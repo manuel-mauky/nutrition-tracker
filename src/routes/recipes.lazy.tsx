@@ -1,4 +1,5 @@
 import { createLazyFileRoute } from "@tanstack/react-router"
+import { ContentLayout } from "../content-layout.tsx"
 
 export const Route = createLazyFileRoute("/recipes")({
   component: RecipesPage,
@@ -6,8 +7,8 @@ export const Route = createLazyFileRoute("/recipes")({
 
 function RecipesPage() {
   return (
-    <div>
-      <h3>Rezepte</h3>
-    </div>
+    <ContentLayout title="Rezepte">
+      <p>Rezepte content</p>
+    </ContentLayout>
   )
 }

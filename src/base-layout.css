@@ -1,0 +1,54 @@
+:root {
+  --app-header-height: 50px;
+  --app-layout-border: 1px solid var(--rs-border-primary);
+}
+
+.app-base-layout {
+  height: 100%;
+}
+
+.brand {
+  height: var(--app-header-height);
+  border-bottom: var(--app-layout-border);
+  padding: 10px 15px;
+  font-size: 20px;
+  overflow: hidden;
+
+  & .rs-icon {
+    min-height: 25px;
+    min-width: 25px;
+  }
+
+  & p {
+    white-space: nowrap;
+  }
+}
+
+.nav-toggle {
+  border-top: var(--app-layout-border);
+  padding: 6px;
+}
+
+.app-sidebar {
+  display: flex;
+  flex-direction: column;
+  border-right: var(--app-layout-border);
+
+  & .rs-sidenav {
+    height: 100%;
+  }
+}
+
+#content-layout-root {
+  & > header {
+    height: var(--app-header-height);
+    border-bottom: var(--app-layout-border);
+    font-size: 20px;
+    padding-left: 10px;
+    padding-top: 10px;
+  }
+
+  & > .rs-content {
+    padding-left: 10px;
+  }
+}
