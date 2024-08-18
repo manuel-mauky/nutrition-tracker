@@ -1,14 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router"
-import { ContentLayout } from "../content-layout.tsx"
+import { DiaryRoute } from "../features/diary/diary.route.tsx"
 
 export const Route = createLazyFileRoute("/diary")({
-  component: DiaryPage,
+  component: DiaryRoute,
 })
-
-function DiaryPage() {
-  return (
-    <ContentLayout title="Tagebuch">
-      <p>tagebuch content</p>
-    </ContentLayout>
-  )
-}

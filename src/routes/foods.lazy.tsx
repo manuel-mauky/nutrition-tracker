@@ -1,14 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router"
-import { ContentLayout } from "../content-layout.tsx"
+import { FoodsRoute } from "../features/foods/foods.route.tsx"
 
 export const Route = createLazyFileRoute("/foods")({
-  component: FoodsPage,
+  component: FoodsRoute,
 })
-
-function FoodsPage() {
-  return (
-    <ContentLayout title="Lebensmittel">
-      <p>Lebensmittel content</p>
-    </ContentLayout>
-  )
-}
