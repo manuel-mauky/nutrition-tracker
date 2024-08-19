@@ -1,0 +1,52 @@
+import { Id, Recipe } from "../types.ts"
+import { nanoid } from "nanoid"
+import { StateCreator } from "zustand"
+import { RootStore, RootStoreMutators } from "../store.ts"
+
+const initialState: RecipesState = {
+  recipes: [
+    {
+      id: nanoid(),
+      name: "Bolognese",
+      description: "",
+    },
+    {
+      id: nanoid(),
+      name: "Tomatensalat",
+      description: "",
+    },
+  ],
+}
+
+type RecipesState = {
+  recipes: Array<Recipe>
+}
+
+export type RecipesSlice = RecipesState & {
+  addRecipe: (newRecipe: Omit<Recipe, "id">) => void
+  editRecipe: (editedRecipe: Recipe) => void
+  removeRecipe: (recipeOrId: Recipe | Id) => void
+}
+
+export const createRecipesSlice: StateCreator<RootStore, RootStoreMutators, [], RecipesSlice> = (set) => ({
+  ...initialState,
+  addRecipe: (newRecipe) =>
+    set((state) => {
+      state.recipes.push({
+        id: nanoid(),
+        ...newRecipe,
+      })
+    }),
+  editRecipe: (editedRecipe) =>
+    set((state) => ({
+      recipes: state.recipes.map((recipe) => (recipe.id === editedRecipe.id ? editedRecipe : recipe)),
+    })),
+  removeRecipe: (recipeOrId) =>
+    set((state) => {
+      const id = typeof recipeOrId === "string" ? recipeOrId : recipeOrId.id
+
+      return {
+        recipes: state.recipes.filter((recipe) => recipe.id !== id),
+      }
+    }),
+})
