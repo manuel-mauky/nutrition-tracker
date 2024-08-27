@@ -1,9 +1,13 @@
 import { ContentLayout } from "../../content-layout.tsx"
 import { useStore } from "../store.ts"
 import { useState } from "react"
+import { FoodsTable } from "./foods-table.tsx"
+
+import "./foods.css"
+
 
 export function FoodsRoute() {
-  const { foods, addFood } = useStore()
+  const { addFood } = useStore()
 
   const [name, setName] = useState("")
 
@@ -24,17 +28,16 @@ export function FoodsRoute() {
 
   return (
     <ContentLayout title="Lebensmittel">
-      <div>
-        <label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-        </label>
-
-        <button onClick={createNewFood}>Add</button>
-      </div>
-      <div>
-        {foods.map((food) => (
-          <div key={food.id}>{JSON.stringify(food)}</div>
-        ))}
+      <div id="foods-root">
+        <div>
+          <label>
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+          </label>
+          <button onClick={createNewFood}>Add</button>
+        </div>
+        <div style={{ flexGrow: 1 }}>
+          <FoodsTable />
+        </div>
       </div>
     </ContentLayout>
   )

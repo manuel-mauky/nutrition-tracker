@@ -1,8 +1,9 @@
-import { ColumnProps, Container, Table } from "rsuite"
+import { CellProps, ColumnProps, Container, Table } from "rsuite"
 import { Food } from "../types.ts"
 import { useStore } from "../store.ts"
 import { useState } from "react"
 import type { SortType } from "rsuite-table"
+import { Link } from "@tanstack/react-router"
 
 type FoodColumn = ColumnProps<Food> & {
   key: keyof Food
@@ -54,6 +55,18 @@ const columns: Array<FoodColumn> = [
   },
 ]
 
+function LinkCell({ rowData, ...rest }: CellProps<Food>) {
+  return (
+    <Table.Cell {...rest}>
+      {rowData && (
+        <Link to={"/foods/$foodId"} params={{ foodId: rowData.id }}>
+          {rowData.name}
+        </Link>
+      )}
+    </Table.Cell>
+  )
+}
+
 export function FoodsTable() {
   const { foods } = useStore()
 
@@ -97,7 +110,8 @@ export function FoodsTable() {
           return (
             <Table.Column {...rest} key={key}>
               <Table.HeaderCell>{label}</Table.HeaderCell>
-              <Table.Cell dataKey={key} />
+
+              {key === "name" ? <LinkCell dataKey={key} /> : <Table.Cell dataKey={key} />}
             </Table.Column>
           )
         })}
