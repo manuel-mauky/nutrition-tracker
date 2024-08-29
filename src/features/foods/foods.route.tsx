@@ -4,6 +4,8 @@ import { useState } from "react"
 import { FoodsTable } from "./foods-table.tsx"
 
 import "./foods.css"
+import { FoodsBreadcrumb } from "./foods-breadcrumb.tsx"
+
 
 
 export function FoodsRoute() {
@@ -27,7 +29,7 @@ export function FoodsRoute() {
   }
 
   return (
-    <ContentLayout title="Lebensmittel">
+    <ContentLayout header={<FoodsBreadcrumb/>}>
       <div id="foods-root">
         <div>
           <label>

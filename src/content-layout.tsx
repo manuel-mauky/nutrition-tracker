@@ -1,14 +1,12 @@
-import { PropsWithChildren } from "react"
-import { Container, Content, Header, Text } from "rsuite"
+import { PropsWithChildren, ReactElement } from "react"
+import { Container, Content, Header } from "rsuite"
 
 import "./base-layout.css"
 
-export function ContentLayout({ children, title }: PropsWithChildren<{ title?: string }>) {
+export function ContentLayout({ children, header }: PropsWithChildren<{ header?: ReactElement }>) {
   return (
     <Container id="content-layout-root">
-      <Header>
-        <Text>{title}</Text>
-      </Header>
+      <Header>{header}</Header>
       <Content>{children}</Content>
     </Container>
   )

@@ -41,14 +41,22 @@
 
 #content-layout-root {
   & > header {
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    justify-content: center;
     height: var(--app-header-height);
     border-bottom: var(--app-layout-border);
     font-size: 20px;
-    padding-left: 10px;
-    padding-top: 10px;
   }
 
   & > .rs-content {
     padding-left: 10px;
+  }
+
+  .rs-header {
+    .rs-breadcrumb {
+      margin-bottom: 0;
+    }
   }
 }
