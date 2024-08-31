@@ -3,40 +3,129 @@ import { useStore } from "../store.ts"
 import { useState } from "react"
 import { FoodsTable } from "./foods-table.tsx"
 
-import "./foods.css"
 import { FoodsBreadcrumb } from "./foods-breadcrumb.tsx"
+import { Button, ButtonToolbar, Form, Modal } from "rsuite"
+import { PiPlusBold } from "react-icons/pi"
 
+import "./foods.css"
+import { Food } from "../types.ts"
+import { Controller, ControllerRenderProps, useForm } from "react-hook-form"
 
+type AddFoodFormValue = Omit<Food, "id">
 
-export function FoodsRoute() {
-  const { addFood } = useStore()
+function Field({
+  field,
+  error,
+  label,
+  ...rest
+}: {
+  field: ControllerRenderProps<AddFoodFormValue>
+  error?: string
+  label: string
+}) {
+  return (
+    <Form.Group>
+      <Form.ControlLabel>{label}</Form.ControlLabel>
+      <Form.Control name={field.name} value={field.value} onChange={(value) => field.onChange(value)} {...rest} />
+      <Form.ErrorMessage show={!!error} placement="bottomStart">
+        {error}
+      </Form.ErrorMessage>
+    </Form.Group>
+  )
+}
 
-  const [name, setName] = useState("")
+function AddFoodDialog() {
+  const [openAddDialog, setOpenAddDialog] = useState(false)
+  const { addFood, foods } = useStore()
 
-  function createNewFood() {
-    if (name.trim().length > 0) {
-      addFood({
-        name,
-        description: "",
-        kcal: 0,
-        carbs: 0,
-        fat: 0,
-        protein: 0,
-        fiber: 0,
-        sugar: 0,
-      })
-    }
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm<AddFoodFormValue>({
+    defaultValues: {
+      name: "",
+      description: "",
+      kcal: 0,
+      carbs: 0,
+      fat: 0,
+      protein: 0,
+      fiber: 0,
+      sugar: 0,
+    },
+  })
+
+  function handleOpen() {
+    reset()
+    setOpenAddDialog(true)
   }
 
+  function handleClose() {
+    setOpenAddDialog(false)
+  }
+
+  const onSubmit = handleSubmit((data) => {
+    addFood(data)
+    setOpenAddDialog(false)
+    reset()
+  })
+
   return (
-    <ContentLayout header={<FoodsBreadcrumb/>}>
+    <>
+      <Button startIcon={<PiPlusBold />} onClick={handleOpen}>
+        Hinzufügen
+      </Button>
+      <Modal open={openAddDialog} onClose={handleClose}>
+        <Modal.Header>
+          <Modal.Title>Lebensmittel hinzufügen</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <Form id="add-food-form" onSubmit={(_, event) => onSubmit(event)}>
+            <Controller
+              name="name"
+              control={control}
+              rules={{
+                required: "Name ist erforderlich",
+                validate: (value) => {
+                  const duplicate = foods.some((food) => food.name === value)
+
+                  if (duplicate) {
+                    return "Name existiert bereits"
+                  } else {
+                    return undefined
+                  }
+                },
+              }}
+              render={({ field }) => <Field field={field} error={errors[field.name]?.message} label="Name" />}
+            />
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => <Field field={field} error={errors[field.name]?.message} label="Beschreibung" />}
+            />
+          </Form>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button form="add-food-form" type="submit">
+            Ok
+          </Button>
+          <Button onClick={handleClose}>Abbrechen</Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  )
+}
+
+export function FoodsRoute() {
+  return (
+    <ContentLayout header={<FoodsBreadcrumb />}>
       <div id="foods-root">
-        <div>
-          <label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-          </label>
-          <button onClick={createNewFood}>Add</button>
-        </div>
+        <ButtonToolbar>
+          <AddFoodDialog />
+        </ButtonToolbar>
         <div style={{ flexGrow: 1 }}>
           <FoodsTable />
         </div>
