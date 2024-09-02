@@ -7,32 +7,13 @@ import { FoodsBreadcrumb } from "./foods-breadcrumb.tsx"
 import { Button, ButtonToolbar, Form, Modal } from "rsuite"
 import { PiPlusBold } from "react-icons/pi"
 
-import "./foods.css"
 import { Food } from "../types.ts"
-import { Controller, ControllerRenderProps, useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
+import { NumberField, TextAreaField, TextField } from "../../components/form-fields.tsx"
+
+import "./foods.css"
 
 type AddFoodFormValue = Omit<Food, "id">
-
-function Field({
-  field,
-  error,
-  label,
-  ...rest
-}: {
-  field: ControllerRenderProps<AddFoodFormValue>
-  error?: string
-  label: string
-}) {
-  return (
-    <Form.Group>
-      <Form.ControlLabel>{label}</Form.ControlLabel>
-      <Form.Control name={field.name} value={field.value} onChange={(value) => field.onChange(value)} {...rest} />
-      <Form.ErrorMessage show={!!error} placement="bottomStart">
-        {error}
-      </Form.ErrorMessage>
-    </Form.Group>
-  )
-}
 
 function AddFoodDialog() {
   const [openAddDialog, setOpenAddDialog] = useState(false)
@@ -82,7 +63,7 @@ function AddFoodDialog() {
         </Modal.Header>
 
         <Modal.Body>
-          <Form id="add-food-form" onSubmit={(_, event) => onSubmit(event)}>
+          <Form id="add-food-form" fluid onSubmit={(_, event) => onSubmit(event)}>
             <Controller
               name="name"
               control={control}
@@ -98,13 +79,58 @@ function AddFoodDialog() {
                   }
                 },
               }}
-              render={({ field }) => <Field field={field} error={errors[field.name]?.message} label="Name" />}
+              render={({ field }) => <TextField field={field} error={errors[field.name]?.message} label="Name" />}
             />
             <Controller
               name="description"
               control={control}
-              render={({ field }) => <Field field={field} error={errors[field.name]?.message} label="Beschreibung" />}
+              render={({ field }) => (
+                <TextAreaField label="Beschreibung" field={field} error={errors[field.name]?.message} />
+              )}
             />
+
+            <div className="two-column-form-grid">
+              <Controller
+                name="kcal"
+                control={control}
+                render={({ field }) => <NumberField label="KCal" field={field} error={errors[field.name]?.message} />}
+              />
+              <Controller
+                name="carbs"
+                control={control}
+                render={({ field }) => (
+                  <NumberField label="Kohlenhydrate" unit="g" field={field} error={errors[field.name]?.message} />
+                )}
+              />
+              <Controller
+                name="fat"
+                control={control}
+                render={({ field }) => (
+                  <NumberField label="Fett" unit="g" field={field} error={errors[field.name]?.message} />
+                )}
+              />
+              <Controller
+                name="protein"
+                control={control}
+                render={({ field }) => (
+                  <NumberField label="Protein" unit="g" field={field} error={errors[field.name]?.message} />
+                )}
+              />
+              <Controller
+                name="fiber"
+                control={control}
+                render={({ field }) => (
+                  <NumberField label="Ballaststoffe" unit="g" field={field} error={errors[field.name]?.message} />
+                )}
+              />
+              <Controller
+                name="sugar"
+                control={control}
+                render={({ field }) => (
+                  <NumberField label="Zucker" unit="g" field={field} error={errors[field.name]?.message} />
+                )}
+              />
+            </div>
           </Form>
         </Modal.Body>
 
