@@ -1,9 +1,11 @@
-import { CellProps, ColumnProps, Container, Table } from "rsuite"
-import { Food } from "../types.ts"
+import { Button, CellProps, ColumnProps, Container, IconButton, Modal, Table } from "rsuite"
+import { Food, Id } from "../types.ts"
 import { useStore } from "../store.ts"
 import { useState } from "react"
 import type { SortType } from "rsuite-table"
 import { Link } from "@tanstack/react-router"
+import { PiTrash } from "react-icons/pi"
+import { Icon } from "@rsuite/icons"
 
 type FoodColumn = ColumnProps<Food> & {
   key: keyof Food
@@ -67,8 +69,67 @@ function LinkCell({ rowData, ...rest }: CellProps<Food>) {
   )
 }
 
-export function FoodsTable() {
+function ActionsTableCell({ rowData, deleteAction, ...rest }: CellProps<Food> & { deleteAction: (id: Id) => void }) {
+  if (!rowData) {
+    return null
+  }
+
+  const foodId = rowData.id
+
+  return (
+    <>
+      <Table.Cell {...rest} style={{ paddingTop: "4px" }}>
+        <>
+          <IconButton onClick={() => deleteAction(foodId)} aria-label="Löschen" icon={<Icon as={PiTrash} />} />
+        </>
+      </Table.Cell>
+    </>
+  )
+}
+
+function DeleteFoodWarningDialog({
+  foodId,
+  handleOk,
+  handleCancel,
+}: {
+  foodId: Id | undefined
+  handleOk: () => void
+  handleCancel: () => void
+}) {
   const { foods } = useStore()
+
+  if (!foodId) {
+    return null
+  }
+
+  const food = foods.find((food) => food.id === foodId)
+
+  if (!food) {
+    return null
+  }
+
+  return (
+    <Modal open={true} role="alertdialog" backdrop="static" autoFocus>
+      <Modal.Header>
+        <Modal.Title>Lebensmittel löschen?</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>Möchten Sie "{food.name}" wirklich löschen?</Modal.Body>
+      <Modal.Footer>
+        <Button onClick={handleOk} appearance="primary">
+          Ok
+        </Button>
+        <Button onClick={handleCancel} appearance="subtle">
+          Abbrechen
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  )
+}
+
+export function FoodsTable() {
+  const { foods, removeFood } = useStore()
+
+  const [deleteClickedId, setDeleteClickedId] = useState<Id | undefined>()
 
   const [sortColumn, setSortColumn] = useState<FoodColumn["key"] | undefined>()
   const [sortType, setSortType] = useState<SortType | undefined>()
@@ -102,8 +163,26 @@ export function FoodsTable() {
     setSortType(sortType)
   }
 
+  function handleDeleteAction(id: Id) {
+    setDeleteClickedId(id)
+  }
+
+  function handleDeleteOk() {
+    if (deleteClickedId) {
+      removeFood(deleteClickedId)
+    }
+
+    setDeleteClickedId(undefined)
+  }
+
+  function handleDeleteCancel() {
+    setDeleteClickedId(undefined)
+  }
+
   return (
     <Container style={{ height: "100%" }}>
+      <DeleteFoodWarningDialog foodId={deleteClickedId} handleOk={handleDeleteOk} handleCancel={handleDeleteCancel} />
+
       <Table sortColumn={sortColumn} sortType={sortType} onSortColumn={handleSortColumn} autoHeight data={getData()}>
         {columns.map((column) => {
           const { key, label, ...rest } = column
@@ -115,6 +194,12 @@ export function FoodsTable() {
             </Table.Column>
           )
         })}
+
+        <Table.Column key="actions">
+          <Table.HeaderCell>Aktionen</Table.HeaderCell>
+
+          <ActionsTableCell deleteAction={handleDeleteAction} />
+        </Table.Column>
       </Table>
     </Container>
   )
