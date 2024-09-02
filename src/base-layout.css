@@ -57,6 +57,7 @@
   .rs-header {
     .rs-breadcrumb {
       margin-bottom: 0;
+      font-size: 20px;
     }
   }
 }
