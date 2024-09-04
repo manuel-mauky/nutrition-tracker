@@ -37,20 +37,24 @@ type FoodsState = {
 }
 
 export type FoodsSlice = FoodsState & {
-  addFood: (newFood: Omit<Food, "id">) => void
+  addFood: (newFood: Omit<Food, "id">) => Id
   editFood: (editedFood: Food) => void
   removeFood: (foodOrId: Food | Id) => void
 }
 
 export const createFoodsSlice: StateCreator<RootStore, RootStoreMutators, [], FoodsSlice> = (set) => ({
   ...initialState,
-  addFood: (newFood) =>
+  addFood: (newFood) => {
+    const id = nanoid()
+
     set((state) => {
       state.foods.push({
-        id: nanoid(),
+        id: id,
         ...newFood,
       })
-    }),
+    })
+    return id
+  },
   editFood: (editedFood) => {
     set((state) => ({
       foods: state.foods.map((food) => (food.id === editedFood.id ? editedFood : food)),
