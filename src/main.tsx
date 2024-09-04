@@ -2,6 +2,8 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import { CustomProvider } from "rsuite"
 
+import deDE from "rsuite/locales/de_DE"
+
 import "./index.css"
 import "rsuite/dist/rsuite.min.css"
 
@@ -16,9 +18,17 @@ declare module "@tanstack/react-router" {
   }
 }
 
+const adjustedLocaleDeDE: typeof deDE = {
+  ...deDE,
+  Plaintext: {
+    ...deDE.Plaintext,
+    unfilled: "",
+  },
+}
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <CustomProvider theme="light">
+    <CustomProvider theme="light" locale={adjustedLocaleDeDE}>
       <RouterProvider router={router} />
     </CustomProvider>
   </React.StrictMode>,
