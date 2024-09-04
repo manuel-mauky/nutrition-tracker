@@ -9,11 +9,10 @@ import { PiPlusBold } from "react-icons/pi"
 
 import { Food } from "../types.ts"
 import { Controller, useForm } from "react-hook-form"
-import { NumberField, TextAreaField, TextField } from "../../components/form-fields.tsx"
+import { TextAreaField, TextField } from "../../components/form-fields.tsx"
 
 import "./foods.css"
-
-type AddFoodFormValue = Omit<Food, "id">
+import { FoodNutritionForm } from "./food-nutrition-form.tsx"
 
 function AddFoodDialog() {
   const [openAddDialog, setOpenAddDialog] = useState(false)
@@ -24,7 +23,7 @@ function AddFoodDialog() {
     control,
     reset,
     formState: { errors },
-  } = useForm<AddFoodFormValue>({
+  } = useForm<Food>({
     defaultValues: {
       name: "",
       description: "",
@@ -89,48 +88,7 @@ function AddFoodDialog() {
               )}
             />
 
-            <div className="two-column-form-grid">
-              <Controller
-                name="kcal"
-                control={control}
-                render={({ field }) => <NumberField label="KCal" field={field} error={errors[field.name]?.message} />}
-              />
-              <Controller
-                name="carbs"
-                control={control}
-                render={({ field }) => (
-                  <NumberField label="Kohlenhydrate" unit="g" field={field} error={errors[field.name]?.message} />
-                )}
-              />
-              <Controller
-                name="fat"
-                control={control}
-                render={({ field }) => (
-                  <NumberField label="Fett" unit="g" field={field} error={errors[field.name]?.message} />
-                )}
-              />
-              <Controller
-                name="protein"
-                control={control}
-                render={({ field }) => (
-                  <NumberField label="Protein" unit="g" field={field} error={errors[field.name]?.message} />
-                )}
-              />
-              <Controller
-                name="fiber"
-                control={control}
-                render={({ field }) => (
-                  <NumberField label="Ballaststoffe" unit="g" field={field} error={errors[field.name]?.message} />
-                )}
-              />
-              <Controller
-                name="sugar"
-                control={control}
-                render={({ field }) => (
-                  <NumberField label="Zucker" unit="g" field={field} error={errors[field.name]?.message} />
-                )}
-              />
-            </div>
+            <FoodNutritionForm control={control} errors={errors} />
           </Form>
         </Modal.Body>
 

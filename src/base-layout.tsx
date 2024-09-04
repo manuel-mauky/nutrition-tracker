@@ -44,7 +44,7 @@ function BaseLayout() {
 
   return (
     <Container className="app-base-layout">
-      <Sidebar className="app-sidebar" width={expand ? 260 : 56} collapsible>
+      <Sidebar className="app-sidebar" width={expand ? 210 : 56} collapsible>
         <Sidenav.Header>
           <Brand expand={expand} />
         </Sidenav.Header>

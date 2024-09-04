@@ -52,6 +52,7 @@
 
   & > .rs-content {
     padding-left: 10px;
+    padding-right: 10px;
   }
 
   .rs-header {
