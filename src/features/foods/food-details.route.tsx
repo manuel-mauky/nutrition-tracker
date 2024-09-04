@@ -4,13 +4,15 @@ import { useStore } from "../store.ts"
 import "./foods.css"
 import { ContentLayout } from "../../content-layout.tsx"
 import { FoodsBreadcrumb } from "./foods-breadcrumb.tsx"
-import { Button, ButtonGroup, ButtonToolbar, Form } from "rsuite"
+import { Button, ButtonGroup, ButtonToolbar, Form, IconButton } from "rsuite"
 import { useState } from "react"
 import { Food } from "../types.ts"
 import { Controller, useForm } from "react-hook-form"
 import { TextAreaField, TextField } from "../../components/form-fields.tsx"
 import { FoodNutritionForm } from "./food-nutrition-form.tsx"
 import { DeleteFoodWarningDialog } from "./delete-food-warning-dialog.tsx"
+import { PiCopySimple, PiPencilLine, PiTrash } from "react-icons/pi"
+import { Icon } from "@rsuite/icons"
 
 export function FoodDetailsRoute() {
   const { foodId } = useParams({ strict: false })
@@ -82,13 +84,17 @@ export function FoodDetailsRoute() {
             <Button onClick={handleEditCancel}>Abbrechen</Button>
           </ButtonGroup>
         ) : (
-          <Button onClick={() => setEditMode(!editMode)}>Editieren</Button>
+          <IconButton icon={<Icon as={PiPencilLine} />} onClick={() => setEditMode(!editMode)}>
+            Editieren
+          </IconButton>
         )}
 
-        <Button disabled={editMode}>Clonen</Button>
-        <Button disabled={editMode} onClick={handleDelete}>
+        <IconButton icon={<Icon as={PiCopySimple} />} disabled={editMode}>
+          Clonen
+        </IconButton>
+        <IconButton icon={<Icon as={PiTrash} />} disabled={editMode} onClick={handleDelete}>
           Löschen
-        </Button>
+        </IconButton>
       </ButtonToolbar>
 
       <Form plaintext={!editMode} id="edit-food-form" fluid onSubmit={(_, event) => onSubmit(event)}>
