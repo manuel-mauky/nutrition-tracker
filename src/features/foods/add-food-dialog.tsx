@@ -71,7 +71,9 @@ export function AddFoodDialog() {
                   }
                 },
               }}
-              render={({ field }) => <TextField field={field} error={errors[field.name]?.message} label="Name" />}
+              render={({ field }) => (
+                <TextField autoFocus field={field} error={errors[field.name]?.message} label="Name" />
+              )}
             />
             <Controller
               name="description"

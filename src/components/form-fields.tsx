@@ -11,6 +11,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement>((props, ref) => (
 export type CommonFieldProps = {
   label: string
   error?: string
+  autoFocus?: boolean
 }
 
 export type FieldProps<T extends Record<string, unknown>> = PropsWithChildren<
@@ -31,18 +32,25 @@ export function Field({ children, error, label }: PropsWithChildren<CommonFieldP
   )
 }
 
-export function TextField<T extends FormData>({ field, ...rest }: FieldProps<T>) {
+export function TextField<T extends FormData>({ field, label, error, autoFocus }: FieldProps<T>) {
   return (
-    <Field {...rest}>
-      <Form.Control name={field.name} value={field.value} onChange={(value) => field.onChange(value)} />
+    <Field label={label} error={error}>
+      <Form.Control
+        autoFocus={autoFocus}
+        accepter={Input}
+        name={field.name}
+        value={field.value}
+        onChange={(value) => field.onChange(value)}
+      />
     </Field>
   )
 }
 
-export function TextAreaField<T extends FormData>({ field, ...rest }: FieldProps<T>) {
+export function TextAreaField<T extends FormData>({ field, label, error, autoFocus }: FieldProps<T>) {
   return (
-    <Field {...rest}>
+    <Field label={label} error={error}>
       <Form.Control
+        autoFocus={autoFocus}
         accepter={Textarea}
         name={field.name}
         value={field.value}
@@ -55,15 +63,18 @@ export function TextAreaField<T extends FormData>({ field, ...rest }: FieldProps
 export function NumberField<T extends FormData>({
   field,
   unit,
-  ...rest
+  label,
+  error,
+  autoFocus,
 }: FieldProps<T> & {
   unit?: string
 }) {
   const formatter = unit ? (value: number | string) => `${value} ${unit}` : undefined
 
   return (
-    <Field {...rest}>
+    <Field label={label} error={error}>
       <Form.Control
+        autoFocus={autoFocus}
         accepter={InputNumber}
         formatter={formatter}
         min={0}
