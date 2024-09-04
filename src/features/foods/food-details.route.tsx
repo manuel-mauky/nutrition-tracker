@@ -1,4 +1,4 @@
-import { useParams } from "@tanstack/react-router"
+import { Navigate, useParams } from "@tanstack/react-router"
 import { useStore } from "../store.ts"
 
 import "./foods.css"
@@ -10,13 +10,16 @@ import { Food } from "../types.ts"
 import { Controller, useForm } from "react-hook-form"
 import { TextAreaField, TextField } from "../../components/form-fields.tsx"
 import { FoodNutritionForm } from "./food-nutrition-form.tsx"
+import { DeleteFoodWarningDialog } from "./delete-food-warning-dialog.tsx"
 
 export function FoodDetailsRoute() {
   const { foodId } = useParams({ strict: false })
 
   const [editMode, setEditMode] = useState(false)
 
-  const { foods, editFood } = useStore()
+  const [showDeleteWarning, setShowDeleteWarning] = useState(false)
+
+  const { foods, editFood, removeFood } = useStore()
 
   const food = foods.find((food) => food.id === foodId)
 
@@ -40,8 +43,36 @@ export function FoodDetailsRoute() {
     setEditMode(false)
   }
 
+  function handleDelete() {
+    setShowDeleteWarning(true)
+  }
+
+  function handleDeleteOk() {
+    if (food) {
+      removeFood(food)
+    }
+    setShowDeleteWarning(false)
+  }
+
+  function handleDeleteCancel() {
+    setShowDeleteWarning(false)
+  }
+
+  if (!food) {
+    // this case can happen when:
+    // a) users directly navigated to details page with wrong link/id
+    // b) after the food was deleted
+    return <Navigate to="/foods" />
+  }
+
   return (
     <ContentLayout header={<FoodsBreadcrumb food={food} />}>
+      <DeleteFoodWarningDialog
+        open={showDeleteWarning}
+        foodId={food?.id}
+        handleOk={handleDeleteOk}
+        handleCancel={handleDeleteCancel}
+      />
       <ButtonToolbar style={{ marginBottom: "10px" }}>
         {editMode ? (
           <ButtonGroup>
@@ -55,7 +86,9 @@ export function FoodDetailsRoute() {
         )}
 
         <Button disabled={editMode}>Clonen</Button>
-        <Button disabled={editMode}>Löschen</Button>
+        <Button disabled={editMode} onClick={handleDelete}>
+          Löschen
+        </Button>
       </ButtonToolbar>
 
       <Form plaintext={!editMode} id="edit-food-form" fluid onSubmit={(_, event) => onSubmit(event)}>

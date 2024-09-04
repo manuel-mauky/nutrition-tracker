@@ -1,4 +1,4 @@
-import { Button, CellProps, ColumnProps, Container, IconButton, Modal, Table } from "rsuite"
+import { CellProps, ColumnProps, Container, IconButton, Table } from "rsuite"
 import { Food, Id } from "../types.ts"
 import { useStore } from "../store.ts"
 import { useState } from "react"
@@ -6,6 +6,7 @@ import type { SortType } from "rsuite-table"
 import { Link } from "@tanstack/react-router"
 import { PiTrash } from "react-icons/pi"
 import { Icon } from "@rsuite/icons"
+import { DeleteFoodWarningDialog } from "./delete-food-warning-dialog.tsx"
 
 type FoodColumn = ColumnProps<Food> & {
   key: keyof Food
@@ -87,45 +88,6 @@ function ActionsTableCell({ rowData, deleteAction, ...rest }: CellProps<Food> & 
   )
 }
 
-function DeleteFoodWarningDialog({
-  foodId,
-  handleOk,
-  handleCancel,
-}: {
-  foodId: Id | undefined
-  handleOk: () => void
-  handleCancel: () => void
-}) {
-  const { foods } = useStore()
-
-  if (!foodId) {
-    return null
-  }
-
-  const food = foods.find((food) => food.id === foodId)
-
-  if (!food) {
-    return null
-  }
-
-  return (
-    <Modal open={true} role="alertdialog" backdrop="static" autoFocus>
-      <Modal.Header>
-        <Modal.Title>Lebensmittel löschen?</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>Möchten Sie "{food.name}" wirklich löschen?</Modal.Body>
-      <Modal.Footer>
-        <Button onClick={handleOk} appearance="primary">
-          Ok
-        </Button>
-        <Button onClick={handleCancel} appearance="subtle">
-          Abbrechen
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  )
-}
-
 export function FoodsTable() {
   const { foods, removeFood } = useStore()
 
@@ -181,7 +143,12 @@ export function FoodsTable() {
 
   return (
     <Container style={{ height: "100%" }}>
-      <DeleteFoodWarningDialog foodId={deleteClickedId} handleOk={handleDeleteOk} handleCancel={handleDeleteCancel} />
+      <DeleteFoodWarningDialog
+        open={!!deleteClickedId}
+        foodId={deleteClickedId}
+        handleOk={handleDeleteOk}
+        handleCancel={handleDeleteCancel}
+      />
 
       <Table sortColumn={sortColumn} sortType={sortType} onSortColumn={handleSortColumn} autoHeight data={getData()}>
         {columns.map((column) => {
