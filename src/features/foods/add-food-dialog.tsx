@@ -6,6 +6,7 @@ import { Button, Form, Modal } from "rsuite"
 import { PiPlusBold } from "react-icons/pi"
 import { TextAreaField, TextField } from "../../components/form-fields.tsx"
 import { FoodNutritionForm } from "./food-nutrition-form.tsx"
+import { validateName } from "./foods-utils.ts"
 
 export function AddFoodDialog() {
   const [openAddDialog, setOpenAddDialog] = useState(false)
@@ -61,15 +62,7 @@ export function AddFoodDialog() {
               control={control}
               rules={{
                 required: "Name ist erforderlich",
-                validate: (value) => {
-                  const duplicate = foods.some((food) => food.name === value)
-
-                  if (duplicate) {
-                    return "Name existiert bereits"
-                  } else {
-                    return undefined
-                  }
-                },
+                validate: (value) => validateName(value, foods),
               }}
               render={({ field }) => (
                 <TextField autoFocus field={field} error={errors[field.name]?.message} label="Name" />

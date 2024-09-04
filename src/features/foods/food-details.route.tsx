@@ -13,6 +13,7 @@ import { FoodNutritionForm } from "./food-nutrition-form.tsx"
 import { DeleteFoodWarningDialog } from "./delete-food-warning-dialog.tsx"
 import { PiCopySimple, PiPencilLine, PiTrash } from "react-icons/pi"
 import { Icon } from "@rsuite/icons"
+import { validateName } from "./foods-utils.ts"
 
 export function FoodDetailsRoute() {
   const { foodId } = useParams({ strict: false })
@@ -108,15 +109,11 @@ export function FoodDetailsRoute() {
             control={control}
             rules={{
               required: "Name ist erforderlich",
-              validate: (value, formFood) => {
-                const duplicate = foods.some((food) => food.id !== formFood.id && food.name === value)
-
-                if (duplicate) {
-                  return "Name existiert bereits"
-                } else {
-                  return undefined
-                }
-              },
+              validate: (value, formFood) =>
+                validateName(
+                  value,
+                  foods.filter((food) => food.id !== formFood.id),
+                ),
             }}
             render={({ field }) => <TextField field={field} error={errors[field.name]?.message} label="Name" />}
           />
