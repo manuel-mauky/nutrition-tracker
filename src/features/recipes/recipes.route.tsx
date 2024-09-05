@@ -1,16 +1,15 @@
 import { ContentLayout } from "../../content-layout.tsx"
-import { useStore } from "../store.ts"
-import { Text } from "rsuite"
+import { ButtonToolbar, Text } from "rsuite"
+import { RecipesTable } from "./recipes-table.tsx"
 
 export function RecipesRoute() {
-  const { recipes } = useStore()
-
   return (
     <ContentLayout header={<Text>Rezepte</Text>}>
-      <div>
-        {recipes.map((recipe) => (
-          <div key={recipe.id}>{JSON.stringify(recipe)}</div>
-        ))}
+      <div id="recipe-root">
+        <ButtonToolbar></ButtonToolbar>
+        <div style={{ flexGrow: 1 }}>
+          <RecipesTable />
+        </div>
       </div>
     </ContentLayout>
   )

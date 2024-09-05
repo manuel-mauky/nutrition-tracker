@@ -1,14 +1,8 @@
 export type Id = string
 
-export type Nutrients = {
-  kcal: number
-  carbs: number
-  fat: number
-  protein: number
+export const nutrientNames = ["kcal", "carbs", "fat", "protein", "fiber", "sugar"] as const
 
-  fiber: number
-  sugar: number
-}
+export type Nutrients = Record<(typeof nutrientNames)[number], number>
 
 export type Food = Nutrients & {
   id: Id
@@ -20,4 +14,10 @@ export type Recipe = {
   id: Id
   name: string
   description: string
+  ingredients: Array<Ingredient>
+}
+
+export type Ingredient = {
+  amountInGram: number
+  foodId: Id
 }
