@@ -3,33 +3,10 @@ import { StateCreator } from "zustand"
 import { nanoid } from "nanoid"
 import { RootStore, RootStoreMutators } from "../store.ts"
 
+import { foods } from "../../test-data.ts"
+
 const initialState: FoodsState = {
-  foods: [
-    {
-      id: nanoid(),
-      name: "Spaghetti",
-      description: "",
-      kcal: 270,
-
-      carbs: 53,
-      fat: 2.1,
-      protein: 10,
-      sugar: 0,
-      fiber: 2.5,
-    },
-    {
-      id: nanoid(),
-      name: "Tomaten",
-      description: "",
-      kcal: 20,
-
-      carbs: 4,
-      fat: 0.3,
-      protein: 1,
-      sugar: 2.6,
-      fiber: 1.2,
-    },
-  ],
+  foods: [...foods],
 }
 
 type FoodsState = {

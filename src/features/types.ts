@@ -1,10 +1,6 @@
 export type Id = string
 
-export type Food = {
-  id: Id
-  name: string
-  description: string
-
+export type Nutrients = {
   kcal: number
   carbs: number
   fat: number
@@ -12,6 +8,12 @@ export type Food = {
 
   fiber: number
   sugar: number
+}
+
+export type Food = Nutrients & {
+  id: Id
+  name: string
+  description: string
 }
 
 export type Recipe = {

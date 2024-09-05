@@ -2,20 +2,10 @@ import { Id, Recipe } from "../types.ts"
 import { nanoid } from "nanoid"
 import { StateCreator } from "zustand"
 import { RootStore, RootStoreMutators } from "../store.ts"
+import { recipes } from "../../test-data.ts"
 
 const initialState: RecipesState = {
-  recipes: [
-    {
-      id: nanoid(),
-      name: "Bolognese",
-      description: "",
-    },
-    {
-      id: nanoid(),
-      name: "Tomatensalat",
-      description: "",
-    },
-  ],
+  recipes: [...recipes],
 }
 
 type RecipesState = {
