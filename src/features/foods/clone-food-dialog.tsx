@@ -57,9 +57,14 @@ export function CloneFoodDialog({
       </Modal.Header>
 
       <Modal.Body>
-        <Form id="clone-food-form" style={{
-          marginBottom: "20px"
-        }} fluid onSubmit={(_, event) => onSubmit(event)}>
+        <Form
+          id="clone-food-form"
+          style={{
+            marginBottom: "20px",
+          }}
+          fluid
+          onSubmit={(_, event) => onSubmit(event)}
+        >
           <Controller
             name="newName"
             control={control}
@@ -67,7 +72,9 @@ export function CloneFoodDialog({
               required: "Name ist erforderlich",
               validate: (value) => validateName(value, foods),
             }}
-            render={({ field }) => <TextField autoFocus label="Name" field={field} error={errors[field.name]?.message} />}
+            render={({ field }) => (
+              <TextField autoFocus label="Name" field={field} error={errors[field.name]?.message} />
+            )}
           />
         </Form>
       </Modal.Body>
