@@ -1,37 +1,37 @@
 import { Id } from "../types.ts"
 import { useStore } from "../store.ts"
-import { Button, Form, Modal } from "rsuite"
 import { Controller, useForm } from "react-hook-form"
-import { TextField } from "../../components/form-fields.tsx"
+import { Button, Form, Modal } from "rsuite"
 import { validateName } from "../utils.ts"
+import { TextField } from "../../components/form-fields.tsx"
 
-export type CloneFoodFormValue = {
+export type CloneRecipeFormValue = {
   newName: string
 }
 
-export function CloneFoodDialog({
-  foodId,
+export function CloneRecipeDialog({
+  recipeId,
   handleOk,
   handleCancel,
   open,
 }: {
-  foodId: Id
+  recipeId: Id
   handleOk: (newName: string) => void
   handleCancel: () => void
   open: boolean
 }) {
-  const { foods } = useStore()
+  const { recipes } = useStore()
 
-  const food = foods.find((food) => food.id === foodId)
+  const recipe = recipes.find((recipe) => recipe.id === recipeId)
 
   const {
     handleSubmit,
     control,
     reset,
     formState: { errors },
-  } = useForm<CloneFoodFormValue>({
+  } = useForm<CloneRecipeFormValue>({
     defaultValues: {
-      newName: food?.name,
+      newName: recipe?.name,
     },
   })
 
@@ -46,19 +46,19 @@ export function CloneFoodDialog({
     handleCancel()
   }
 
-  if (!food) {
+  if (!recipe) {
     return null
   }
 
   return (
     <Modal open={open} role="dialog" backdrop="static" autoFocus>
       <Modal.Header>
-        <Modal.Title>Lebensmittel klonen</Modal.Title>
+        <Modal.Title>Rezepte klonen</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
         <Form
-          id="clone-food-form"
+          id="clone-recipe-form"
           style={{
             marginBottom: "20px",
           }}
@@ -70,7 +70,7 @@ export function CloneFoodDialog({
             control={control}
             rules={{
               required: "Name ist erforderlich",
-              validate: (value) => validateName(value, foods),
+              validate: (value) => validateName(value, recipes),
             }}
             render={({ field }) => (
               <TextField autoFocus label="Name" field={field} error={errors[field.name]?.message} />
@@ -79,7 +79,7 @@ export function CloneFoodDialog({
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button appearance="primary" type="submit" form="clone-food-form">
+        <Button appearance="primary" type="submit" form="clone-recipe-form">
           Ok
         </Button>
         <Button appearance="subtle" onClick={handleOnCancel}>

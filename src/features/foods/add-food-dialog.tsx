@@ -6,7 +6,7 @@ import { Button, Form, Modal } from "rsuite"
 import { PiPlusBold } from "react-icons/pi"
 import { TextAreaField, TextField } from "../../components/form-fields.tsx"
 import { FoodNutritionForm } from "./food-nutrition-form.tsx"
-import { validateName } from "./foods-utils.ts"
+import { validateName } from "../utils.ts"
 
 export function AddFoodDialog() {
   const [openAddDialog, setOpenAddDialog] = useState(false)

@@ -17,6 +17,7 @@ const columns: Array<RecipeColumn> = [
   {
     key: "name",
     label: "Name",
+    width: 150,
     sortable: true,
   },
   {

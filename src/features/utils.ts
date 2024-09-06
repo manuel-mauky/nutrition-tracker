@@ -1,6 +1,4 @@
-import { Food } from "../types.ts"
-
-export function validateName(value: string, foods: Array<Food>): string | undefined {
+export function validateName(value: string, foods: Array<{ name: string }>): string | undefined {
   const duplicate = foods.some((food) => food.name.trim() === value.trim())
 
   if (duplicate) {

@@ -14,7 +14,7 @@ import { DeleteFoodWarningDialog } from "./delete-food-warning-dialog.tsx"
 import { PiCopySimple, PiPencilLine, PiTrash } from "react-icons/pi"
 import { Icon } from "@rsuite/icons"
 import { CloneFoodDialog } from "./clone-food-dialog.tsx"
-import { validateName } from "./foods-utils.ts"
+import { validateName } from "../utils.ts"
 
 export function FoodDetailsRoute() {
   const { foodId } = useParams({ strict: false })
@@ -117,7 +117,7 @@ export function FoodDetailsRoute() {
         handleCancel={handleCloneCancel}
         open={showCloneDialog}
       />
-      <ButtonToolbar style={{ marginBottom: "10px" }}>
+      <ButtonToolbar style={{ marginBottom: "10px", marginTop: "10px" }}>
         {editMode ? (
           <ButtonGroup>
             <Button appearance="primary" type="submit" form="edit-food-form">
