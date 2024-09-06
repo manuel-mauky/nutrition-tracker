@@ -8,7 +8,7 @@ export function FoodsBreadcrumb({ food }: { food?: Food }) {
       <Breadcrumb.Item to="/foods" as={Link} active={!food}>
         Lebensmittel
       </Breadcrumb.Item>
-      {food ? <Breadcrumb.Item active>{food.name}</Breadcrumb.Item> : false}
+      {food ? <Breadcrumb.Item active>{food.name}</Breadcrumb.Item> : null}
     </Breadcrumb>
   )
 }

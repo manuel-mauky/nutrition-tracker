@@ -1,9 +1,10 @@
 import { RootStore, useStore } from "../store.ts"
-import { ColumnProps, Container, Table } from "rsuite"
+import { CellProps, ColumnProps, Container, Table } from "rsuite"
 import { Food, Id, Ingredient, nutrientNames, Nutrients, Recipe } from "../types.ts"
 import { useState } from "react"
 import { SortType } from "rsuite-table"
 import { createSelector } from "reselect"
+import { Link } from "@tanstack/react-router"
 
 type RecipeWithNutrients = Omit<Recipe, "ingredients"> & Nutrients
 
@@ -130,6 +131,18 @@ const selectRecipesWithNutrients = createSelector(
   },
 )
 
+function LinkCell({ rowData, ...rest }: CellProps<Recipe>) {
+  return (
+    <Table.Cell {...rest}>
+      {rowData && (
+        <Link to={"/recipes/$recipeId"} params={{ recipeId: rowData.id }}>
+          {rowData.name}
+        </Link>
+      )}
+    </Table.Cell>
+  )
+}
+
 export function RecipesTable() {
   const recipesWithNutrients: Array<RecipeWithNutrients> = useStore(selectRecipesWithNutrients)
 
@@ -176,7 +189,7 @@ export function RecipesTable() {
             <Table.Column {...rest} key={key}>
               <Table.HeaderCell>{label}</Table.HeaderCell>
 
-              <Table.Cell dataKey={key} />
+              {key === "name" ? <LinkCell dataKey={key} /> : <Table.Cell dataKey={key} />}
             </Table.Column>
           )
         })}
