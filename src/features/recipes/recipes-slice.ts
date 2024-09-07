@@ -13,7 +13,7 @@ type RecipesState = {
 }
 
 export type RecipesSlice = RecipesState & {
-  addRecipe: (newRecipe: Omit<Recipe, "id">) => Id
+  addRecipe: (newRecipe: Omit<Recipe, "id" | "ingredients">) => Id
   editRecipe: (editedRecipe: Recipe) => void
   removeRecipe: (recipeOrId: Recipe | Id) => void
 }
@@ -25,6 +25,7 @@ export const createRecipesSlice: StateCreator<RootStore, RootStoreMutators, [], 
     set((state) => {
       state.recipes.push({
         id: id,
+        ingredients: [],
         ...newRecipe,
       })
     })
