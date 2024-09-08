@@ -8,10 +8,11 @@ import { Controller, useForm } from "react-hook-form"
 import { Recipe } from "../types.ts"
 import { Icon } from "@rsuite/icons"
 import { PiCopySimple, PiPencilLine, PiTrash } from "react-icons/pi"
-import { TextAreaField, TextField } from "../../components/form-fields.tsx"
+import { ReadonlyNumberField, TextAreaField, TextField } from "../../components/form-fields.tsx"
 import { validateName } from "../utils.ts"
 import { DeleteRecipeWarningDialog } from "./delete-recipe-warning-dialog.tsx"
 import { CloneRecipeDialog } from "./clone-recipe-dialog.tsx"
+import { calcNutrients, createFoodsMap } from "./recipe-utils.ts"
 
 type RecipeForm = Omit<Recipe, "ingredients">
 
@@ -24,8 +25,7 @@ export function RecipeDetailsRoute() {
   const [showDeleteWarning, setShowDeleteWarning] = useState(false)
   const [showCloneDialog, setShowCloneDialog] = useState(false)
 
-  const { recipes, editRecipe, addRecipe, removeRecipe } = useStore()
-
+  const { recipes, foods, editRecipe, addRecipe, removeRecipe } = useStore()
   const recipe = recipes.find((recipe) => recipe.id === recipeId)
 
   const {
@@ -104,6 +104,10 @@ export function RecipeDetailsRoute() {
     return <Navigate to="/recipes" />
   }
 
+  const foodsMap = createFoodsMap(foods)
+
+  const recipeWithNutrients = calcNutrients(foodsMap, recipe)
+
   return (
     <ContentLayout header={<RecipesBreadcrumb recipe={recipe} />}>
       <DeleteRecipeWarningDialog
@@ -143,7 +147,11 @@ export function RecipeDetailsRoute() {
       </ButtonToolbar>
 
       <Form plaintext={!editMode} id="edit-recipe-form" fluid onSubmit={(_, event) => onSubmit(event)}>
-        <div className="two-column-form-grid">
+        <div
+          style={{
+            height: "70px",
+          }}
+        >
           <Controller
             name="name"
             control={control}
@@ -157,6 +165,18 @@ export function RecipeDetailsRoute() {
             }}
             render={({ field }) => <TextField label="Name" field={field} error={errors[field.name]?.message} />}
           />
+        </div>
+        <div className="two-column-form-grid">
+          <div className="two-column-form-grid">
+            <ReadonlyNumberField label="KCal" recipe={recipeWithNutrients} nutrientName="kcal" />
+            <ReadonlyNumberField label="carbs" recipe={recipeWithNutrients} nutrientName="carbs" />
+
+            <ReadonlyNumberField label="fat" recipe={recipeWithNutrients} nutrientName="fat" />
+            <ReadonlyNumberField label="protein" recipe={recipeWithNutrients} nutrientName="protein" />
+
+            <ReadonlyNumberField label="fiber" recipe={recipeWithNutrients} nutrientName="fiber" />
+            <ReadonlyNumberField label="sugar" recipe={recipeWithNutrients} nutrientName="sugar" />
+          </div>
 
           <Controller
             name="description"

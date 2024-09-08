@@ -17,6 +17,8 @@ export type Recipe = {
   ingredients: Array<Ingredient>
 }
 
+export type RecipeWithNutrients = Omit<Recipe, "ingredients"> & Nutrients
+
 export type Ingredient = {
   amountInGram: number
   foodId: Id

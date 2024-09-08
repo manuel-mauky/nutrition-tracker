@@ -17,3 +17,7 @@ body {
     height: 35px;
   }
 }
+
+.rs-form-group {
+  margin-bottom: 10px !important;
+}

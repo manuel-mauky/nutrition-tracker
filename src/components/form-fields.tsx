@@ -1,6 +1,7 @@
 import React, { PropsWithChildren } from "react"
 import { ControllerRenderProps } from "react-hook-form"
 import { Form, Input, InputNumber } from "rsuite"
+import { RecipeWithNutrients } from "../features/types.ts"
 
 type FormData = Record<string, string | number | undefined | null>
 
@@ -82,6 +83,22 @@ export function NumberField<T extends FormData>({
         value={field.value}
         onChange={(value) => field.onChange(value)}
       />
+    </Field>
+  )
+}
+
+export function ReadonlyNumberField({
+  label,
+  recipe,
+  nutrientName,
+}: {
+  label: string
+  recipe: RecipeWithNutrients
+  nutrientName: keyof RecipeWithNutrients
+}) {
+  return (
+    <Field label={label}>
+      <InputNumber plaintext={true} name={nutrientName} value={recipe[nutrientName]} />
     </Field>
   )
 }
