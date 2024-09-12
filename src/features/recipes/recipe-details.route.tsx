@@ -2,7 +2,7 @@ import { Navigate, useNavigate, useParams } from "@tanstack/react-router"
 import { useStore } from "../store.ts"
 import { ContentLayout } from "../../content-layout.tsx"
 import { RecipesBreadcrumb } from "./recipes-breadcrumb.tsx"
-import { Button, ButtonGroup, ButtonToolbar, Form, IconButton } from "rsuite"
+import { Button, ButtonGroup, ButtonToolbar, Divider, Form, IconButton, List, Text } from "rsuite"
 import { useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { Recipe } from "../types.ts"
@@ -13,8 +13,35 @@ import { validateName } from "../utils.ts"
 import { DeleteRecipeWarningDialog } from "./delete-recipe-warning-dialog.tsx"
 import { CloneRecipeDialog } from "./clone-recipe-dialog.tsx"
 import { calcNutrients, createFoodsMap } from "./recipe-utils.ts"
+import { MovedItemInfo } from "rsuite/esm/List/helper/useSortHelper"
 
 type RecipeForm = Omit<Recipe, "ingredients">
+
+function IngredientList({ recipe }: { recipe: Recipe }) {
+  const { foods, editRecipe } = useStore()
+  const foodsMap = createFoodsMap(foods)
+
+  function handleSortEnd({ oldIndex, newIndex }: MovedItemInfo) {
+    const dataMutable = [...recipe.ingredients]
+    const moveData = dataMutable.splice(oldIndex, 1)
+    dataMutable.splice(newIndex, 0, moveData[0])
+
+    editRecipe({
+      ...recipe,
+      ingredients: dataMutable,
+    })
+  }
+
+  return (
+    <List sortable onSort={handleSortEnd}>
+      {recipe.ingredients.map((ingredient, index) => (
+        <List.Item key={`${ingredient.foodId}_${ingredient.amountInGram}_${index}`} index={index}>
+          {ingredient.amountInGram} g - {foodsMap[ingredient.foodId].name}
+        </List.Item>
+      ))}
+    </List>
+  )
+}
 
 export function RecipeDetailsRoute() {
   const { recipeId } = useParams({ strict: false })
@@ -188,6 +215,11 @@ export function RecipeDetailsRoute() {
           />
         </div>
       </Form>
+
+      <Divider />
+      <Text size="xl">Zutaten</Text>
+
+      <IngredientList recipe={recipe} />
     </ContentLayout>
   )
 }
