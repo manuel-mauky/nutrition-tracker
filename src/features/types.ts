@@ -1,18 +1,20 @@
 export type Id = string
 
+export type Entity = {
+  id: Id
+  name: string
+}
+
 export const nutrientNames = ["kcal", "carbs", "fat", "protein", "fiber", "sugar"] as const
 
 export type Nutrients = Record<(typeof nutrientNames)[number], number>
 
-export type Food = Nutrients & {
-  id: Id
-  name: string
-  description: string
-}
+export type Food = Nutrients &
+  Entity & {
+    description: string
+  }
 
-export type Recipe = {
-  id: Id
-  name: string
+export type Recipe = Entity & {
   description: string
   ingredients: Array<Ingredient>
 }
