@@ -1,12 +1,10 @@
-import { CellProps, ColumnProps, Container, IconButton, Table } from "rsuite"
-import { Food, Id } from "../types.ts"
+import { CellProps, ColumnProps, Container, Table } from "rsuite"
+import { Food } from "../types.ts"
 import { useStore } from "../store.ts"
 import { useState } from "react"
 import type { SortType } from "rsuite-table"
 import { Link } from "@tanstack/react-router"
-import { PiTrash } from "react-icons/pi"
-import { Icon } from "@rsuite/icons"
-import { DeleteFoodWarningDialog } from "./delete-food-warning-dialog.tsx"
+import { DeleteFoodButton } from "./delete-food-button.tsx"
 
 type FoodColumn = ColumnProps<Food> & {
   key: keyof Food
@@ -70,7 +68,7 @@ function LinkCell({ rowData, ...rest }: CellProps<Food>) {
   )
 }
 
-function ActionsTableCell({ rowData, deleteAction, ...rest }: CellProps<Food> & { deleteAction: (id: Id) => void }) {
+function ActionsTableCell({ rowData, ...rest }: CellProps<Food>) {
   if (!rowData) {
     return null
   }
@@ -81,7 +79,7 @@ function ActionsTableCell({ rowData, deleteAction, ...rest }: CellProps<Food> & 
     <>
       <Table.Cell {...rest} style={{ paddingTop: "4px" }}>
         <>
-          <IconButton onClick={() => deleteAction(foodId)} aria-label="Löschen" icon={<Icon as={PiTrash} />} />
+          <DeleteFoodButton foodId={foodId} hideLabel />
         </>
       </Table.Cell>
     </>
@@ -89,9 +87,7 @@ function ActionsTableCell({ rowData, deleteAction, ...rest }: CellProps<Food> & 
 }
 
 export function FoodsTable() {
-  const { foods, removeFood } = useStore()
-
-  const [deleteClickedId, setDeleteClickedId] = useState<Id | undefined>()
+  const { foods } = useStore()
 
   const [sortColumn, setSortColumn] = useState<FoodColumn["key"] | undefined>()
   const [sortType, setSortType] = useState<SortType | undefined>()
@@ -125,31 +121,8 @@ export function FoodsTable() {
     setSortType(sortType)
   }
 
-  function handleDeleteAction(id: Id) {
-    setDeleteClickedId(id)
-  }
-
-  function handleDeleteOk() {
-    if (deleteClickedId) {
-      removeFood(deleteClickedId)
-    }
-
-    setDeleteClickedId(undefined)
-  }
-
-  function handleDeleteCancel() {
-    setDeleteClickedId(undefined)
-  }
-
   return (
     <Container style={{ height: "100%" }}>
-      <DeleteFoodWarningDialog
-        open={!!deleteClickedId}
-        foodId={deleteClickedId}
-        handleOk={handleDeleteOk}
-        handleCancel={handleDeleteCancel}
-      />
-
       <Table sortColumn={sortColumn} sortType={sortType} onSortColumn={handleSortColumn} autoHeight data={getData()}>
         {columns.map((column) => {
           const { key, label, ...rest } = column
@@ -165,7 +138,7 @@ export function FoodsTable() {
         <Table.Column key="actions">
           <Table.HeaderCell>Aktionen</Table.HeaderCell>
 
-          <ActionsTableCell deleteAction={handleDeleteAction} />
+          <ActionsTableCell />
         </Table.Column>
       </Table>
     </Container>

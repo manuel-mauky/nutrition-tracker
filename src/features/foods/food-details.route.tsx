@@ -1,4 +1,4 @@
-import { Navigate, useNavigate, useParams } from "@tanstack/react-router"
+import { Navigate, useParams } from "@tanstack/react-router"
 import { useStore } from "../store.ts"
 
 import "./foods.css"
@@ -10,23 +10,18 @@ import { Food } from "../types.ts"
 import { Controller, useForm } from "react-hook-form"
 import { TextAreaField, TextField } from "../../components/form-fields.tsx"
 import { FoodNutritionForm } from "./food-nutrition-form.tsx"
-import { DeleteFoodWarningDialog } from "./delete-food-warning-dialog.tsx"
-import { PiCopySimple, PiPencilLine, PiTrash } from "react-icons/pi"
+import { DeleteFoodButton } from "./delete-food-button.tsx"
+import { PiPencilLine } from "react-icons/pi"
 import { Icon } from "@rsuite/icons"
-import { CloneFoodDialog } from "./clone-food-dialog.tsx"
+import { CloneFoodButton } from "./clone-food-button.tsx"
 import { validateName } from "../utils.ts"
 
 export function FoodDetailsRoute() {
   const { foodId } = useParams({ strict: false })
-  const navigate = useNavigate({ from: "/foods/$foodId" })
 
   const [editMode, setEditMode] = useState(false)
 
-  const [showDeleteWarning, setShowDeleteWarning] = useState(false)
-
-  const [showCloneDialog, setShowCloneDialog] = useState(false)
-
-  const { foods, addFood, editFood, removeFood } = useStore()
+  const { foods, editFood } = useStore()
 
   const food = foods.find((food) => food.id === foodId)
 
@@ -50,52 +45,6 @@ export function FoodDetailsRoute() {
     setEditMode(false)
   }
 
-  function handleDelete() {
-    setShowDeleteWarning(true)
-  }
-
-  function handleDeleteOk() {
-    if (food) {
-      removeFood(food)
-    }
-    setShowDeleteWarning(false)
-  }
-
-  function handleDeleteCancel() {
-    setShowDeleteWarning(false)
-  }
-
-  function handleClone() {
-    setShowCloneDialog(true)
-  }
-
-  async function handleCloneOk(newName: string) {
-    if (food) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { id, ...rest } = food
-
-      const clone: Omit<Food, "id"> = {
-        ...rest,
-        name: newName,
-      }
-
-      const newId = addFood(clone)
-
-      await navigate({
-        to: "/foods/$foodId",
-        params: {
-          foodId: newId,
-        },
-      })
-    }
-
-    setShowCloneDialog(false)
-  }
-
-  function handleCloneCancel() {
-    setShowCloneDialog(false)
-  }
-
   if (!food) {
     // this case can happen when:
     // a) users directly navigated to details page with wrong link/id
@@ -105,18 +54,6 @@ export function FoodDetailsRoute() {
 
   return (
     <ContentLayout header={<FoodsBreadcrumb food={food} />}>
-      <DeleteFoodWarningDialog
-        open={showDeleteWarning}
-        foodId={food?.id}
-        handleOk={handleDeleteOk}
-        handleCancel={handleDeleteCancel}
-      />
-      <CloneFoodDialog
-        foodId={food?.id}
-        handleOk={handleCloneOk}
-        handleCancel={handleCloneCancel}
-        open={showCloneDialog}
-      />
       <ButtonToolbar style={{ marginBottom: "10px", marginTop: "10px" }}>
         {editMode ? (
           <ButtonGroup>
@@ -133,12 +70,8 @@ export function FoodDetailsRoute() {
           </IconButton>
         )}
 
-        <IconButton icon={<Icon as={PiCopySimple} />} disabled={editMode} onClick={handleClone}>
-          Klonen
-        </IconButton>
-        <IconButton icon={<Icon as={PiTrash} />} disabled={editMode} onClick={handleDelete}>
-          Löschen
-        </IconButton>
+        <CloneFoodButton foodId={food.id} disabled={editMode} />
+        <DeleteFoodButton foodId={food.id} disabled={editMode} />
       </ButtonToolbar>
 
       <Form plaintext={!editMode} id="edit-food-form" fluid onSubmit={(_, event) => onSubmit(event)}>
