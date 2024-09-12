@@ -147,42 +147,43 @@ export function RecipeDetailsRoute() {
       </ButtonToolbar>
 
       <Form plaintext={!editMode} id="edit-recipe-form" fluid onSubmit={(_, event) => onSubmit(event)}>
-        <div
-          style={{
-            height: "70px",
-          }}
-        >
-          <Controller
-            name="name"
-            control={control}
-            rules={{
-              required: "Name ist erforderlich",
-              validate: (value, formRecipe) =>
-                validateName(
-                  value,
-                  recipes.filter((recipe) => recipe.id !== formRecipe.id),
-                ),
-            }}
-            render={({ field }) => <TextField label="Name" field={field} error={errors[field.name]?.message} />}
-          />
-        </div>
         <div className="two-column-form-grid">
-          <div className="two-column-form-grid">
-            <ReadonlyNumberField label="KCal" recipe={recipeWithNutrients} nutrientName="kcal" />
-            <ReadonlyNumberField label="carbs" recipe={recipeWithNutrients} nutrientName="carbs" />
+          <div>
+            <Controller
+              name="name"
+              control={control}
+              rules={{
+                required: "Name ist erforderlich",
+                validate: (value, formRecipe) =>
+                  validateName(
+                    value,
+                    recipes.filter((recipe) => recipe.id !== formRecipe.id),
+                  ),
+              }}
+              render={({ field }) => <TextField label="Name" field={field} error={errors[field.name]?.message} />}
+            />
+            <div className="four-column-form-grid">
+              <ReadonlyNumberField label="KCal" recipe={recipeWithNutrients} nutrientName="kcal" />
+              <ReadonlyNumberField label="Kohlenhydrate" recipe={recipeWithNutrients} nutrientName="carbs" />
 
-            <ReadonlyNumberField label="fat" recipe={recipeWithNutrients} nutrientName="fat" />
-            <ReadonlyNumberField label="protein" recipe={recipeWithNutrients} nutrientName="protein" />
+              <ReadonlyNumberField label="Fett" recipe={recipeWithNutrients} nutrientName="fat" />
+              <ReadonlyNumberField label="Protein" recipe={recipeWithNutrients} nutrientName="protein" />
 
-            <ReadonlyNumberField label="fiber" recipe={recipeWithNutrients} nutrientName="fiber" />
-            <ReadonlyNumberField label="sugar" recipe={recipeWithNutrients} nutrientName="sugar" />
+              <ReadonlyNumberField label="Ballaststoffe" recipe={recipeWithNutrients} nutrientName="fiber" />
+              <ReadonlyNumberField label="Zucker" recipe={recipeWithNutrients} nutrientName="sugar" />
+            </div>
           </div>
 
           <Controller
             name="description"
             control={control}
             render={({ field }) => (
-              <TextAreaField label="Beschreibung" field={field} error={errors[field.name]?.message} />
+              <TextAreaField
+                style={{ height: "200px" }}
+                label="Beschreibung"
+                field={field}
+                error={errors[field.name]?.message}
+              />
             )}
           />
         </div>

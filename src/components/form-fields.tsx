@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react"
+import React, { ComponentPropsWithoutRef, PropsWithChildren } from "react"
 import { ControllerRenderProps } from "react-hook-form"
 import { Form, Input, InputNumber } from "rsuite"
 import { RecipeWithNutrients } from "../features/types.ts"
@@ -9,7 +9,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement>((props, ref) => (
   <Input {...props} as="textarea" ref={ref} />
 ))
 
-export type CommonFieldProps = {
+export type CommonFieldProps = ComponentPropsWithoutRef<"div"> & {
   label: string
   error?: string
   autoFocus?: boolean
@@ -21,9 +21,9 @@ export type FieldProps<T extends Record<string, unknown>> = PropsWithChildren<
   }
 >
 
-export function Field({ children, error, label }: PropsWithChildren<CommonFieldProps>) {
+export function Field({ children, error, label, ...rest }: PropsWithChildren<CommonFieldProps>) {
   return (
-    <Form.Group>
+    <Form.Group {...rest}>
       <Form.ControlLabel>{label}</Form.ControlLabel>
       {children}
       <Form.ErrorMessage show={!!error} placement="bottomStart">
@@ -33,9 +33,9 @@ export function Field({ children, error, label }: PropsWithChildren<CommonFieldP
   )
 }
 
-export function TextField<T extends FormData>({ field, label, error, autoFocus }: FieldProps<T>) {
+export function TextField<T extends FormData>({ field, label, error, autoFocus, ...rest }: FieldProps<T>) {
   return (
-    <Field label={label} error={error}>
+    <Field label={label} error={error} {...rest}>
       <Form.Control
         autoFocus={autoFocus}
         accepter={Input}
@@ -47,9 +47,9 @@ export function TextField<T extends FormData>({ field, label, error, autoFocus }
   )
 }
 
-export function TextAreaField<T extends FormData>({ field, label, error, autoFocus }: FieldProps<T>) {
+export function TextAreaField<T extends FormData>({ field, label, error, autoFocus, ...rest }: FieldProps<T>) {
   return (
-    <Field label={label} error={error}>
+    <Field label={label} error={error} {...rest}>
       <Form.Control
         autoFocus={autoFocus}
         accepter={Textarea}
@@ -67,13 +67,14 @@ export function NumberField<T extends FormData>({
   label,
   error,
   autoFocus,
+  ...rest
 }: FieldProps<T> & {
   unit?: string
 }) {
   const formatter = unit ? (value: number | string) => `${value} ${unit}` : undefined
 
   return (
-    <Field label={label} error={error}>
+    <Field label={label} error={error} {...rest}>
       <Form.Control
         autoFocus={autoFocus}
         accepter={InputNumber}
@@ -91,13 +92,14 @@ export function ReadonlyNumberField({
   label,
   recipe,
   nutrientName,
+  ...rest
 }: {
   label: string
   recipe: RecipeWithNutrients
   nutrientName: keyof RecipeWithNutrients
 }) {
   return (
-    <Field label={label}>
+    <Field label={label} {...rest}>
       <InputNumber plaintext={true} name={nutrientName} value={recipe[nutrientName]} />
     </Field>
   )

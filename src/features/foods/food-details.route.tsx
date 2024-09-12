@@ -142,33 +142,36 @@ export function FoodDetailsRoute() {
       </ButtonToolbar>
 
       <Form plaintext={!editMode} id="edit-food-form" fluid onSubmit={(_, event) => onSubmit(event)}>
-        <div
-          style={{
-            height: "70px",
-          }}
-        >
-          <Controller
-            name="name"
-            control={control}
-            rules={{
-              required: "Name ist erforderlich",
-              validate: (value, formFood) =>
-                validateName(
-                  value,
-                  foods.filter((food) => food.id !== formFood.id),
-                ),
-            }}
-            render={({ field }) => <TextField field={field} error={errors[field.name]?.message} label="Name" />}
-          />
-        </div>
         <div className="two-column-form-grid">
-          <FoodNutritionForm control={control} errors={errors} />
+          <div>
+            <Controller
+              name="name"
+              control={control}
+              rules={{
+                required: "Name ist erforderlich",
+                validate: (value, formFood) =>
+                  validateName(
+                    value,
+                    foods.filter((food) => food.id !== formFood.id),
+                  ),
+              }}
+              render={({ field }) => <TextField field={field} error={errors[field.name]?.message} label="Name" />}
+            />
+            <div className="four-column-form-grid">
+              <FoodNutritionForm control={control} errors={errors} />
+            </div>
+          </div>
 
           <Controller
             name="description"
             control={control}
             render={({ field }) => (
-              <TextAreaField label="Beschreibung" field={field} error={errors[field.name]?.message} />
+              <TextAreaField
+                style={{ height: "200px" }}
+                label="Beschreibung"
+                field={field}
+                error={errors[field.name]?.message}
+              />
             )}
           />
         </div>

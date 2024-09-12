@@ -18,6 +18,22 @@ body {
   }
 }
 
+.four-column-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  column-gap: 10px;
+}
+
 .rs-form-group {
   margin-bottom: 10px !important;
+  display: flex;
+  flex-direction: column;
+
+  .rs-form-control-wrapper {
+    flex-grow: 1;
+
+    textarea {
+      height: 100%;
+    }
+  }
 }

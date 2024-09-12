@@ -4,7 +4,7 @@ import { Food } from "../types.ts"
 
 export function FoodNutritionForm({ control, errors }: { control: Control<Food>; errors: FieldErrors<Food> }) {
   return (
-    <div className="two-column-form-grid">
+    <>
       <Controller
         name="kcal"
         control={control}
@@ -43,6 +43,6 @@ export function FoodNutritionForm({ control, errors }: { control: Control<Food>;
           <NumberField label="Zucker" unit="g" field={field} error={errors[field.name]?.message} />
         )}
       />
-    </div>
+    </>
   )
 }
