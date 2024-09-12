@@ -2,20 +2,16 @@ import { Navigate, useNavigate, useParams } from "@tanstack/react-router"
 import { useStore } from "../store.ts"
 import { ContentLayout } from "../../content-layout.tsx"
 import { RecipesBreadcrumb } from "./recipes-breadcrumb.tsx"
-import { Button, ButtonGroup, ButtonToolbar, Divider, Form, IconButton, List, Text } from "rsuite"
-import { useState } from "react"
-import { Controller, useForm } from "react-hook-form"
+import { Button, ButtonGroup, ButtonToolbar, Divider, IconButton, List, Text } from "rsuite"
+import { useRef, useState } from "react"
 import { Recipe } from "../types.ts"
 import { Icon } from "@rsuite/icons"
 import { PiCopySimple, PiPencilLine, PiTrash } from "react-icons/pi"
-import { ReadonlyNumberField, TextAreaField, TextField } from "../../components/form-fields.tsx"
-import { validateName } from "../utils.ts"
 import { DeleteRecipeWarningDialog } from "./delete-recipe-warning-dialog.tsx"
 import { CloneRecipeDialog } from "./clone-recipe-dialog.tsx"
-import { calcNutrients, createFoodsMap } from "./recipe-utils.ts"
+import { createFoodsMap } from "./recipe-utils.ts"
 import { MovedItemInfo } from "rsuite/esm/List/helper/useSortHelper"
-
-type RecipeForm = Omit<Recipe, "ingredients">
+import { RecipeDetailsForm, RecipeDetailsFormRef } from "./recipe-details-form.tsx"
 
 function IngredientList({ recipe }: { recipe: Recipe }) {
   const { foods, editRecipe } = useStore()
@@ -46,35 +42,19 @@ function IngredientList({ recipe }: { recipe: Recipe }) {
 export function RecipeDetailsRoute() {
   const { recipeId } = useParams({ strict: false })
 
+  const formRef = useRef<RecipeDetailsFormRef>(null)
+
   const navigate = useNavigate({ from: "/recipes/$recipeId" })
 
   const [editMode, setEditMode] = useState(false)
   const [showDeleteWarning, setShowDeleteWarning] = useState(false)
   const [showCloneDialog, setShowCloneDialog] = useState(false)
 
-  const { recipes, foods, editRecipe, addRecipe, removeRecipe } = useStore()
+  const { recipes, addRecipe, removeRecipe } = useStore()
   const recipe = recipes.find((recipe) => recipe.id === recipeId)
 
-  const {
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors },
-  } = useForm<RecipeForm>({
-    values: recipe,
-  })
-
-  const onSubmit = handleSubmit((data) => {
-    editRecipe({
-      ...recipe!,
-      ...data,
-    })
-    setEditMode(false)
-    reset()
-  })
-
   function handleEditCancel() {
-    reset()
+    formRef.current?.reset()
     setEditMode(false)
   }
 
@@ -131,10 +111,6 @@ export function RecipeDetailsRoute() {
     return <Navigate to="/recipes" />
   }
 
-  const foodsMap = createFoodsMap(foods)
-
-  const recipeWithNutrients = calcNutrients(foodsMap, recipe)
-
   return (
     <ContentLayout header={<RecipesBreadcrumb recipe={recipe} />}>
       <DeleteRecipeWarningDialog
@@ -173,48 +149,7 @@ export function RecipeDetailsRoute() {
         </IconButton>
       </ButtonToolbar>
 
-      <Form plaintext={!editMode} id="edit-recipe-form" fluid onSubmit={(_, event) => onSubmit(event)}>
-        <div className="two-column-form-grid">
-          <div>
-            <Controller
-              name="name"
-              control={control}
-              rules={{
-                required: "Name ist erforderlich",
-                validate: (value, formRecipe) =>
-                  validateName(
-                    value,
-                    recipes.filter((recipe) => recipe.id !== formRecipe.id),
-                  ),
-              }}
-              render={({ field }) => <TextField label="Name" field={field} error={errors[field.name]?.message} />}
-            />
-            <div className="four-column-form-grid">
-              <ReadonlyNumberField label="KCal" recipe={recipeWithNutrients} nutrientName="kcal" />
-              <ReadonlyNumberField label="Kohlenhydrate" recipe={recipeWithNutrients} nutrientName="carbs" />
-
-              <ReadonlyNumberField label="Fett" recipe={recipeWithNutrients} nutrientName="fat" />
-              <ReadonlyNumberField label="Protein" recipe={recipeWithNutrients} nutrientName="protein" />
-
-              <ReadonlyNumberField label="Ballaststoffe" recipe={recipeWithNutrients} nutrientName="fiber" />
-              <ReadonlyNumberField label="Zucker" recipe={recipeWithNutrients} nutrientName="sugar" />
-            </div>
-          </div>
-
-          <Controller
-            name="description"
-            control={control}
-            render={({ field }) => (
-              <TextAreaField
-                style={{ height: "200px" }}
-                label="Beschreibung"
-                field={field}
-                error={errors[field.name]?.message}
-              />
-            )}
-          />
-        </div>
-      </Form>
+      <RecipeDetailsForm ref={formRef} recipe={recipe} editMode={editMode} setEditMode={setEditMode} />
 
       <Divider />
       <Text size="xl">Zutaten</Text>
