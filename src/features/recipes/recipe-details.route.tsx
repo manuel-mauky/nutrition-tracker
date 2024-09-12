@@ -1,4 +1,4 @@
-import { Navigate, useNavigate, useParams } from "@tanstack/react-router"
+import { Navigate, useParams } from "@tanstack/react-router"
 import { useStore } from "../store.ts"
 import { ContentLayout } from "../../content-layout.tsx"
 import { RecipesBreadcrumb } from "./recipes-breadcrumb.tsx"
@@ -6,12 +6,12 @@ import { Button, ButtonGroup, ButtonToolbar, Divider, IconButton, List, Text } f
 import { useRef, useState } from "react"
 import { Recipe } from "../types.ts"
 import { Icon } from "@rsuite/icons"
-import { PiCopySimple, PiPencilLine, PiTrash } from "react-icons/pi"
-import { DeleteRecipeWarningDialog } from "./delete-recipe-warning-dialog.tsx"
-import { CloneRecipeDialog } from "./clone-recipe-dialog.tsx"
+import { PiPencilLine } from "react-icons/pi"
+import { CloneRecipeButton } from "./clone-recipe-button.tsx"
 import { createFoodsMap } from "./recipe-utils.ts"
 import { MovedItemInfo } from "rsuite/esm/List/helper/useSortHelper"
 import { RecipeDetailsForm, RecipeDetailsFormRef } from "./recipe-details-form.tsx"
+import { DeleteRecipeButton } from "./delete-recipe-button.tsx"
 
 function IngredientList({ recipe }: { recipe: Recipe }) {
   const { foods, editRecipe } = useStore()
@@ -44,64 +44,14 @@ export function RecipeDetailsRoute() {
 
   const formRef = useRef<RecipeDetailsFormRef>(null)
 
-  const navigate = useNavigate({ from: "/recipes/$recipeId" })
-
   const [editMode, setEditMode] = useState(false)
-  const [showDeleteWarning, setShowDeleteWarning] = useState(false)
-  const [showCloneDialog, setShowCloneDialog] = useState(false)
 
-  const { recipes, addRecipe, removeRecipe } = useStore()
+  const { recipes } = useStore()
   const recipe = recipes.find((recipe) => recipe.id === recipeId)
 
   function handleEditCancel() {
     formRef.current?.reset()
     setEditMode(false)
-  }
-
-  function handleDelete() {
-    setShowDeleteWarning(true)
-  }
-
-  function handleDeleteOk() {
-    if (recipe) {
-      removeRecipe(recipe)
-    }
-    setShowDeleteWarning(false)
-  }
-
-  function handleDeleteCancel() {
-    setShowDeleteWarning(false)
-  }
-
-  function handleClone() {
-    setShowCloneDialog(true)
-  }
-
-  async function handleCloneOk(newName: string) {
-    if (recipe) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { id, ...rest } = recipe
-
-      const clone: Omit<Recipe, "id"> = {
-        ...rest,
-        name: newName,
-      }
-
-      const newId = addRecipe(clone)
-
-      await navigate({
-        to: "/recipes/$recipeId",
-        params: {
-          recipeId: newId,
-        },
-      })
-    }
-
-    setShowCloneDialog(false)
-  }
-
-  function handleCloneCancel() {
-    setShowCloneDialog(false)
   }
 
   if (!recipe) {
@@ -113,18 +63,6 @@ export function RecipeDetailsRoute() {
 
   return (
     <ContentLayout header={<RecipesBreadcrumb recipe={recipe} />}>
-      <DeleteRecipeWarningDialog
-        open={showDeleteWarning}
-        recipeId={recipe?.id}
-        handleOk={handleDeleteOk}
-        handleCancel={handleDeleteCancel}
-      />
-      <CloneRecipeDialog
-        open={showCloneDialog}
-        recipeId={recipe?.id}
-        handleOk={handleCloneOk}
-        handleCancel={handleCloneCancel}
-      />
       <ButtonToolbar style={{ marginBottom: "10px", marginTop: "10px" }}>
         {editMode ? (
           <ButtonGroup>
@@ -141,12 +79,8 @@ export function RecipeDetailsRoute() {
           </IconButton>
         )}
 
-        <IconButton icon={<Icon as={PiCopySimple} />} disabled={editMode} onClick={handleClone}>
-          Klonen
-        </IconButton>
-        <IconButton icon={<Icon as={PiTrash} />} disabled={editMode} onClick={handleDelete}>
-          Löschen
-        </IconButton>
+        <CloneRecipeButton recipeId={recipe.id} disabled={editMode} />
+        <DeleteRecipeButton recipeId={recipe.id} disabled={editMode} />
       </ButtonToolbar>
 
       <RecipeDetailsForm ref={formRef} recipe={recipe} editMode={editMode} setEditMode={setEditMode} />
