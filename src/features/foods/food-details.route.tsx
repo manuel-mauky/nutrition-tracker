@@ -100,6 +100,8 @@ export function FoodDetailsRoute() {
             control={control}
             render={({ field }) => (
               <TextAreaField
+                readOnly={!editMode}
+                plaintext={false}
                 style={{ height: "200px" }}
                 label="Beschreibung"
                 field={field}

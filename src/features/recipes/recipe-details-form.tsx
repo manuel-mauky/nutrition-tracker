@@ -69,6 +69,8 @@ export const RecipeDetailsForm = forwardRef<RecipeDetailsFormRef, Props>(({ reci
           control={control}
           render={({ field }) => (
             <TextAreaField
+              readOnly={!editMode}
+              plaintext={false}
               style={{ height: "150px" }}
               label="Beschreibung"
               field={field}
