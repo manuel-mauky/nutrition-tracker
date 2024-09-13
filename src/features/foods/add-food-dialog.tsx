@@ -50,7 +50,7 @@ export function AddFoodDialog() {
       <Button startIcon={<PiPlusBold />} onClick={handleOpen}>
         Hinzufügen
       </Button>
-      <Modal open={openAddDialog} onClose={handleClose}>
+      <Modal open={openAddDialog} onClose={handleClose} backdrop="static">
         <Modal.Header>
           <Modal.Title>Lebensmittel hinzufügen</Modal.Title>
         </Modal.Header>

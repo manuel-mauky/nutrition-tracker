@@ -1,6 +1,7 @@
-import React, { ComponentPropsWithoutRef, PropsWithChildren } from "react"
+import React, { ComponentPropsWithoutRef, PropsWithChildren, useEffect, useRef } from "react"
 import { ControllerRenderProps } from "react-hook-form"
-import { Form, Input, InputNumber } from "rsuite"
+import { Form, Input, InputNumber, InputPicker } from "rsuite"
+import { Id } from "../features/types.ts"
 
 type FormData = Record<string, string | number | undefined | null>
 
@@ -31,6 +32,34 @@ export function Field({ children, error, label, ...rest }: PropsWithChildren<Com
         {error}
       </Form.ErrorMessage>
     </Form.Group>
+  )
+}
+
+export function InputPickerField<T extends FormData>({
+  field,
+  label,
+  error,
+  autoFocus,
+  readOnly,
+  plaintext,
+  data,
+  ...rest
+}: FieldProps<T> & {
+  data: Array<{ label: string; value: Id }>
+}) {
+  return (
+    <Field label={label} error={error} {...rest}>
+      <Form.Control
+        autoFocus={autoFocus}
+        plaintext={plaintext}
+        readOnly={readOnly}
+        accepter={InputPicker}
+        data={data}
+        name={field.name}
+        value={field.value}
+        onChange={(value) => field.onChange(value)}
+      />
+    </Field>
   )
 }
 
@@ -96,9 +125,21 @@ export function NumberField<T extends FormData>({
 }) {
   const formatter = unit ? (value: number | string) => `${value} ${unit}` : undefined
 
+  const ref = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (ref.current && autoFocus) {
+      const input = ref.current.querySelector("input")
+      if (input) {
+        input.select()
+      }
+    }
+  }, [ref, autoFocus])
+
   return (
     <Field label={label} error={error} {...rest}>
       <Form.Control
+        ref={ref}
         autoFocus={autoFocus}
         plaintext={plaintext}
         readOnly={readOnly}

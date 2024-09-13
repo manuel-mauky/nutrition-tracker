@@ -12,6 +12,7 @@ import { DeleteRecipeButton } from "./delete-recipe-button.tsx"
 import { IngredientTable } from "./ingredient-table.tsx"
 
 import "./recipes.css"
+import { AddIngredientButton } from "./add-ingredient-button.tsx"
 
 export function RecipeDetailsRoute() {
   const { recipeId } = useParams({ strict: false })
@@ -61,7 +62,13 @@ export function RecipeDetailsRoute() {
         <RecipeDetailsForm ref={formRef} recipe={recipe} editMode={editMode} setEditMode={setEditMode} />
 
         <Divider />
-        <Text size="xl">Zutaten</Text>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <Text size="xl">Zutaten</Text>
+          <ButtonToolbar style={{ marginTop: "10px", marginBottom: "10px" }}>
+            <AddIngredientButton recipe={recipe} />
+          </ButtonToolbar>
+        </div>
 
         <div style={{ flexGrow: 1 }}>
           <IngredientTable recipe={recipe} />

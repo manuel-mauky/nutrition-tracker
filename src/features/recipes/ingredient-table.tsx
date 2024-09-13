@@ -134,7 +134,7 @@ export function IngredientTable({ recipe }: { recipe: Recipe }) {
   }
 
   return (
-    <Container style={{height: "100%"}}>
+    <Container style={{ height: "100%" }}>
       <Table
         headerHeight={80}
         sortColumn={sortColumn}

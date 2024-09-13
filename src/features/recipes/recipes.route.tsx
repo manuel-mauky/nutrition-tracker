@@ -9,7 +9,7 @@ import "./recipes.css"
 export function RecipesRoute() {
   return (
     <ContentLayout header={<RecipesBreadcrumb />}>
-      <div id="recipe-root" style={{height: "100%"}}>
+      <div id="recipe-root" style={{ height: "100%" }}>
         <ButtonToolbar>
           <AddRecipeDialog />
         </ButtonToolbar>
