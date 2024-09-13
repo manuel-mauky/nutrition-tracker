@@ -16,27 +16,20 @@ function calcNutrientForFood(food: Food, ingredient: Ingredient, key: keyof Nutr
   return Math.floor((food[key] / 100) * ingredient.amountInGram)
 }
 
-/**
- * Calculate the sum of all nutrients for a given recipe.
- *
- * @param foodsMap a map of all foods. This is needed to take the basic nutrient values for foods
- * @param recipe
- */
-export function calcNutrients(foodsMap: Record<Id, Food>, recipe: Recipe): RecipeWithNutrients {
-  // transform all ingredients to a list of nutrients.
-  const nutrients: Array<Nutrients> = recipe.ingredients.map((ingredient) => {
-    const food = foodsMap[ingredient.foodId]
+export function calcNutrientsForIngredient(foodsMap: Record<Id, Food>, ingredient: Ingredient): Nutrients {
+  const food = foodsMap[ingredient.foodId]
 
-    // for every nutrient we calculate the nutrient amount of that ingredient
-    return nutrientNames.reduce((prev, nutrientName) => {
-      const value = calcNutrientForFood(food, ingredient, nutrientName)
-      return {
-        ...prev,
-        [nutrientName]: value,
-      }
-    }, {}) as Nutrients
-  })
+  // for every nutrient we calculate the nutrient amount of that ingredient
+  return nutrientNames.reduce((prev, nutrientName) => {
+    const value = calcNutrientForFood(food, ingredient, nutrientName)
+    return {
+      ...prev,
+      [nutrientName]: value,
+    }
+  }, {}) as Nutrients
+}
 
+export function sumNutrients(nutrients: Array<Nutrients>): Nutrients {
   // first need a record of nutrientName to 0 that is used
   // as a starting value for the next reduce step
   const initial = nutrientNames.reduce((prev, nutrientName) => {
@@ -47,7 +40,7 @@ export function calcNutrients(foodsMap: Record<Id, Food>, recipe: Recipe): Recip
   }, {}) as Nutrients
 
   // now we can go through all nutrients and sum up all nutrient values to get the nutrients of the whole recipe
-  const sumValues: Nutrients = nutrients.reduce((sumValues, nutrient) => {
+  return nutrients.reduce((sumValues, nutrient) => {
     // for this, we go through all nutrientNames and sum up the values
     return nutrientNames.reduce((prev, nutrientName) => {
       return {
@@ -56,6 +49,21 @@ export function calcNutrients(foodsMap: Record<Id, Food>, recipe: Recipe): Recip
       }
     }, {}) as Nutrients
   }, initial)
+}
+
+/**
+ * Calculate the sum of all nutrients for a given recipe.
+ *
+ * @param foodsMap a map of all foods. This is needed to take the basic nutrient values for foods
+ * @param recipe
+ */
+export function calcNutrients(foodsMap: Record<Id, Food>, recipe: Recipe): RecipeWithNutrients {
+  // transform all ingredients to a list of nutrients.
+  const nutrients: Array<Nutrients> = recipe.ingredients.map((ingredient) =>
+    calcNutrientsForIngredient(foodsMap, ingredient),
+  )
+
+  const sumValues: Nutrients = sumNutrients(nutrients)
 
   return {
     ...recipe,

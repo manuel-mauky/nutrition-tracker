@@ -6,6 +6,20 @@ export type Entity = {
 }
 
 export const nutrientNames = ["kcal", "carbs", "fat", "protein", "fiber", "sugar"] as const
+export type NutrientName = (typeof nutrientNames)[number]
+
+export function isNutrientName(key: string): key is NutrientName {
+  return nutrientNames.includes(key as NutrientName)
+}
+
+export const nutrientUnit: Record<NutrientName, string> = {
+  kcal: "",
+  carbs: "g",
+  fat: "g",
+  protein: "g",
+  fiber: "g",
+  sugar: "g",
+}
 
 export type Nutrients = Record<(typeof nutrientNames)[number], number>
 

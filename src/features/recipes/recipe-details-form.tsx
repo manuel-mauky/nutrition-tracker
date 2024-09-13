@@ -2,10 +2,9 @@ import { Recipe } from "../types.ts"
 import { forwardRef, useImperativeHandle } from "react"
 import { useStore } from "../store.ts"
 import { Controller, useForm } from "react-hook-form"
-import { calcNutrients, createFoodsMap } from "./recipe-utils.ts"
 import { Form } from "rsuite"
 import { validateName } from "../utils.ts"
-import { ReadonlyNumberField, TextAreaField, TextField } from "../../components/form-fields.tsx"
+import { TextAreaField, TextField } from "../../components/form-fields.tsx"
 
 export type RecipeForm = Omit<Recipe, "ingredients">
 
@@ -20,7 +19,7 @@ export type Props = {
 }
 
 export const RecipeDetailsForm = forwardRef<RecipeDetailsFormRef, Props>(({ recipe, editMode, setEditMode }, ref) => {
-  const { recipes, foods, editRecipe } = useStore()
+  const { recipes, editRecipe } = useStore()
 
   const {
     handleSubmit,
@@ -46,10 +45,6 @@ export const RecipeDetailsForm = forwardRef<RecipeDetailsFormRef, Props>(({ reci
     reset()
   })
 
-  const foodsMap = createFoodsMap(foods)
-
-  const recipeWithNutrients = calcNutrients(foodsMap, recipe)
-
   return (
     <Form plaintext={!editMode} id="edit-recipe-form" fluid onSubmit={(_, event) => onSubmit(event)}>
       <div className="two-column-form-grid">
@@ -67,16 +62,6 @@ export const RecipeDetailsForm = forwardRef<RecipeDetailsFormRef, Props>(({ reci
             }}
             render={({ field }) => <TextField label="Name" field={field} error={errors[field.name]?.message} />}
           />
-          <div className="four-column-form-grid">
-            <ReadonlyNumberField label="KCal" recipe={recipeWithNutrients} nutrientName="kcal" />
-            <ReadonlyNumberField label="Kohlenhydrate" recipe={recipeWithNutrients} nutrientName="carbs" />
-
-            <ReadonlyNumberField label="Fett" recipe={recipeWithNutrients} nutrientName="fat" />
-            <ReadonlyNumberField label="Protein" recipe={recipeWithNutrients} nutrientName="protein" />
-
-            <ReadonlyNumberField label="Ballaststoffe" recipe={recipeWithNutrients} nutrientName="fiber" />
-            <ReadonlyNumberField label="Zucker" recipe={recipeWithNutrients} nutrientName="sugar" />
-          </div>
         </div>
 
         <Controller
@@ -84,7 +69,7 @@ export const RecipeDetailsForm = forwardRef<RecipeDetailsFormRef, Props>(({ reci
           control={control}
           render={({ field }) => (
             <TextAreaField
-              style={{ height: "200px" }}
+              style={{ height: "150px" }}
               label="Beschreibung"
               field={field}
               error={errors[field.name]?.message}

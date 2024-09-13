@@ -56,7 +56,7 @@ const columns: Array<FoodColumn> = [
   },
 ]
 
-function LinkCell({ rowData, ...rest }: CellProps<Food>) {
+export function FoodLinkCell({ rowData, ...rest }: CellProps<Food>) {
   return (
     <Table.Cell {...rest}>
       {rowData && (
@@ -130,7 +130,7 @@ export function FoodsTable() {
             <Table.Column {...rest} key={key}>
               <Table.HeaderCell>{label}</Table.HeaderCell>
 
-              {key === "name" ? <LinkCell dataKey={key} /> : <Table.Cell dataKey={key} />}
+              {key === "name" ? <FoodLinkCell dataKey={key} /> : <Table.Cell dataKey={key} />}
             </Table.Column>
           )
         })}
