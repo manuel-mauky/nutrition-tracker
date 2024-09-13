@@ -1,4 +1,4 @@
-import { Ingredient, isNutrientName, Nutrients, nutrientUnit, Recipe } from "../types.ts"
+import { Id, Ingredient, isNutrientName, Nutrients, nutrientUnit, Recipe } from "../types.ts"
 import { useStore } from "../store.ts"
 import { calcNutrients, calcNutrientsForIngredient, createFoodsMap } from "./recipe-utils.ts"
 import { ColumnProps, Container, Table } from "rsuite"
@@ -8,6 +8,7 @@ import { FoodLinkCell } from "../foods/foods-table.tsx"
 
 type IngredientData = Omit<Ingredient, "foodId"> &
   Nutrients & {
+    id: Id
     name: string
   }
 
@@ -87,6 +88,7 @@ export function IngredientTable({ recipe }: { recipe: Recipe }) {
       const nutrients = calcNutrientsForIngredient(foodsMap, ingredient)
 
       return {
+        id: food.id,
         name: food.name,
         amountInGram: ingredient.amountInGram,
         ...nutrients,
