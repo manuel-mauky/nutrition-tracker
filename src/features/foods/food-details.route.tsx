@@ -54,7 +54,7 @@ export function FoodDetailsRoute() {
 
   return (
     <ContentLayout header={<FoodsBreadcrumb food={food} />}>
-      <ButtonToolbar style={{ marginBottom: "10px", marginTop: "10px" }}>
+      <ButtonToolbar style={{ marginBottom: "10px" }}>
         {editMode ? (
           <ButtonGroup>
             <Button appearance="primary" type="submit" form="edit-food-form">

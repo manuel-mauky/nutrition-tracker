@@ -4,10 +4,12 @@ import { RecipesTable } from "./recipes-table.tsx"
 import { RecipesBreadcrumb } from "./recipes-breadcrumb.tsx"
 import { AddRecipeDialog } from "./add-recipe-dialog.tsx"
 
+import "./recipes.css"
+
 export function RecipesRoute() {
   return (
     <ContentLayout header={<RecipesBreadcrumb />}>
-      <div id="recipe-root">
+      <div id="recipe-root" style={{height: "100%"}}>
         <ButtonToolbar>
           <AddRecipeDialog />
         </ButtonToolbar>

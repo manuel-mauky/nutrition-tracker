@@ -123,7 +123,13 @@ export function FoodsTable() {
 
   return (
     <Container style={{ height: "100%" }}>
-      <Table sortColumn={sortColumn} sortType={sortType} onSortColumn={handleSortColumn} autoHeight data={getData()}>
+      <Table
+        fillHeight
+        sortColumn={sortColumn}
+        sortType={sortType}
+        onSortColumn={handleSortColumn}
+        data={getData()}
+      >
         {columns.map((column) => {
           const { key, label, ...rest } = column
           return (

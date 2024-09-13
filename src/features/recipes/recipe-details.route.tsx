@@ -11,6 +11,8 @@ import { RecipeDetailsForm, RecipeDetailsFormRef } from "./recipe-details-form.t
 import { DeleteRecipeButton } from "./delete-recipe-button.tsx"
 import { IngredientTable } from "./ingredient-table.tsx"
 
+import "./recipes.css"
+
 export function RecipeDetailsRoute() {
   const { recipeId } = useParams({ strict: false })
 
@@ -35,32 +37,36 @@ export function RecipeDetailsRoute() {
 
   return (
     <ContentLayout header={<RecipesBreadcrumb recipe={recipe} />}>
-      <ButtonToolbar style={{ marginBottom: "10px", marginTop: "10px" }}>
-        {editMode ? (
-          <ButtonGroup>
-            <Button appearance="primary" type="submit" form="edit-recipe-form">
-              Speichern
-            </Button>
-            <Button onClick={handleEditCancel} appearance="subtle">
-              Abbrechen
-            </Button>
-          </ButtonGroup>
-        ) : (
-          <IconButton icon={<Icon as={PiPencilLine} />} onClick={() => setEditMode(!editMode)}>
-            Editieren
-          </IconButton>
-        )}
+      <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <ButtonToolbar style={{ marginBottom: "10px" }}>
+          {editMode ? (
+            <ButtonGroup>
+              <Button appearance="primary" type="submit" form="edit-recipe-form">
+                Speichern
+              </Button>
+              <Button onClick={handleEditCancel} appearance="subtle">
+                Abbrechen
+              </Button>
+            </ButtonGroup>
+          ) : (
+            <IconButton icon={<Icon as={PiPencilLine} />} onClick={() => setEditMode(!editMode)}>
+              Editieren
+            </IconButton>
+          )}
 
-        <CloneRecipeButton recipeId={recipe.id} disabled={editMode} />
-        <DeleteRecipeButton recipeId={recipe.id} disabled={editMode} />
-      </ButtonToolbar>
+          <CloneRecipeButton recipeId={recipe.id} disabled={editMode} />
+          <DeleteRecipeButton recipeId={recipe.id} disabled={editMode} />
+        </ButtonToolbar>
 
-      <RecipeDetailsForm ref={formRef} recipe={recipe} editMode={editMode} setEditMode={setEditMode} />
+        <RecipeDetailsForm ref={formRef} recipe={recipe} editMode={editMode} setEditMode={setEditMode} />
 
-      <Divider />
-      <Text size="xl">Zutaten</Text>
+        <Divider />
+        <Text size="xl">Zutaten</Text>
 
-      <IngredientTable recipe={recipe} />
+        <div style={{ flexGrow: 1 }}>
+          <IngredientTable recipe={recipe} />
+        </div>
+      </div>
     </ContentLayout>
   )
 }
