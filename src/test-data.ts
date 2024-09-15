@@ -64,14 +64,17 @@ export const recipes: Array<Recipe> = [
     description: "",
     ingredients: [
       {
+        ingredientId: randUuid(),
         foodId: tomatos.id,
         amountInGram: 400,
       },
       {
+        ingredientId: randUuid(),
         foodId: tofu.id,
         amountInGram: 200,
       },
       {
+        ingredientId: randUuid(),
         foodId: oliveOil.id,
         amountInGram: 25,
       },
@@ -83,18 +86,15 @@ export const recipes: Array<Recipe> = [
     description: "",
     ingredients: [
       {
+        ingredientId: randUuid(),
         foodId: tomatos.id,
         amountInGram: 300,
       },
       {
+        ingredientId: randUuid(),
         foodId: oliveOil.id,
         amountInGram: 20,
       },
     ],
   },
 ]
-
-console.log("testData", {
-  foods,
-  recipes,
-})

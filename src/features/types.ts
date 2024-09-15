@@ -36,6 +36,7 @@ export type Recipe = Entity & {
 export type RecipeWithNutrients = Omit<Recipe, "ingredients"> & Nutrients
 
 export type Ingredient = {
-  amountInGram: number
+  ingredientId: Id
   foodId: Id
+  amountInGram: number
 }

@@ -1,14 +1,14 @@
 import { Id, Ingredient, isNutrientName, Nutrients, nutrientUnit, Recipe } from "../types.ts"
 import { useStore } from "../store.ts"
 import { calcNutrients, calcNutrientsForIngredient, createFoodsMap } from "./recipe-utils.ts"
-import { ColumnProps, Container, Table } from "rsuite"
+import { CellProps, ColumnProps, Container, Table } from "rsuite"
 import { useMemo, useState } from "react"
 import { SortType } from "rsuite-table"
 import { FoodLinkCell } from "../foods/foods-table.tsx"
+import { InlineNumberField } from "../../components/form-fields.tsx"
 
-type IngredientData = Omit<Ingredient, "foodId"> &
+type IngredientData = Ingredient &
   Nutrients & {
-    id: Id
     name: string
   }
 
@@ -21,7 +21,7 @@ const columns: Array<IngredientColumn> = [
   {
     key: "amountInGram",
     label: "Menge (in g)",
-    width: 120,
+    width: 150,
     sortable: true,
   },
   {
@@ -77,8 +77,27 @@ function HeaderSummary({ title, sum }: { title: string; sum: string }) {
   )
 }
 
+function AmountCell({
+  rowData,
+  onAmountChanged,
+  ...rest
+}: CellProps<IngredientData> & {
+  onAmountChanged: (ingredientId: Id, newValue: number) => void
+}) {
+  return (
+    <Table.Cell {...rest}>
+      {rowData && (
+        <InlineNumberField
+          value={rowData.amountInGram}
+          onSave={(newValue) => onAmountChanged(rowData.ingredientId, newValue)}
+        />
+      )}
+    </Table.Cell>
+  )
+}
+
 export function IngredientTable({ recipe }: { recipe: Recipe }) {
-  const { foods } = useStore()
+  const { foods, editRecipe } = useStore()
 
   const ingredientsData: Array<IngredientData> = useMemo(() => {
     const foodsMap = createFoodsMap(foods)
@@ -88,7 +107,8 @@ export function IngredientTable({ recipe }: { recipe: Recipe }) {
       const nutrients = calcNutrientsForIngredient(foodsMap, ingredient)
 
       return {
-        id: food.id,
+        ingredientId: ingredient.ingredientId,
+        foodId: food.id,
         name: food.name,
         amountInGram: ingredient.amountInGram,
         ...nutrients,
@@ -133,6 +153,22 @@ export function IngredientTable({ recipe }: { recipe: Recipe }) {
     setSortType(sortType)
   }
 
+  function onChangeAmount(ingredientId: Id, newAmount: number) {
+    const newRecipe = {
+      ...recipe,
+      ingredients: recipe.ingredients.map((ingredient) =>
+        ingredient.ingredientId === ingredientId
+          ? {
+              ...ingredient,
+              amountInGram: newAmount,
+            }
+          : ingredient,
+      ),
+    }
+
+    editRecipe(newRecipe)
+  }
+
   return (
     <Container style={{ height: "100%" }}>
       <Table
@@ -146,6 +182,23 @@ export function IngredientTable({ recipe }: { recipe: Recipe }) {
         {columns.map((column) => {
           const { key, label, ...rest } = column
 
+          let cell
+
+          switch (key) {
+            case "amountInGram": {
+              cell = <AmountCell dataKey={key} onAmountChanged={onChangeAmount} />
+              break
+            }
+            case "name": {
+              cell = <FoodLinkCell dataKey={key} />
+              break
+            }
+            default: {
+              cell = <Table.Cell dataKey={key} />
+              break
+            }
+          }
+
           return (
             <Table.Column {...rest} key={key}>
               <Table.HeaderCell>
@@ -155,8 +208,7 @@ export function IngredientTable({ recipe }: { recipe: Recipe }) {
                   label
                 )}
               </Table.HeaderCell>
-
-              {key === "name" ? <FoodLinkCell dataKey={key} /> : <Table.Cell dataKey={key} />}
+              {cell}
             </Table.Column>
           )
         })}

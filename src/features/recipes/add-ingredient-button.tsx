@@ -5,6 +5,7 @@ import { useStore } from "../store.ts"
 import { Id, Recipe } from "../types.ts"
 import { Controller, useForm } from "react-hook-form"
 import { InputPickerField, NumberField } from "../../components/form-fields.tsx"
+import { nanoid } from "nanoid"
 
 type AddIngredientFormValue = {
   amount: number
@@ -34,6 +35,7 @@ export function AddIngredientButton({ recipe }: { recipe: Recipe }) {
       ingredients: [
         ...recipe.ingredients,
         {
+          ingredientId: nanoid(),
           amountInGram: data.amount,
           foodId: data.foodId,
         },

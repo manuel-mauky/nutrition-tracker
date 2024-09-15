@@ -1,7 +1,8 @@
-import React, { ComponentPropsWithoutRef, PropsWithChildren, useEffect, useRef } from "react"
+import React, { ComponentPropsWithoutRef, PropsWithChildren, useEffect, useRef, useState } from "react"
 import { ControllerRenderProps } from "react-hook-form"
-import { Form, Input, InputNumber, InputPicker } from "rsuite"
+import { Form, IconButton, Input, InputNumber, InputPicker } from "rsuite"
 import { Id } from "../features/types.ts"
+import { PiCheck, PiX } from "react-icons/pi"
 
 type FormData = Record<string, string | number | undefined | null>
 
@@ -151,5 +152,56 @@ export function NumberField<T extends FormData>({
         onChange={(value) => field.onChange(value)}
       />
     </Field>
+  )
+}
+
+export function InlineNumberField({ value, onSave }: { value: number; onSave: (newValue: number) => void }) {
+  const ref = useRef<HTMLInputElement>(null)
+  const [editMode, setEditMode] = useState(false)
+
+  const [internalValue, setInternalValue] = useState<number>(value)
+
+  useEffect(() => {
+    setInternalValue(value)
+  }, [value])
+
+  useEffect(() => {
+    if (ref.current && editMode) {
+      ref.current.querySelector("input")?.select()
+    }
+  }, [ref, editMode])
+
+  function onChange(newValue: string | number | null) {
+    setInternalValue(Number(newValue))
+  }
+
+  function onDoubleClick() {
+    if (!editMode) {
+      setEditMode(true)
+    }
+  }
+
+  function onOk() {
+    onSave(internalValue)
+    setEditMode(false)
+  }
+
+  function onCancel() {
+    setInternalValue(value)
+    setEditMode(false)
+  }
+
+  return (
+    <div onDoubleClick={onDoubleClick}>
+      {editMode ? (
+        <div style={{ display: "flex", gap: "2px", alignItems: "center" }}>
+          <InputNumber ref={ref} value={internalValue} onChange={onChange} size="xs" />
+          <IconButton icon={<PiCheck />} aria-label="Ok" onClick={onOk} size="xs" />
+          <IconButton icon={<PiX />} aria-label="Abbrechen" onClick={onCancel} size="xs" />
+        </div>
+      ) : (
+        <span>{value}</span>
+      )}
+    </div>
   )
 }
