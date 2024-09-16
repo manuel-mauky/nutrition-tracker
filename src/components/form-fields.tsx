@@ -162,6 +162,9 @@ export function InlineNumberField({ value, onSave }: { value: number; onSave: (n
   const [internalValue, setInternalValue] = useState<number>(value)
 
   useEffect(() => {
+    if (editMode) {
+      setEditMode(false)
+    }
     setInternalValue(value)
   }, [value])
 
