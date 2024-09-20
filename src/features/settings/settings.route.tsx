@@ -1,8 +1,8 @@
-import type { CSSProperties } from "react"
+import { CSSProperties, useEffect } from "react"
 import { ContentLayout } from "../../content-layout.tsx"
 
 import { Button, Modal, Panel, Text, Uploader } from "rsuite"
-import { PiArrowSquareIn, PiDownloadSimple, PiUploadSimple } from "react-icons/pi"
+import { PiArrowSquareIn, PiCheckCircle, PiDownloadSimple, PiUploadSimple } from "react-icons/pi"
 import { RootStore, useStore } from "../store.ts"
 import { useState } from "react"
 import { fileToString, triggerFileDownload } from "./file-utils.ts"
@@ -25,6 +25,14 @@ export function SettingsRoute() {
 
   const [uploadedState, setUploadedState] = useState<RootStore | undefined>()
   const [showImportWarning, setShowImportWarning] = useState(false)
+
+  const [isPersistedEnabled, setIsPersistedEnabled] = useState(false)
+
+  useEffect(() => {
+    navigator.storage.persisted().then((result) => {
+      setIsPersistedEnabled(result)
+    })
+  }, [])
 
   function onExport() {
     const version = useStore.persist.getOptions().version
@@ -75,6 +83,11 @@ export function SettingsRoute() {
     setShowImportWarning(false)
   }
 
+  async function onRequestPersisted() {
+    const isPersisted = await navigator.storage.persist()
+    setIsPersistedEnabled(isPersisted)
+  }
+
   return (
     <>
       <Modal open={showImportWarning} role="alertdialog" backdrop="static" autoFocus>
@@ -96,12 +109,33 @@ export function SettingsRoute() {
       </Modal>
       <ContentLayout header={<Text>Einstellungen</Text>}>
         <div id="settings-root">
-          <Panel header="Daten sichern">
+          <Panel header="Datenspeicher">
             <div style={panelContainerStyle}>
               <Text>
-                Alle Daten werden ausschließlich lokal in deinem Browser gespeichert. Es wird aber dringend empfohlen,
-                die Daten regelmäßig zu sichern. Um eine Sicherheitskopie deiner Daten zu erstellen, kannst du hier
-                deine Daten als Datei exportieren und bei Bedarf wieder importieren.
+                Nutrition-Tracker speichert bewusst keine deiner Daten auf irgendeinem Server. Alle Daten werden
+                ausschließlich lokal in deinem Browser gespeichert. Damit ist allerdings ein gewisses Risiko verbunden,
+                dass Daten verloren gehen könnten, beispielsweise wenn du die Seite lange nicht mehr besucht hast oder
+                du die Browser-History oder Cookies löschst.
+              </Text>
+              <Text>Du kannst Nutrition-Tracker erlauben, Daten langfristig lokal im Browser zu speichern.</Text>
+              {isPersistedEnabled ? (
+                <div style={{ display: "flex", flexDirection: "row", gap: "5px" }}>
+                  <PiCheckCircle size="20" style={{ color: "var(--rs-state-success)" }} /> Erlaubnis bereits erteilt
+                </div>
+              ) : (
+                <div>
+                  <Text>
+                    Wenn du diesen Button klickst, fragt dich dein Browser eventuell nach, ob du dies gestatten
+                    möchtest.
+                  </Text>
+                  <Button onClick={onRequestPersisted}>Dauerhafte Speicherung erlauben?</Button>
+                </div>
+              )}
+              <Text>
+                Allerdings ist auch das keine absolute Garantie. Es wird daher dringend empfohlen, die Daten regelmäßig
+                zu sichern. Um eine Sicherheitskopie deiner Daten zu erstellen, kannst du hier deine Daten als Datei
+                exportieren und bei Bedarf wieder importieren. <br />
+                Damit kannst du deine Daten auch zu einem anderen Browser oder Computer mitnehmen.
               </Text>
 
               <div className="two-column-form-grid">
