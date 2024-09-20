@@ -1,9 +1,9 @@
-import { Container, HStack, IconButton, Nav, Sidebar, Sidenav, Stack, Text } from "rsuite"
+import { Container, Divider, HStack, IconButton, Nav, Sidebar, Sidenav, Stack, Text } from "rsuite"
 import { PropsWithChildren, useState } from "react"
 
 import { Icon } from "@rsuite/icons"
 
-import { PiAvocado, PiBowlSteam, PiCaretLeft, PiCaretRight, PiPepper, PiListBullets } from "react-icons/pi"
+import { PiAvocado, PiBowlSteam, PiCaretLeft, PiCaretRight, PiPepper, PiListBullets, PiSliders } from "react-icons/pi"
 import { Link, LinkProps, Outlet, useLinkProps } from "@tanstack/react-router"
 import { IconType } from "react-icons"
 
@@ -59,6 +59,10 @@ function BaseLayout() {
               </NavLink>
               <NavLink to="/recipes" icon={PiBowlSteam}>
                 Rezepte
+              </NavLink>
+              <Divider style={{margin: "12px 0px"}}/>
+              <NavLink to="/settings" icon={PiSliders}>
+                Einstellungen
               </NavLink>
             </Nav>
           </Sidenav.Body>
