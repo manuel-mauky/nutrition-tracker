@@ -9,6 +9,7 @@ import { fileToString, triggerFileDownload } from "./file-utils.ts"
 import { FileType } from "rsuite/esm/Uploader/Uploader"
 
 import { deDE } from "rsuite/locales"
+import { migrate } from "../../storage.ts"
 
 const panelContainerStyle: CSSProperties = {
   display: "flex",
@@ -26,7 +27,14 @@ export function SettingsRoute() {
   const [showImportWarning, setShowImportWarning] = useState(false)
 
   function onExport() {
-    triggerFileDownload("nutrition-tracker-data.json", state)
+    const version = useStore.persist.getOptions().version
+
+    const file = {
+      version,
+      state,
+    }
+
+    triggerFileDownload("nutrition-tracker-data.json", file)
   }
 
   async function fileChanged(newFileList: Array<FileType>) {
@@ -38,9 +46,14 @@ export function SettingsRoute() {
       if (file) {
         try {
           const contentAsString = await fileToString(file)
-          const newState = JSON.parse(contentAsString)
+          const contentAsJson = JSON.parse(contentAsString)
 
-          setUploadedState(newState)
+          const { version, state: newState } = contentAsJson
+
+          const migratedState = await migrate(newState, version)
+
+          // todo: Maybe should do _some_ runtime typeschecking to see if it's really a RootStore
+          setUploadedState(migratedState as RootStore)
           return
         } catch (e) {
           console.error(e)

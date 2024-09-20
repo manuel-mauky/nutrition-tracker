@@ -3,6 +3,7 @@ import { createFoodsSlice, FoodsSlice } from "./foods/foods-slice.ts"
 import { createRecipesSlice, RecipesSlice } from "./recipes/recipes-slice.ts"
 import { immer } from "zustand/middleware/immer"
 import { devtools, persist } from "zustand/middleware"
+import { migrate } from "../storage.ts"
 
 export type RootStore = FoodsSlice & RecipesSlice
 
@@ -17,7 +18,9 @@ export const useStore = create<RootStore, RootStoreMutators>(
           ...createRecipesSlice(...a),
         }),
         {
+          version: 1,
           name: "nutrition-tracker-storage",
+          migrate: migrate,
         },
       ),
     ),
