@@ -1,4 +1,4 @@
-import { Food, Id } from "../types.ts"
+import { Food, Id, Recipe } from "../types.ts"
 import { StateCreator } from "zustand"
 import { nanoid } from "nanoid"
 import { RootStore, RootStoreMutators } from "../store.ts"
@@ -41,9 +41,16 @@ export const createFoodsSlice: StateCreator<RootStore, RootStoreMutators, [], Fo
     set((state) => {
       const id = typeof foodOrId === "string" ? foodOrId : foodOrId.id
 
-      return {
-        foods: state.foods.filter((food) => food.id !== id),
-      }
+      state.recipes.forEach((recipe) => {
+        recipe.ingredients = recipe.ingredients.filter((ingredient) => ingredient.foodId !== id)
+      })
+
+      state.foods = state.foods.filter((food) => food.id !== id)
     })
   },
 })
+
+export const selectRecipesWithFood =
+  (foodId: Id) =>
+  (state: RootStore): Array<Recipe> =>
+    state.recipes.filter((recipe) => recipe.ingredients.some((ingredient) => ingredient.foodId === foodId))

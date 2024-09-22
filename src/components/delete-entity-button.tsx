@@ -1,6 +1,6 @@
 import { Entity, Id } from "../features/types.ts"
-import { useState } from "react"
-import { Button, IconButton, Modal } from "rsuite"
+import { PropsWithChildren, useState } from "react"
+import { Button, IconButton, Modal, Text } from "rsuite"
 import { Icon } from "@rsuite/icons"
 import { PiTrash } from "react-icons/pi"
 
@@ -10,13 +10,14 @@ export function DeleteEntityButton({
   disabled = false,
   title,
   hideLabel = false,
-}: {
+  children,
+}: PropsWithChildren<{
   entity: Entity
   removeEntity: (id: Id) => void
   disabled?: boolean
   title: string
   hideLabel?: boolean
-}) {
+}>) {
   const [open, setOpen] = useState(false)
 
   function handleDeleteButtonClicked() {
@@ -47,7 +48,7 @@ export function DeleteEntityButton({
         <Modal.Header>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Möchten Sie "{entity.name}" wirklich löschen?</Modal.Body>
+        <Modal.Body>{children ?? <Text>Möchtest du "{entity.name}" wirklich löschen?</Text>}</Modal.Body>
         <Modal.Footer>
           <Button onClick={handleDeleteOk} appearance="primary">
             Ok
