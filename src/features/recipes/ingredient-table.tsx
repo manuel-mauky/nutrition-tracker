@@ -6,6 +6,7 @@ import { useMemo, useState } from "react"
 import { SortType } from "rsuite-table"
 import { FoodLinkCell } from "../foods/foods-table.tsx"
 import { InlineNumberField } from "../../components/form-fields.tsx"
+import { DeleteIngredientButton } from "./delete-ingredient-button.tsx"
 
 type IngredientData = Ingredient &
   Nutrients & {
@@ -92,6 +93,20 @@ function AmountCell({
           onSave={(newValue) => onAmountChanged(rowData.ingredientId, newValue)}
         />
       )}
+    </Table.Cell>
+  )
+}
+
+function ActionsTableCell({ rowData, recipe, ...rest }: CellProps<IngredientData> & { recipe: Recipe }) {
+  if (!rowData) {
+    return null
+  }
+
+  const ingredientId = rowData.ingredientId
+
+  return (
+    <Table.Cell {...rest} style={{ paddingTop: "4px" }}>
+      <DeleteIngredientButton recipe={recipe} ingredientId={ingredientId} hideLabel />
     </Table.Cell>
   )
 }
@@ -212,6 +227,11 @@ export function IngredientTable({ recipe }: { recipe: Recipe }) {
             </Table.Column>
           )
         })}
+
+        <Table.Column key="actions">
+          <Table.HeaderCell>Aktionen</Table.HeaderCell>
+          <ActionsTableCell recipe={recipe} />
+        </Table.Column>
       </Table>
     </Container>
   )
