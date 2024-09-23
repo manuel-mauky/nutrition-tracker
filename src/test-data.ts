@@ -62,6 +62,7 @@ export const recipes: Array<Recipe> = [
     id: randUuid(),
     name: "Bolognese",
     description: "",
+    portions: 2,
     ingredients: [
       {
         ingredientId: randUuid(),
@@ -84,6 +85,7 @@ export const recipes: Array<Recipe> = [
     id: randUuid(),
     name: "Tomatensalat",
     description: "",
+    portions: 1.5,
     ingredients: [
       {
         ingredientId: randUuid(),

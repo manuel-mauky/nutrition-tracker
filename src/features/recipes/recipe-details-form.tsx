@@ -4,7 +4,7 @@ import { useStore } from "../store.ts"
 import { Controller, useForm } from "react-hook-form"
 import { Form } from "rsuite"
 import { validateName } from "../utils.ts"
-import { TextAreaField, TextField } from "../../components/form-fields.tsx"
+import { NumberField, TextAreaField, TextField } from "../../components/form-fields.tsx"
 
 export type RecipeForm = Omit<Recipe, "ingredients">
 
@@ -61,6 +61,27 @@ export const RecipeDetailsForm = forwardRef<RecipeDetailsFormRef, Props>(({ reci
                 ),
             }}
             render={({ field }) => <TextField label="Name" field={field} error={errors[field.name]?.message} />}
+          />
+
+          <Controller
+            name="portions"
+            control={control}
+            rules={{
+              required: "Anzahl an Portionen ist erforderlich",
+              validate: (value) => {
+                if (value <= 0) {
+                  return "Anzahl muss größer als 0 sein"
+                }
+              },
+            }}
+            render={({ field }) => (
+              <NumberField
+                step={0.5}
+                label="Wieviele Portionen ergibt das Rezept?"
+                field={field}
+                error={errors[field.name]?.message}
+              />
+            )}
           />
         </div>
 

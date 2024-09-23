@@ -26,6 +26,7 @@ export function AddRecipeDialog() {
     defaultValues: {
       name: "",
       description: "",
+      portions: 1,
     },
   })
 

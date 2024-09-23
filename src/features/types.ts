@@ -31,6 +31,7 @@ export type Food = Nutrients &
 export type Recipe = Entity & {
   description: string
   ingredients: Array<Ingredient>
+  portions: number
 }
 
 export type RecipeWithNutrients = Omit<Recipe, "ingredients"> & Nutrients

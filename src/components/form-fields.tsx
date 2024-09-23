@@ -120,9 +120,11 @@ export function NumberField<T extends FormData>({
   autoFocus,
   plaintext,
   readOnly,
+  step,
   ...rest
 }: FieldProps<T> & {
   unit?: string
+  step?: number
 }) {
   const formatter = unit ? (value: number | string) => `${value} ${unit}` : undefined
 
@@ -147,6 +149,7 @@ export function NumberField<T extends FormData>({
         accepter={InputNumber}
         formatter={formatter}
         min={0}
+        step={step}
         name={field.name}
         value={field.value}
         onChange={(value) => field.onChange(value)}
