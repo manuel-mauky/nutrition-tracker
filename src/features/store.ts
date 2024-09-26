@@ -4,6 +4,7 @@ import { createRecipesSlice, RecipesSlice } from "./recipes/recipes-slice.ts"
 import { immer } from "zustand/middleware/immer"
 import { devtools, persist } from "zustand/middleware"
 import { migrate } from "../storage.ts"
+import { shared } from "../middlewares/broadcast.ts"
 
 export type RootStore = FoodsSlice & RecipesSlice
 
@@ -12,15 +13,20 @@ export type RootStoreMutators = [["zustand/devtools", never], ["zustand/immer", 
 export const useStore = create<RootStore, RootStoreMutators>(
   devtools(
     immer(
-      persist(
-        (...a) => ({
-          ...createFoodsSlice(...a),
-          ...createRecipesSlice(...a),
-        }),
+      shared(
+        persist(
+          (...o) => ({
+            ...createFoodsSlice(...o),
+            ...createRecipesSlice(...o),
+          }),
+          {
+            version: 1,
+            name: "nutrition-tracker-storage",
+            migrate: migrate,
+          },
+        ),
         {
-          version: 1,
-          name: "nutrition-tracker-storage",
-          migrate: migrate,
+          name: "nutrition-tracker-channel",
         },
       ),
     ),
