@@ -1,22 +1,21 @@
 import { Id, Ingredient, isNutrientName, Nutrients, nutrientUnit, Recipe } from "../types.ts"
 import { useStore } from "../store.ts"
 import { calcNutrients, calcNutrientsForIngredient, createFoodsMap } from "./recipe-utils.ts"
-import { CellProps, ColumnProps, Container, Table } from "rsuite"
-import { useMemo, useState } from "react"
+import { CellProps, Container, Table } from "rsuite"
+import { useMemo } from "react"
 import { SortType } from "rsuite-table"
 import { FoodLinkCell } from "../foods/foods-table.tsx"
 import { InlineNumberField } from "../../components/form-fields.tsx"
 import { DeleteIngredientButton } from "./delete-ingredient-button.tsx"
+import { selectSortSettings } from "../settings/settings-slice.ts"
+import { ColumnType, sort } from "../../utils/sort-utils.ts"
 
 type IngredientData = Ingredient &
   Nutrients & {
     name: string
   }
 
-type IngredientColumn = ColumnProps<IngredientData> & {
-  key: keyof IngredientData
-  label: string
-}
+export type IngredientColumn = ColumnType<IngredientData>
 
 const columns: Array<IngredientColumn> = [
   {
@@ -112,6 +111,8 @@ function ActionsTableCell({ rowData, recipe, ...rest }: CellProps<IngredientData
 }
 
 export function IngredientTable({ recipe }: { recipe: Recipe }) {
+  const { changeSortSettings, sortType, sortColumn } = useStore(selectSortSettings("recipeIngredients"))
+
   const { foods, editRecipe } = useStore()
 
   const ingredientsData: Array<IngredientData> = useMemo(() => {
@@ -136,36 +137,12 @@ export function IngredientTable({ recipe }: { recipe: Recipe }) {
     return calcNutrients(foodsMap, recipe)
   }, [foods, recipe])
 
-  const [sortColumn, setSortColumn] = useState<IngredientColumn["key"] | undefined>()
-  const [sortType, setSortType] = useState<SortType | undefined>()
-
   function getData() {
-    if (sortColumn && sortType) {
-      return ingredientsData.sort((a, b) => {
-        let x = a[sortColumn]
-        let y = b[sortColumn]
-
-        if (typeof x === "string") {
-          x = x.charCodeAt(0)
-        }
-        if (typeof y === "string") {
-          y = y.charCodeAt(0)
-        }
-
-        if (sortType === "asc") {
-          return x - y
-        } else {
-          return y - x
-        }
-      })
-    } else {
-      return ingredientsData
-    }
+    return sort(ingredientsData, sortType, sortColumn)
   }
 
   function handleSortColumn(sortColumn: string, sortType?: SortType) {
-    setSortColumn(sortColumn as IngredientColumn["key"])
-    setSortType(sortType)
+    changeSortSettings({ sortType, sortColumn: sortColumn as IngredientColumn["key"] })
   }
 
   function onChangeAmount(ingredientId: Id, newAmount: number) {

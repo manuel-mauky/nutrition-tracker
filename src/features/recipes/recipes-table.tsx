@@ -1,15 +1,13 @@
 import { useStore } from "../store.ts"
-import { CellProps, ColumnProps, Container, Table } from "rsuite"
+import { CellProps, Container, Table } from "rsuite"
 import { Recipe, RecipeWithNutrients } from "../types.ts"
-import { useState } from "react"
 import { SortType } from "rsuite-table"
 import { Link } from "@tanstack/react-router"
 import { selectRecipesWithNutrients } from "./recipe-utils.ts"
+import { selectSortSettings } from "../settings/settings-slice.ts"
+import { ColumnType, sort } from "../../utils/sort-utils.ts"
 
-type RecipeColumn = ColumnProps<RecipeWithNutrients> & {
-  key: keyof RecipeWithNutrients
-  label: string
-}
+export type RecipeColumn = ColumnType<RecipeWithNutrients>
 
 const columns: Array<RecipeColumn> = [
   {
@@ -68,39 +66,15 @@ function LinkCell({ rowData, ...rest }: CellProps<Recipe>) {
 }
 
 export function RecipesTable() {
+  const { changeSortSettings, sortColumn, sortType } = useStore(selectSortSettings("recipes"))
   const recipesWithNutrients: Array<RecipeWithNutrients> = useStore(selectRecipesWithNutrients)
 
-  const [sortColumn, setSortColumn] = useState<RecipeColumn["key"] | undefined>()
-  const [sortType, setSortType] = useState<SortType | undefined>()
-
   function getData(): Array<RecipeWithNutrients> {
-    if (sortColumn && sortType) {
-      return recipesWithNutrients.sort((a, b) => {
-        let x = a[sortColumn]
-        let y = b[sortColumn]
-
-        if (typeof x === "string") {
-          x = x.charCodeAt(0)
-        }
-
-        if (typeof y === "string") {
-          y = y.charCodeAt(0)
-        }
-
-        if (sortType === "asc") {
-          return x - y
-        } else {
-          return y - x
-        }
-      })
-    } else {
-      return recipesWithNutrients
-    }
+    return sort(recipesWithNutrients, sortType, sortColumn)
   }
 
   function handleSortColumn(sortColumn: string, sortType?: SortType) {
-    setSortColumn(sortColumn as RecipeColumn["key"])
-    setSortType(sortType)
+    changeSortSettings({ sortType, sortColumn: sortColumn as RecipeColumn["key"] })
   }
 
   return (

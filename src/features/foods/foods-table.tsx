@@ -1,15 +1,13 @@
-import { CellProps, ColumnProps, Container, Table } from "rsuite"
+import { CellProps, Container, Table } from "rsuite"
 import { Food } from "../types.ts"
 import { useStore } from "../store.ts"
-import { useState } from "react"
 import type { SortType } from "rsuite-table"
 import { Link } from "@tanstack/react-router"
 import { DeleteFoodButton } from "./delete-food-button.tsx"
+import { selectSortSettings } from "../settings/settings-slice.ts"
+import { ColumnType, sort } from "../../utils/sort-utils.ts"
 
-type FoodColumn = ColumnProps<Food> & {
-  key: keyof Food
-  label: string
-}
+export type FoodColumn = ColumnType<Food>
 
 const columns: Array<FoodColumn> = [
   {
@@ -89,36 +87,14 @@ function ActionsTableCell({ rowData, ...rest }: CellProps<Food>) {
 export function FoodsTable() {
   const { foods } = useStore()
 
-  const [sortColumn, setSortColumn] = useState<FoodColumn["key"] | undefined>()
-  const [sortType, setSortType] = useState<SortType | undefined>()
+  const { changeSortSettings, sortColumn, sortType } = useStore(selectSortSettings("foods"))
 
   function getData() {
-    if (sortColumn && sortType) {
-      return foods.sort((a, b) => {
-        let x = a[sortColumn]
-        let y = b[sortColumn]
-
-        if (typeof x === "string") {
-          x = x.charCodeAt(0)
-        }
-        if (typeof y === "string") {
-          y = y.charCodeAt(0)
-        }
-
-        if (sortType === "asc") {
-          return x - y
-        } else {
-          return y - x
-        }
-      })
-    } else {
-      return foods
-    }
+    return sort(foods, sortType, sortColumn)
   }
 
   function handleSortColumn(sortColumn: string, sortType?: SortType) {
-    setSortColumn(sortColumn as FoodColumn["key"])
-    setSortType(sortType)
+    changeSortSettings({ sortType, sortColumn: sortColumn as FoodColumn["key"] })
   }
 
   return (

@@ -5,8 +5,9 @@ import { immer } from "zustand/middleware/immer"
 import { devtools, persist } from "zustand/middleware"
 import { migrate } from "../storage.ts"
 import { shared } from "../middlewares/broadcast.ts"
+import { createSettingsSlice, SettingsSlice } from "./settings/settings-slice.ts"
 
-export type RootStore = FoodsSlice & RecipesSlice
+export type RootStore = FoodsSlice & RecipesSlice & SettingsSlice
 
 export type RootStoreMutators = [["zustand/devtools", never], ["zustand/immer", never], ["zustand/persist", unknown]]
 
@@ -15,9 +16,10 @@ export const useStore = create<RootStore, RootStoreMutators>(
     immer(
       shared(
         persist(
-          (...o) => ({
-            ...createFoodsSlice(...o),
-            ...createRecipesSlice(...o),
+          (...a) => ({
+            ...createFoodsSlice(...a),
+            ...createRecipesSlice(...a),
+            ...createSettingsSlice(...a),
           }),
           {
             version: 1,
