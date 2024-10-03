@@ -1,5 +1,6 @@
-import { seed, randUuid } from "@ngneat/falso"
-import { Food, Recipe } from "./features/types.ts"
+import { seed, randUuid, randBoolean, randNumber } from "@ngneat/falso"
+import { DiaryEntry, Food, FoodDiaryEntry, IsoDateString, Recipe, RecipeDiaryEntry } from "./features/types.ts"
+import { DateTime } from "luxon"
 
 seed("1")
 
@@ -57,46 +58,104 @@ const tofu: Food = {
 
 export const foods: Array<Food> = [spaghetti, tomatos, oliveOil, tofu]
 
-export const recipes: Array<Recipe> = [
-  {
-    id: randUuid(),
-    name: "Bolognese",
-    description: "",
-    portions: 2,
-    ingredients: [
-      {
-        ingredientId: randUuid(),
-        foodId: tomatos.id,
-        amountInGram: 400,
-      },
-      {
-        ingredientId: randUuid(),
-        foodId: tofu.id,
-        amountInGram: 200,
-      },
-      {
-        ingredientId: randUuid(),
-        foodId: oliveOil.id,
-        amountInGram: 25,
-      },
-    ],
-  },
-  {
-    id: randUuid(),
-    name: "Tomatensalat",
-    description: "",
-    portions: 1.5,
-    ingredients: [
-      {
-        ingredientId: randUuid(),
-        foodId: tomatos.id,
-        amountInGram: 300,
-      },
-      {
-        ingredientId: randUuid(),
-        foodId: oliveOil.id,
-        amountInGram: 20,
-      },
-    ],
-  },
-]
+const bolognese = {
+  id: randUuid(),
+  name: "Bolognese",
+  description: "",
+  portions: 2,
+  ingredients: [
+    {
+      ingredientId: randUuid(),
+      foodId: tomatos.id,
+      amountInGram: 400,
+    },
+    {
+      ingredientId: randUuid(),
+      foodId: tofu.id,
+      amountInGram: 200,
+    },
+    {
+      ingredientId: randUuid(),
+      foodId: oliveOil.id,
+      amountInGram: 25,
+    },
+  ],
+}
+
+const tomatensalat = {
+  id: randUuid(),
+  name: "Tomatensalat",
+  description: "",
+  portions: 1.5,
+  ingredients: [
+    {
+      ingredientId: randUuid(),
+      foodId: tomatos.id,
+      amountInGram: 300,
+    },
+    {
+      ingredientId: randUuid(),
+      foodId: oliveOil.id,
+      amountInGram: 20,
+    },
+  ],
+}
+
+export const recipes: Array<Recipe> = [bolognese, tomatensalat]
+
+function generateDiaryEntries(): Record<IsoDateString, Array<DiaryEntry>> {
+  const minDate = DateTime.local(2024, 9, 1)
+  const maxDate = DateTime.local(2024, 9, 30)
+
+  let tmpDate = minDate
+
+  const result: Record<IsoDateString, Array<DiaryEntry>> = {}
+
+  while (tmpDate < maxDate) {
+    const list: Array<DiaryEntry> = []
+    result[tmpDate.toISODate()!] = list
+
+    for (let i = 0; i < 5; i++) {
+      const date = tmpDate
+        .set({
+          hour: randNumber({ min: 8, max: 20 }),
+          minute: randNumber({ min: 0, max: 59 }),
+        })
+        .toISO()!
+
+      if (randBoolean()) {
+        const i = randNumber({ min: 0, max: foods.length - 1 })
+        const food = foods[i]
+
+        const foodEntry: FoodDiaryEntry = {
+          id: randUuid(),
+          mealType: "food",
+          date,
+          amountInGram: randNumber({ min: 10, max: 200, precision: 10 }),
+          foodId: food.id,
+        }
+
+        list.push(foodEntry)
+      } else {
+        const i = randNumber({ min: 0, max: recipes.length - 1 })
+        const recipe = recipes[i]
+
+        const recipeEntry: RecipeDiaryEntry = {
+          id: randUuid(),
+          mealType: "recipe",
+          date,
+          recipeId: recipe.id,
+          portions: randNumber({ min: 0.5, max: 1.5, precision: 0.5 }),
+        }
+
+        list.push(recipeEntry)
+      }
+    }
+
+    tmpDate = tmpDate.plus({ days: 1 })
+  }
+
+  return result
+}
+
+export const diaryEntries = generateDiaryEntries()

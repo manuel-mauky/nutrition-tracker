@@ -41,3 +41,26 @@ export type Ingredient = {
   foodId: Id
   amountInGram: number
 }
+
+
+export type IsoDateString = string
+export type IsoDateTimeString = string
+
+export type FoodDiaryEntry = {
+  id: Id
+  date: IsoDateTimeString
+  mealType: "food"
+  foodId: Id
+  amountInGram: number
+}
+
+export type RecipeDiaryEntry = {
+  id: Id
+  date: IsoDateTimeString
+  mealType: "recipe"
+  recipeId: Id
+  portions: number
+}
+
+export type DiaryEntry = FoodDiaryEntry | RecipeDiaryEntry
+

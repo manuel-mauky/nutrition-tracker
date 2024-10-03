@@ -13,6 +13,7 @@
   "dependencies": {
     "@tanstack/react-router": "^1.48.1",
     "immer": "^10.1.1",
+    "luxon": "^3.5.0",
     "nanoid": "^5.0.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -26,6 +27,7 @@
     "@ngneat/falso": "^7.2.0",
     "@tanstack/router-devtools": "^1.48.1",
     "@tanstack/router-plugin": "^1.47.0",
+    "@types/luxon": "^3",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^8.1.0",
