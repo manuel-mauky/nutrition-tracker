@@ -3,7 +3,14 @@ import { Text } from "rsuite"
 import { useStore } from "../store.ts"
 import { DateTime } from "luxon"
 import { useMemo } from "react"
-import { DiaryEntry, FoodDiaryEntry, IsoDateString, RecipeDiaryEntry } from "../types.ts"
+import { DiaryEntry, IsoDateString } from "../types.ts"
+
+import "./diary.css"
+import { sortDateTime } from "../../utils/sort-utils.ts"
+import { DiaryDayView } from "./diary-day-view.tsx"
+
+// The overview can be scrolled to the oldest day in the diary + this amount of days
+const oldestDayAdditionalRange = 7
 
 function getOldestDay(diaryEntries: Record<IsoDateString, Array<DiaryEntry>>) {
   const allDays = Object.keys(diaryEntries).toSorted()
@@ -28,66 +35,6 @@ function getListOfDatesBetween(start: DateTime, end: DateTime) {
   return list
 }
 
-function RecipeEntry({ entry }: { entry: RecipeDiaryEntry }) {
-  const { recipes } = useStore()
-
-  const recipe = recipes.find((recipe) => recipe.id === entry.recipeId)!
-
-  return (
-    <div>
-      {entry.portions} x {recipe.name}
-    </div>
-  )
-}
-
-function FoodEntry({ entry }: { entry: FoodDiaryEntry }) {
-  const { foods } = useStore()
-
-  const food = foods.find((food) => food.id === entry.foodId)!
-
-  return (
-    <div>
-      {entry.amountInGram}g {food.name}
-    </div>
-  )
-}
-
-function DayDiaryView({ day }: { day: DateTime }) {
-  const { diaryEntries } = useStore()
-  const asIsoDate = day.toISODate()
-
-  if (!asIsoDate) {
-    return null
-  }
-
-  const entries = diaryEntries[asIsoDate] ?? []
-
-  return (
-    <div>
-      <h2>{asIsoDate}</h2>
-
-      {entries.length > 0 ? (
-        <>
-          <ul>
-            {entries.map((entry) => (
-              <li key={entry.id}>
-                <div>
-                  {entry.mealType === "food" && <FoodEntry entry={entry} />}
-                  {entry.mealType === "recipe" && <RecipeEntry entry={entry} />}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </>
-      ) : (
-        <>
-          <p>no entries</p>
-        </>
-      )}
-    </div>
-  )
-}
-
 export function DiaryRoute() {
   const { diaryEntries } = useStore()
 
@@ -95,17 +42,27 @@ export function DiaryRoute() {
 
   const oldestDay = DateTime.fromISO(getOldestDay(diaryEntries))
 
-  const listOfDays = useMemo(() => getListOfDatesBetween(oldestDay, today), [])
+  oldestDay.plus({ day: oldestDayAdditionalRange })
+
+  const listOfDays = useMemo(
+    () =>
+      getListOfDatesBetween(oldestDay.minus({ day: oldestDayAdditionalRange }), today).toSorted((a, b) =>
+        sortDateTime(b, a),
+      ),
+    [oldestDay, today],
+  )
 
   return (
     <ContentLayout header={<Text>Tagebuch</Text>}>
-      <ul>
-        {listOfDays.map((day) => (
-          <li key={day.toISODate()}>
-            <DayDiaryView day={day} />
-          </li>
-        ))}
-      </ul>
+      <div id="diary-root">
+        <ul className="diary-list-of-days">
+          {listOfDays.map((day) => (
+            <li key={day.toISODate()}>
+              <DiaryDayView day={day} />
+            </li>
+          ))}
+        </ul>
+      </div>
     </ContentLayout>
   )
 }

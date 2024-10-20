@@ -104,8 +104,8 @@ const tomatensalat = {
 export const recipes: Array<Recipe> = [bolognese, tomatensalat]
 
 function generateDiaryEntries(): Record<IsoDateString, Array<DiaryEntry>> {
-  const minDate = DateTime.local(2024, 9, 1)
-  const maxDate = DateTime.local(2024, 9, 30)
+  const maxDate = DateTime.now()
+  const minDate = maxDate.minus({day: 30})
 
   let tmpDate = minDate
 

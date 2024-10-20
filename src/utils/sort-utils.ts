@@ -1,5 +1,6 @@
 import { SortType } from "rsuite-table"
 import { ColumnProps } from "rsuite"
+import { DateTime } from "luxon"
 
 type Row = {
   [key: string]: string | number
@@ -36,4 +37,11 @@ export function sort<T extends Row, C extends ColumnType<T>>(
   } else {
     return items
   }
+}
+
+export function sortDateTime(a: string | DateTime, b: string | DateTime): number {
+  return (
+    (typeof a === "string" ? DateTime.fromISO(a) : a).toSeconds() -
+    (typeof b === "string" ? DateTime.fromISO(b) : b).toSeconds()
+  )
 }

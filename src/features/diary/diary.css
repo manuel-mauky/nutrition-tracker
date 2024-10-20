@@ -1,0 +1,48 @@
+.diary-list-of-days {
+  list-style: none;
+
+  margin: 0;
+  padding: 0;
+
+  & > li {
+    margin-bottom: 4rem;
+
+    &:last-child {
+      margin-bottom: unset;
+    }
+  }
+}
+
+.diary-day-overview-entry {
+  display: flex;
+  flex-direction: column;
+
+  & > header {
+    display: flex;
+    gap: 2em;
+
+    margin-bottom: 0.5em;
+  }
+
+  .diary-view-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    .entries-table {
+      .time-col {
+        width: 100px;
+      }
+
+      .amount-col {
+        width: 50px;
+      }
+    }
+
+    .nutrition-overview {
+    }
+  }
+}
+
+.format-time {
+  font-style: italic;
+}
