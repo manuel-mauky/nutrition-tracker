@@ -62,5 +62,7 @@ export type RecipeDiaryEntry = {
   portions: number
 }
 
+
 export type DiaryEntry = FoodDiaryEntry | RecipeDiaryEntry
 
+export type MealType = DiaryEntry["mealType"]

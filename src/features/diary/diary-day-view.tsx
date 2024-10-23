@@ -1,10 +1,11 @@
 import { DateTime } from "luxon"
 import { Fragment, useMemo } from "react"
-import { Button, Heading } from "rsuite"
+import { Heading } from "rsuite"
 import { useStore } from "../store.ts"
 import { sortDateTime } from "../../utils/sort-utils.ts"
 import { FoodDiaryEntry, RecipeDiaryEntry } from "../types.ts"
 import { FormatTime } from "../../components/format-time.tsx"
+import { AddDiaryEntryDialog } from "./add-diary-entry-dialog.tsx"
 
 function RecipeEntryRow({ entry }: { entry: RecipeDiaryEntry }) {
   const { recipes } = useStore()
@@ -58,7 +59,7 @@ export function DiaryDayView({ day }: { day: DateTime }) {
     <div className="diary-day-overview-entry">
       <header>
         <Heading level={3}>{asIsoDate}</Heading>
-        <Button>Eintrag Hinzufügen</Button>
+        <AddDiaryEntryDialog date={day} />
       </header>
 
       <div className="diary-view-container">

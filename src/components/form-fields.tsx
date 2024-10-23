@@ -1,8 +1,9 @@
 import React, { ComponentPropsWithoutRef, PropsWithChildren, useEffect, useRef, useState } from "react"
 import { ControllerRenderProps } from "react-hook-form"
-import { Form, IconButton, Input, InputNumber, InputPicker } from "rsuite"
-import { Id } from "../features/types.ts"
+import { DatePicker, Form, IconButton, Input, InputNumber, InputPicker, TimePicker } from "rsuite"
 import { PiCheck, PiX } from "react-icons/pi"
+import { DateTime } from "luxon"
+import { areDateTimesEqual } from "../utils/date-utils.ts"
 
 type FormData = Record<string, string | number | undefined | null>
 
@@ -46,7 +47,7 @@ export function InputPickerField<T extends FormData>({
   data,
   ...rest
 }: FieldProps<T> & {
-  data: Array<{ label: string; value: Id }>
+  data: Array<{ label: string; value: string }>
 }) {
   return (
     <Field label={label} error={error} {...rest}>
@@ -209,5 +210,145 @@ export function InlineNumberField({ value, onSave }: { value: number; onSave: (n
         <span>{value}</span>
       )}
     </div>
+  )
+}
+
+function DateOrTimePickerField<T extends Record<string, string | number | undefined | null | DateTime>>({
+  field,
+  label,
+  error,
+  autoFocus,
+  readOnly,
+  plaintext,
+  dateOrTime,
+  ...rest
+}: FieldProps<T> & {
+  dateOrTime: "time" | "date"
+}) {
+  const jsDate =
+    field.value instanceof DateTime
+      ? field.value
+      : typeof field.value === "string"
+        ? DateTime.fromISO(field.value)
+        : undefined
+
+  return (
+    <Field label={label} error={error} {...rest}>
+      <Form.Control
+        autoFocus={autoFocus}
+        plaintext={plaintext}
+        readOnly={readOnly}
+        accepter={dateOrTime === "date" ? DatePicker : TimePicker}
+        oneTap={dateOrTime === "date"}
+        hideMinutes={(minute) => minute % 5 !== 0}
+        cleanable={false}
+        value={jsDate?.toJSDate()}
+        name={field.name}
+        onChange={(value) => {
+          field.onChange(value ? DateTime.fromJSDate(value) : undefined)
+        }}
+      />
+    </Field>
+  )
+}
+
+export function DatePickerField<T extends Record<string, string | number | undefined | null | DateTime>>(
+  props: FieldProps<T>,
+) {
+  return <DateOrTimePickerField dateOrTime="date" {...props} />
+}
+
+export function TimePickerField<T extends Record<string, string | number | undefined | null | DateTime>>(
+  props: FieldProps<T>,
+) {
+  return <DateOrTimePickerField dateOrTime="time" {...props} />
+}
+
+export function DateTimePickerField<T extends Record<string, string | number | undefined | null | DateTime>>({
+  field,
+  label,
+  error,
+  autoFocus,
+  readOnly,
+  plaintext,
+  ...rest
+}: FieldProps<T>) {
+  const jsDate =
+    field.value instanceof DateTime
+      ? field.value
+      : typeof field.value === "string"
+        ? DateTime.fromISO(field.value)
+        : undefined
+
+  const [value, setValue] = useState<DateTime | undefined>(jsDate)
+
+  useEffect(() => {
+    if (value === undefined) {
+      field.onChange(undefined)
+    } else if (field.value instanceof DateTime && !areDateTimesEqual(field.value, value)) {
+      field.onChange(value)
+    }
+  }, [field, value])
+
+  function dateChanged(newDate: DateTime | undefined) {
+    if (newDate === undefined) {
+      setValue(undefined)
+    } else if (value) {
+      setValue(
+        value.set({
+          year: newDate.year,
+          month: newDate.month,
+          day: newDate.day,
+        }),
+      )
+    }
+  }
+
+  function timeChanged(newTime: DateTime | undefined) {
+    if (newTime === undefined) {
+      setValue(undefined)
+    } else if (value) {
+      setValue(
+        value.set({
+          hour: newTime.hour,
+          minute: newTime.minute,
+        }),
+      )
+    }
+  }
+
+  return (
+    <Field label={label} error={error} {...rest}>
+      <div>
+        <Form.Control
+          autoFocus={autoFocus}
+          plaintext={plaintext}
+          readOnly={readOnly}
+          accepter={DatePicker}
+          value={value?.toJSDate()}
+          oneTap={true}
+          cleanable={false}
+          name={field.name}
+          onChange={(value) => {
+            dateChanged(value ? DateTime.fromJSDate(value) : undefined)
+          }}
+        />
+
+        <Form.Control
+          autoFocus={autoFocus}
+          plaintext={plaintext}
+          readOnly={readOnly}
+          accepter={TimePicker}
+          cleanable={false}
+          hideMinutes={(minute) => minute % 5 !== 0}
+          editable={false}
+          value={value?.toJSDate()}
+          name={field.name}
+          onChange={(value) => {
+            timeChanged(value ? DateTime.fromJSDate(value) : undefined)
+          }}
+        />
+      </div>
+    </Field>
   )
 }
