@@ -5,7 +5,7 @@ import { useStore } from "../store.ts"
 import { sortDateTime } from "../../utils/sort-utils.ts"
 import { FoodDiaryEntry, RecipeDiaryEntry } from "../types.ts"
 import { FormatTime } from "../../components/format-time.tsx"
-import { AddDiaryEntryDialog } from "./add-diary-entry-dialog.tsx"
+import { AddDiaryEntryDialog } from "./add-diary-entry/add-diary-entry-dialog.tsx"
 
 function RecipeEntryRow({ entry }: { entry: RecipeDiaryEntry }) {
   const { recipes } = useStore()
