@@ -37,6 +37,11 @@ body {
     }
   }
 
+  .rs-input-group,
+  .rs-picker {
+    width: 100% !important;
+  }
+
   .rs-input[readonly]:focus {
     outline: unset;
     border-color: var(--rs-border-primary);

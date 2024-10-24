@@ -1,11 +1,12 @@
 import { DateTime } from "luxon"
 import { useMemo, useRef, useState } from "react"
-import { Button, Modal, Radio, RadioGroup, TimePicker } from "rsuite"
+import { Button, Form, Modal, Radio, RadioGroup, TimePicker } from "rsuite"
 import { PiPlusBold } from "react-icons/pi"
 import { MealType } from "../../types.ts"
 import { FormRef } from "./types.ts"
 import { AddRecipeEntryForm, AddRecipeFormData } from "./add-recipe-entry-form.tsx"
 import { AddFoodEntryForm, AddFoodFormData } from "./add-food-entry-form.tsx"
+import FormGroup from "rsuite/FormGroup"
 
 const mealTypes: Array<{ label: string; value: MealType }> = [
   {
@@ -81,27 +82,32 @@ export function AddDiaryEntryDialog({ date }: { date: DateTime }) {
         </Modal.Header>
 
         <Modal.Body>
-          <RadioGroup inline value={mealType} onChange={(value) => setMealType(value as MealType)}>
-            {mealTypes.map((mealType) => (
-              <Radio key={mealType.value} value={mealType.value}>
-                {mealType.label}
-              </Radio>
-            ))}
-          </RadioGroup>
+          <div style={{ display: "flex", flexDirection: "column", gap: "1.5em", alignItems: "flex-start" }}>
+            <RadioGroup inline value={mealType} onChange={(value) => setMealType(value as MealType)}>
+              {mealTypes.map((mealType) => (
+                <Radio key={mealType.value} value={mealType.value}>
+                  {mealType.label}
+                </Radio>
+              ))}
+            </RadioGroup>
 
-          <TimePicker
-            cleanable={false}
-            hideMinutes={(minute) => minute % 5 !== 0}
-            value={time.toJSDate()}
-            onChange={(jsDate) => (jsDate ? setTime(DateTime.fromJSDate(jsDate)) : now)}
-          />
+            <FormGroup>
+              <Form.ControlLabel>Wann?</Form.ControlLabel>
 
-          {mealType === "recipe" && (
-            <AddRecipeEntryForm ref={formRef} formId="add-diary-entry-form" onSubmit={onSubmitAddRecipe} />
-          )}
-          {mealType === "food" && (
-            <AddFoodEntryForm ref={formRef} formId="add-diary-entry-form" onSubmit={onSubmitAddFood} />
-          )}
+              <TimePicker
+                cleanable={false}
+                hideMinutes={(minute) => minute % 5 !== 0}
+                value={time.toJSDate()}
+                onChange={(jsDate) => (jsDate ? setTime(DateTime.fromJSDate(jsDate)) : now)}
+              />
+            </FormGroup>
+            {mealType === "recipe" && (
+              <AddRecipeEntryForm ref={formRef} formId="add-diary-entry-form" onSubmit={onSubmitAddRecipe} />
+            )}
+            {mealType === "food" && (
+              <AddFoodEntryForm ref={formRef} formId="add-diary-entry-form" onSubmit={onSubmitAddFood} />
+            )}
+          </div>
         </Modal.Body>
 
         <Modal.Footer>
