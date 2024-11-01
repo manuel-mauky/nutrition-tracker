@@ -8,6 +8,7 @@ import { AddRecipeEntryForm, AddRecipeFormData } from "./add-recipe-entry-form.t
 import { AddFoodEntryForm, AddFoodFormData } from "./add-food-entry-form.tsx"
 import FormGroup from "rsuite/FormGroup"
 import "./add-diary-entry.css"
+import { useStore } from "../../store.ts"
 
 const mealTypes: Array<{ label: string; value: MealType }> = [
   {
@@ -22,6 +23,8 @@ const mealTypes: Array<{ label: string; value: MealType }> = [
 
 export function AddDiaryEntryDialog({ date }: { date: DateTime }) {
   const formRef = useRef<FormRef>(null)
+
+  const { addDiaryEntry } = useStore()
 
   const [openDialog, setOpenDialog] = useState(false)
 
@@ -54,9 +57,11 @@ export function AddDiaryEntryDialog({ date }: { date: DateTime }) {
   }
 
   function onSubmitAddRecipe(data: AddRecipeFormData) {
-    console.log("submit recipe", {
-      time: time.toISO(),
-      ...data,
+    addDiaryEntry({
+      mealType: "recipe",
+      date: time.toISO() ?? DateTime.now().toISO(),
+      recipeId: data.recipeId,
+      portions: data.portions,
     })
 
     setOpenDialog(false)
@@ -64,10 +69,14 @@ export function AddDiaryEntryDialog({ date }: { date: DateTime }) {
   }
 
   function onSubmitAddFood(data: AddFoodFormData) {
-    console.log("submit food", {
-      time: time.toISO(),
-      ...data,
+    addDiaryEntry({
+      mealType: "food",
+      date: time.toISO() ?? DateTime.now().toISO(),
+      foodId: data.foodId,
+      amountInGram: data.amountInGram,
     })
+
+    setOpenDialog(false)
     reset()
   }
 

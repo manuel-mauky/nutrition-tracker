@@ -153,7 +153,7 @@ export function NumberField<T extends FormData>({
         step={step}
         name={field.name}
         value={field.value}
-        onChange={(value) => field.onChange(value)}
+        onChange={(value) => field.onChange(Number.parseFloat(value))}
       />
     </Field>
   )

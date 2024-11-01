@@ -24,7 +24,7 @@ export const AddFoodEntryForm = forwardRef<
     formState: { errors },
   } = useForm<AddFoodFormData>({
     defaultValues: {
-      amountInGram: 0,
+      amountInGram: 100,
     },
   })
 
