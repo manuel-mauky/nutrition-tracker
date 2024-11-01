@@ -5,7 +5,7 @@
   padding: 0;
 
   & > li {
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
 
     &:last-child {
       margin-bottom: unset;
@@ -14,34 +14,38 @@
 }
 
 .diary-day-overview-entry {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: max-content auto;
+  grid-column-gap: 2em;
+  grid-row-gap: 0.5em;
 
-  & > header {
+  .diary-view-entries-header {
     display: flex;
     gap: 2em;
 
     align-items: center;
-
-    margin-bottom: 0.5em;
   }
 
-  .diary-view-container {
+  .diary-view-entries-container {
+    .time-col {
+      width: 100px;
+    }
+
+    .amount-col {
+      width: 50px;
+    }
+  }
+
+  .diary-view-nutrition-header {
+    display: flex;
+    align-items: center;
+  }
+
+  .diary-view-nutrition-overview {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-
-    .entries-table {
-      .time-col {
-        width: 100px;
-      }
-
-      .amount-col {
-        width: 50px;
-      }
-    }
-
-    .nutrition-overview {
-    }
+    grid-template-columns: repeat(2, max-content auto);
+    grid-column-gap: 1em;
+    grid-row-gap: 0.2em;
   }
 }
 

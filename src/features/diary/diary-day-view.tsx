@@ -6,6 +6,7 @@ import { sortDateTime } from "../../utils/sort-utils.ts"
 import { FoodDiaryEntry, RecipeDiaryEntry } from "../types.ts"
 import { FormatTime } from "../../components/format-time.tsx"
 import { AddDiaryEntryDialog } from "./add-diary-entry/add-diary-entry-dialog.tsx"
+import { DiaryNutritionOverview } from "./diary-nutrition-overview.tsx"
 
 function RecipeEntryRow({ entry }: { entry: RecipeDiaryEntry }) {
   const { recipes } = useStore()
@@ -57,37 +58,36 @@ export function DiaryDayView({ day }: { day: DateTime }) {
 
   return (
     <div className="diary-day-overview-entry">
-      <header>
+      <header className="diary-view-entries-header">
         <Heading level={3}>{asIsoDate}</Heading>
         <AddDiaryEntryDialog date={day} />
       </header>
-
-      <div className="diary-view-container">
-        <div className="entries-table">
-          {entries.length > 0 ? (
-            <table style={{ tableLayout: "fixed" }}>
-              <colgroup>
-                <col className="time-col" />
-                <col className="amount-col" />
-                <col className="name-col" />
-              </colgroup>
-              <tbody>
-                {entries.map((entry) => (
-                  <Fragment key={entry.id}>
-                    {entry.mealType === "food" && <FoodEntryRow entry={entry} />}
-                    {entry.mealType === "recipe" && <RecipeEntryRow entry={entry} />}
-                  </Fragment>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>Keine Einträge</p>
-          )}
-        </div>
-
-        <div className="nutrition-overview">
-          <Heading level={5}>Nährwerte</Heading>
-        </div>
+      <div className="diary-view-nutrition-header">
+        <Heading level={5}>Nährwerte</Heading>
+      </div>
+      <div className="diary-view-entries-container">
+        {entries.length > 0 ? (
+          <table style={{ tableLayout: "fixed" }}>
+            <colgroup>
+              <col className="time-col" />
+              <col className="amount-col" />
+              <col className="name-col" />
+            </colgroup>
+            <tbody>
+              {entries.map((entry) => (
+                <Fragment key={entry.id}>
+                  {entry.mealType === "food" && <FoodEntryRow entry={entry} />}
+                  {entry.mealType === "recipe" && <RecipeEntryRow entry={entry} />}
+                </Fragment>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>Keine Einträge</p>
+        )}
+      </div>
+      <div className="diary-view-nutrition-container">
+        <DiaryNutritionOverview day={day} />
       </div>
     </div>
   )

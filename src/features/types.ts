@@ -36,22 +36,22 @@ export type Recipe = Entity & {
 
 export type RecipeWithNutrients = Omit<Recipe, "ingredients"> & Nutrients
 
-export type Ingredient = {
-  ingredientId: Id
+export type FoodAmount = {
   foodId: Id
   amountInGram: number
 }
 
+export type Ingredient = FoodAmount & {
+  ingredientId: Id
+}
 
 export type IsoDateString = string
 export type IsoDateTimeString = string
 
-export type FoodDiaryEntry = {
+export type FoodDiaryEntry = FoodAmount & {
   id: Id
   date: IsoDateTimeString
   mealType: "food"
-  foodId: Id
-  amountInGram: number
 }
 
 export type RecipeDiaryEntry = {
@@ -61,7 +61,6 @@ export type RecipeDiaryEntry = {
   recipeId: Id
   portions: number
 }
-
 
 export type DiaryEntry = FoodDiaryEntry | RecipeDiaryEntry
 
