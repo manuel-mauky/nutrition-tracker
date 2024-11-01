@@ -4,7 +4,7 @@ import { FormRef } from "./types.ts"
 import { useStore } from "../../store.ts"
 import { Controller, useForm } from "react-hook-form"
 import { Form } from "rsuite"
-import { InputPickerField } from "../../../components/form-fields.tsx"
+import { InputPickerField, NumberField } from "../../../components/form-fields.tsx"
 
 export type AddFoodFormData = Omit<FoodDiaryEntry, "id" | "date" | "mealType">
 
@@ -49,13 +49,35 @@ export const AddFoodEntryForm = forwardRef<
   return (
     <Form id={formId} fluid onSubmit={(_, event) => onSubmitHandler(event)}>
       <Controller
+        name="amountInGram"
+        control={control}
+        rules={{
+          validate: (value) => (value <= 0 ? "Muss größer als 0g sein" : undefined),
+        }}
+        render={({ field }) => (
+          <NumberField
+            className="first-column"
+            step={0.1}
+            label="Menge in Gram"
+            field={field}
+            error={errors[field.name]?.message}
+          />
+        )}
+      />
+      <Controller
         name="foodId"
         control={control}
         rules={{
           required: "Lebensmittel ist erforderlich",
         }}
         render={({ field }) => (
-          <InputPickerField label="Lebensmittel" field={field} data={foodItems} error={errors[field.name]?.message} />
+          <InputPickerField
+            style={{ flexGrow: 1 }}
+            label="Lebensmittel"
+            field={field}
+            data={foodItems}
+            error={errors[field.name]?.message}
+          />
         )}
       />
     </Form>

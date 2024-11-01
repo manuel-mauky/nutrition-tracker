@@ -7,6 +7,7 @@ import { FormRef } from "./types.ts"
 import { AddRecipeEntryForm, AddRecipeFormData } from "./add-recipe-entry-form.tsx"
 import { AddFoodEntryForm, AddFoodFormData } from "./add-food-entry-form.tsx"
 import FormGroup from "rsuite/FormGroup"
+import "./add-diary-entry.css"
 
 const mealTypes: Array<{ label: string; value: MealType }> = [
   {
@@ -82,7 +83,7 @@ export function AddDiaryEntryDialog({ date }: { date: DateTime }) {
         </Modal.Header>
 
         <Modal.Body>
-          <div style={{ display: "flex", flexDirection: "column", gap: "1.5em", alignItems: "flex-start" }}>
+          <div className="add-diary-entry-dialog-root">
             <RadioGroup inline value={mealType} onChange={(value) => setMealType(value as MealType)}>
               {mealTypes.map((mealType) => (
                 <Radio key={mealType.value} value={mealType.value}>
@@ -91,7 +92,7 @@ export function AddDiaryEntryDialog({ date }: { date: DateTime }) {
               ))}
             </RadioGroup>
 
-            <FormGroup>
+            <FormGroup className="first-column">
               <Form.ControlLabel>Wann?</Form.ControlLabel>
 
               <TimePicker

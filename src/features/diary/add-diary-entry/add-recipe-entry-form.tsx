@@ -47,44 +47,40 @@ export const AddRecipeEntryForm = forwardRef<
   })
 
   return (
-    <Form style={{ width: "100%" }} id={formId} onSubmit={(_, event) => onSubmitHandler(event)}>
-      <div style={{ display: "flex", gap: "1em" }}>
-        <Controller
-          name="portions"
-          control={control}
-          rules={{
-            validate: (value) => (value <= 0 ? "Anzahl Portionen muss größer als 0 sein" : undefined),
-          }}
-          render={({ field }) => (
-            <NumberField
-              style={{
-                width: "197px" /* magic number. This way it's aligned with the time field in the dialog*/,
-              }}
-              step={0.1}
-              label="Anzahl Portionen"
-              field={field}
-              error={errors[field.name]?.message}
-            />
-          )}
-        />
+    <Form id={formId} onSubmit={(_, event) => onSubmitHandler(event)}>
+      <Controller
+        name="portions"
+        control={control}
+        rules={{
+          validate: (value) => (value <= 0 ? "Anzahl Portionen muss größer als 0 sein" : undefined),
+        }}
+        render={({ field }) => (
+          <NumberField
+            className="first-column"
+            step={0.1}
+            label="Anzahl Portionen"
+            field={field}
+            error={errors[field.name]?.message}
+          />
+        )}
+      />
 
-        <Controller
-          name="recipeId"
-          control={control}
-          rules={{
-            required: "Rezept ist erforderlich",
-          }}
-          render={({ field }) => (
-            <InputPickerField
-              style={{ flexGrow: 1 }}
-              label="Rezept"
-              field={field}
-              data={recipeItems}
-              error={errors[field.name]?.message}
-            />
-          )}
-        />
-      </div>
+      <Controller
+        name="recipeId"
+        control={control}
+        rules={{
+          required: "Rezept ist erforderlich",
+        }}
+        render={({ field }) => (
+          <InputPickerField
+            style={{ flexGrow: 1 }}
+            label="Rezept"
+            field={field}
+            data={recipeItems}
+            error={errors[field.name]?.message}
+          />
+        )}
+      />
     </Form>
   )
 })
