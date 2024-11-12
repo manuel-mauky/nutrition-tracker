@@ -5,7 +5,7 @@
   padding: 0;
 
   & > li {
-    margin-bottom: 2rem;
+    margin-bottom: 4rem;
 
     &:last-child {
       margin-bottom: unset;
@@ -16,7 +16,7 @@
 .diary-day-overview-entry {
   display: grid;
   grid-template-columns: max-content auto;
-  grid-column-gap: 2em;
+  grid-column-gap: 3em;
   grid-row-gap: 0.5em;
 
   .diary-view-entries-header {
@@ -43,7 +43,7 @@
 
   .diary-view-nutrition-overview {
     display: grid;
-    grid-template-columns: repeat(2, max-content auto);
+    grid-template-columns: repeat(2, max-content 6rem);
     grid-column-gap: 1em;
     grid-row-gap: 0.2em;
   }
