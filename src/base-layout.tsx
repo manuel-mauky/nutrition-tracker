@@ -44,7 +44,7 @@ function BaseLayout() {
 
   return (
     <Container className="app-base-layout">
-      <Sidebar className="app-sidebar" width={expand ? 210 : 56} collapsible>
+      <Sidebar className="app-sidebar" width={expand ? 250 : 56} collapsible>
         <Sidenav.Header>
           <Brand expand={expand} />
         </Sidenav.Header>
@@ -60,7 +60,7 @@ function BaseLayout() {
               <NavLink to="/recipes" icon={PiBowlSteam}>
                 Rezepte
               </NavLink>
-              <Divider style={{margin: "12px 0px"}}/>
+              <Divider style={{ margin: "12px 0px" }} />
               <NavLink to="/settings" icon={PiSliders}>
                 Einstellungen
               </NavLink>
@@ -71,7 +71,6 @@ function BaseLayout() {
       </Sidebar>
 
       <Outlet />
-      {/*<TanStackRouterDevtools />*/}
     </Container>
   )
 }

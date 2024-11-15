@@ -10,7 +10,7 @@
 .brand {
   height: var(--app-header-height);
   border-bottom: var(--app-layout-border);
-  padding: 10px 15px;
+  padding-left: 15px;
   font-size: 20px;
   overflow: hidden;
 
@@ -40,24 +40,30 @@
 }
 
 #content-layout-root {
-  & > header {
+  display: flex;
+  flex-direction: column;
+
+  .rs-panel {
+    flex: auto;
+    overflow: auto;
+
     display: flex;
     flex-direction: column;
-    padding-left: 10px;
-    justify-content: center;
-    height: var(--app-header-height);
-    border-bottom: var(--app-layout-border);
-    font-size: 20px;
-  }
 
-  & > .rs-content {
-    padding: 10px;
+    .rs-panel-body {
+      flex: auto;
+    }
   }
 
   .rs-header {
-    .rs-breadcrumb {
+    .rs-breadcrumb,
+    .rs-text {
       margin-bottom: 0;
       font-size: 20px;
+
+      a {
+        color: var(--rs-text-link);
+      }
     }
   }
 }
