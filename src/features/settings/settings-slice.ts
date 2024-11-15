@@ -4,6 +4,7 @@ import { SortType } from "rsuite-table"
 import { FoodColumn } from "../foods/foods-table.tsx"
 import { RecipeColumn } from "../recipes/recipes-table.tsx"
 import { IngredientColumn } from "../recipes/ingredient-table.tsx"
+import { CustomProviderProps } from "rsuite"
 
 type SortSettings<T extends string> = {
   sortColumn: T | undefined
@@ -13,6 +14,7 @@ type SortSettings<T extends string> = {
 type SortFeatures = "recipes" | "foods" | "recipeIngredients"
 
 type SettingsState = {
+  theme: CustomProviderProps["theme"]
   settings: {
     sorting: {
       recipes: SortSettings<RecipeColumn["key"]>
@@ -28,6 +30,7 @@ const initialSortSettings: SortSettings<never> = {
 }
 
 const initialState: SettingsState = {
+  theme: "light",
   settings: {
     sorting: {
       foods: initialSortSettings,
@@ -38,6 +41,7 @@ const initialState: SettingsState = {
 }
 
 export type SettingsSlice = SettingsState & {
+  changeTheme: (newTheme: SettingsState["theme"]) => void
   changeSortSettings: <T extends SortFeatures>(
     sortFeature: T,
     newSettings: SettingsState["settings"]["sorting"][T],
@@ -49,6 +53,10 @@ export const createSettingsSlice: StateCreator<RootStore, RootStoreMutators, [],
   changeSortSettings: (sortFeature, newSettings) =>
     set((state) => {
       state.settings.sorting[sortFeature] = newSettings
+    }),
+  changeTheme: (newTheme) =>
+    set((state) => {
+      state.theme = newTheme
     }),
 })
 
