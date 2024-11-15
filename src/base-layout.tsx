@@ -69,7 +69,6 @@ function BaseLayout() {
         </Sidenav>
         <NavToggle expand={expand} onChange={() => setExpand(!expand)} />
       </Sidebar>
-
       <Outlet />
     </Container>
   )

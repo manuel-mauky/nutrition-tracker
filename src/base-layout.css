@@ -2,6 +2,10 @@
   --app-header-height: 50px;
   --app-layout-border: 1px solid var(--rs-border-primary);
   height: 100%;
+
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
 }
 
 .brand {
@@ -36,38 +40,37 @@
   }
 }
 
-#content-layout-root {
+#content-container-root {
   display: flex;
   flex-direction: column;
 
-  .rs-panel {
-    flex: auto;
-    overflow: auto;
+  overflow: auto;
+  padding: 1rem;
 
+  flex-grow: 1;
+
+  .content-container-header {
     display: flex;
-    flex-direction: column;
+    align-items: flex-start;
 
-    .rs-panel-body {
+    margin-bottom: 1.5em;
+
+    .rs-header {
       flex: auto;
-    }
-  }
 
-  .rs-header {
-    .rs-breadcrumb,
-    .rs-text {
-      margin-bottom: 0;
-      font-size: 20px;
+      .rs-breadcrumb,
+      .rs-text {
+        margin-bottom: 0;
+        font-size: 24px;
 
-      a {
-        color: var(--rs-text-link);
+        a {
+          color: var(--rs-text-link);
+        }
       }
     }
   }
-}
 
-#global-quick-settings {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 1;
+  .content-container-body {
+    flex: auto;
+  }
 }
