@@ -165,11 +165,17 @@ export function InlineNumberField({ value, onSave }: { value: number; onSave: (n
 
   const [internalValue, setInternalValue] = useState<number>(value)
 
+  // If "value" is changed from outside, we want to exit editMode.
+  // This can happen for example when sorting is triggered as cells are reused.
   useEffect(() => {
     if (editMode) {
       setEditMode(false)
     }
     setInternalValue(value)
+
+    // We intentionally don't run this hook on editMode changes.
+    // Otherwise, it would always re-set editMode to false, when it was set to true before.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
   useEffect(() => {
