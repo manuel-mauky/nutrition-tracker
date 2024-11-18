@@ -10,6 +10,7 @@ import { FileType } from "rsuite/esm/Uploader/Uploader"
 
 import { deDE } from "rsuite/locales"
 import { migrate } from "../../storage.ts"
+import { useTranslation } from "react-i18next"
 
 const panelContainerStyle: CSSProperties = {
   display: "flex",
@@ -19,6 +20,7 @@ const panelContainerStyle: CSSProperties = {
 }
 
 export function SettingsRoute() {
+  const { t } = useTranslation()
   const state = useStore()
 
   const [fileList, setFileList] = useState<Array<FileType>>([])
@@ -107,7 +109,7 @@ export function SettingsRoute() {
           </Button>
         </Modal.Footer>
       </Modal>
-      <ContentLayout header={<Text>Einstellungen</Text>}>
+      <ContentLayout header={<Text>{t("settings.title")}</Text>}>
         <div id="settings-root">
           <Panel header="Datenspeicher">
             <div style={panelContainerStyle}>

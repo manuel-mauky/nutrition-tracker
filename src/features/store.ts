@@ -7,6 +7,7 @@ import { migrate } from "../storage.ts"
 import { shared } from "../middlewares/broadcast.ts"
 import { createSettingsSlice, SettingsSlice } from "./settings/settings-slice.ts"
 import { createDiarySlice, DiarySlice } from "./diary/diary-slice.ts"
+import i18n from "i18next"
 
 export type RootStore = FoodsSlice & RecipesSlice & SettingsSlice & DiarySlice
 
@@ -36,3 +37,13 @@ export const useStore = create<RootStore, RootStoreMutators>(
     ),
   ),
 )
+
+// sync initial language, take value from store (potentially from local storage)
+i18n.changeLanguage(useStore.getState().language)
+
+// when lanugage was changed by user, sync to i18n
+useStore.subscribe((state) => {
+  if (state.language !== i18n.language) {
+    i18n.changeLanguage(state.language)
+  }
+})

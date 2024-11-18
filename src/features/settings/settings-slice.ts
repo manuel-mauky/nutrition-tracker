@@ -5,6 +5,7 @@ import { FoodColumn } from "../foods/foods-table.tsx"
 import { RecipeColumn } from "../recipes/recipes-table.tsx"
 import { IngredientColumn } from "../recipes/ingredient-table.tsx"
 import { CustomProviderProps } from "rsuite"
+import { defaultLanguage, Language } from "../../i18n.ts"
 
 type SortSettings<T extends string> = {
   sortColumn: T | undefined
@@ -15,6 +16,7 @@ type SortFeatures = "recipes" | "foods" | "recipeIngredients"
 
 type SettingsState = {
   theme: CustomProviderProps["theme"]
+  language: Language
   settings: {
     sorting: {
       recipes: SortSettings<RecipeColumn["key"]>
@@ -31,6 +33,7 @@ const initialSortSettings: SortSettings<never> = {
 
 const initialState: SettingsState = {
   theme: "light",
+  language: defaultLanguage,
   settings: {
     sorting: {
       foods: initialSortSettings,
@@ -42,6 +45,7 @@ const initialState: SettingsState = {
 
 export type SettingsSlice = SettingsState & {
   changeTheme: (newTheme: SettingsState["theme"]) => void
+  changeLanguage: (newLanguage: Language) => void
   changeSortSettings: <T extends SortFeatures>(
     sortFeature: T,
     newSettings: SettingsState["settings"]["sorting"][T],
@@ -57,6 +61,10 @@ export const createSettingsSlice: StateCreator<RootStore, RootStoreMutators, [],
   changeTheme: (newTheme) =>
     set((state) => {
       state.theme = newTheme
+    }),
+  changeLanguage: (newLanguage) =>
+    set((state) => {
+      state.language = newLanguage
     }),
 })
 

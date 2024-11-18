@@ -8,12 +8,14 @@ import { Link, LinkProps, Outlet, useLinkProps } from "@tanstack/react-router"
 import { IconType } from "react-icons"
 
 import "./base-layout.css"
+import { useTranslation } from "react-i18next"
 
 function Brand({ expand }: { expand: boolean }) {
+  const { t } = useTranslation()
   return (
     <HStack className="brand" spacing={12}>
       <Icon as={PiPepper} />
-      {expand && <Text>Nutrition Tracker</Text>}
+      {expand && <Text>{t("common.appTitle")}</Text>}
     </HStack>
   )
 }
@@ -40,6 +42,7 @@ function NavLink({ children, icon, to }: PropsWithChildren<{ icon: IconType } & 
 }
 
 function BaseLayout() {
+  const { t } = useTranslation()
   const [expand, setExpand] = useState(true)
 
   return (
@@ -52,17 +55,17 @@ function BaseLayout() {
           <Sidenav.Body>
             <Nav defaultActiveKey="1">
               <NavLink to="/diary" icon={PiListBullets}>
-                Tagebuch
+                {t("diary.navLink")}
               </NavLink>
               <NavLink to="/foods" icon={PiAvocado}>
-                Lebensmittel
+                {t("foods.navLink")}
               </NavLink>
               <NavLink to="/recipes" icon={PiBowlSteam}>
-                Rezepte
+                {t("recipes.navLink")}
               </NavLink>
               <Divider style={{ margin: "12px 0px" }} />
               <NavLink to="/settings" icon={PiSliders}>
-                Einstellungen
+                {t("settings.navLink")}
               </NavLink>
             </Nav>
           </Sidenav.Body>

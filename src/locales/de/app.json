@@ -1,0 +1,21 @@
+{
+  "common": {
+    "appTitle": "Nutrition Tracker"
+  },
+  "diary": {
+    "navLink": "Tagebuch",
+    "title": "Tagebuch"
+  },
+  "foods": {
+    "navLink": "Lebensmittel",
+    "title": "Lebensmittel"
+  },
+  "recipes": {
+    "navLink": "Rezepte",
+    "title": "Rezepte"
+  },
+  "settings": {
+    "navLink": "Einstellungen",
+    "title": "Einstellungen"
+  }
+}

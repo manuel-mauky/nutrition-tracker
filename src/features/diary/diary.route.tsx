@@ -8,6 +8,7 @@ import { DiaryEntry, IsoDateString } from "../types.ts"
 import "./diary.css"
 import { sortDateTime } from "../../utils/sort-utils.ts"
 import { DiaryDayView } from "./diary-day-view.tsx"
+import { useTranslation } from "react-i18next"
 
 // The overview can be scrolled to the oldest day in the diary + this amount of days
 const oldestDayAdditionalRange = 7
@@ -36,6 +37,7 @@ function getListOfDatesBetween(start: DateTime, end: DateTime) {
 }
 
 export function DiaryRoute() {
+  const { t } = useTranslation()
   const { diaryEntries } = useStore()
 
   const today = useMemo(() => DateTime.now(), [])
@@ -53,7 +55,7 @@ export function DiaryRoute() {
   )
 
   return (
-    <ContentLayout header={<Text>Tagebuch</Text>}>
+    <ContentLayout header={<Text>{t("diary.title")}</Text>}>
       <div id="diary-root">
         <ul className="diary-list-of-days">
           {listOfDays.map((day) => (
