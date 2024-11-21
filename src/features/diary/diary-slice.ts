@@ -2,7 +2,6 @@ import { DiaryEntry, IsoDateString, Id, FoodDiaryEntry, RecipeDiaryEntry } from 
 import { StateCreator } from "zustand"
 import { RootStore, RootStoreMutators } from "../store.ts"
 import { nanoid } from "nanoid"
-import { diaryEntries } from "../../test-data.ts"
 import { DateTime } from "luxon"
 
 type DiaryState = {
@@ -10,7 +9,7 @@ type DiaryState = {
 }
 
 const initialState: DiaryState = {
-  diaryEntries: diaryEntries,
+  diaryEntries: {},
 }
 
 export type DiarySlice = DiaryState & {

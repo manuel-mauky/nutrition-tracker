@@ -3,10 +3,8 @@ import { StateCreator } from "zustand"
 import { nanoid } from "nanoid"
 import { RootStore, RootStoreMutators } from "../store.ts"
 
-import { foods } from "../../test-data.ts"
-
 const initialState: FoodsState = {
-  foods: [...foods],
+  foods: [],
 }
 
 type FoodsState = {
