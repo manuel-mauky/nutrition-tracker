@@ -6,6 +6,7 @@ import { Id, Recipe } from "../types.ts"
 import { Controller, useForm } from "react-hook-form"
 import { InputPickerField, NumberField } from "../../components/form-fields.tsx"
 import { nanoid } from "nanoid"
+import { sortByName } from "../../utils/sort-utils.ts"
 
 type AddIngredientFormValue = {
   amount: number
@@ -58,7 +59,7 @@ export function AddIngredientButton({ recipe }: { recipe: Recipe }) {
     reset()
   }
 
-  const foodItems = foods.map((food) => ({
+  const foodItems = foods.toSorted(sortByName()).map((food) => ({
     label: food.name,
     value: food.id,
   }))

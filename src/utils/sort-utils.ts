@@ -45,3 +45,24 @@ export function sortDateTime(a: string | DateTime, b: string | DateTime): number
     (typeof b === "string" ? DateTime.fromISO(b) : b).toSeconds()
   )
 }
+
+export function sortByString<T>(extractString: (elem: T) => string): (a: T, b: T) => number {
+  return (a, b) => {
+    if (!a || !b) {
+      return 0
+    }
+
+    const valA = extractString(a)
+    const valB = extractString(b)
+
+    if (!valA || !valB) {
+      return 0
+    }
+
+    return valA.localeCompare(valB)
+  }
+}
+
+export function sortByName<T extends { name: string }>(): (a: T, b: T) => number {
+  return sortByString((elem) => elem.name)
+}

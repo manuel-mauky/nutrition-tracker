@@ -5,6 +5,7 @@ import { useStore } from "../../store.ts"
 import { Controller, useForm } from "react-hook-form"
 import { Form } from "rsuite"
 import { InputPickerField, NumberField } from "../../../components/form-fields.tsx"
+import { sortByName } from "../../../utils/sort-utils.ts"
 
 export type AddFoodFormData = Omit<FoodDiaryEntry, "id" | "date" | "mealType">
 
@@ -34,7 +35,7 @@ export const AddFoodEntryForm = forwardRef<
 
   const foodItems = useMemo(
     () =>
-      foods.map((food) => ({
+      foods.toSorted(sortByName()).map((food) => ({
         label: food.name,
         value: food.id,
       })),
