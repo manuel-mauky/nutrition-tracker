@@ -56,7 +56,7 @@ export function AddRecipeDialog() {
       <Button startIcon={<PiPlusBold />} onClick={handleOpen}>
         Hinzufügen
       </Button>
-      <Modal open={openAddDialog} onClose={handleClose}>
+      <Modal open={openAddDialog} onClose={handleClose} backdrop="static">
         <Modal.Header>
           <Modal.Title>Rezept hinzufügen</Modal.Title>
         </Modal.Header>
