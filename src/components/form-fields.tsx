@@ -127,6 +127,24 @@ export function NumberField<T extends FormData>({
   unit?: string
   step?: number
 }) {
+  const [internalValue, setInternalValue] = useState<string>("" + field.value)
+
+  useEffect(() => {
+    // if we are in the middle of typing a floating number...
+    if (internalValue.endsWith(".")) {
+      // ... we don't want to parse the number.
+      return
+    }
+
+    const parsedValue = Number.parseFloat(internalValue)
+
+    if (Number.isNaN(parsedValue)) {
+      field.onChange(0)
+    } else {
+      field.onChange(parsedValue)
+    }
+  }, [internalValue, field])
+
   const formatter = unit ? (value: number | string) => `${value} ${unit}` : undefined
 
   const ref = useRef<HTMLInputElement>(null)
@@ -152,8 +170,10 @@ export function NumberField<T extends FormData>({
         min={0}
         step={step}
         name={field.name}
-        value={field.value}
-        onChange={(value) => field.onChange(Number.parseFloat(value))}
+        value={internalValue}
+        onChange={(value) => {
+          setInternalValue(value)
+        }}
       />
     </Field>
   )

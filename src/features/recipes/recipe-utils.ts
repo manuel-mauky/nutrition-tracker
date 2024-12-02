@@ -12,6 +12,7 @@ import {
 import { createSelector } from "reselect"
 import { RootStore } from "../store.ts"
 import { DateTime } from "luxon"
+import { floor } from "../utils.ts"
 
 export const emptyNutrients: Nutrients = nutrientNames.reduce(
   (nutrients, nutrientName) => ({
@@ -32,7 +33,7 @@ export const emptyNutrients: Nutrients = nutrientNames.reduce(
  * @param key
  */
 function calcNutrientForFood(food: Food, ingredient: FoodAmount, key: keyof Nutrients): number {
-  return Math.floor((food[key] / 100) * ingredient.amountInGram)
+  return floor((food[key] / 100) * ingredient.amountInGram, 1)
 }
 
 export function calcNutrientsForIngredient(foodsMap: Record<Id, Food>, ingredient: FoodAmount): Nutrients {

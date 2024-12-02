@@ -7,3 +7,7 @@ export function validateName(value: string, entity: Array<{ name: string }>): st
     return undefined
   }
 }
+
+export function floor(value: number, numberOfDecimals: number) {
+  return parseFloat(value.toFixed(numberOfDecimals))
+}
