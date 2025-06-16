@@ -11,7 +11,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@tanstack/react-router": "^1.48.1",
+    "@tanstack/react-router": "^1.121.16",
     "i18next": "^23.16.5",
     "immer": "^10.1.1",
     "luxon": "^3.5.0",
@@ -27,8 +27,8 @@
   },
   "devDependencies": {
     "@ngneat/falso": "^7.2.0",
-    "@tanstack/router-devtools": "^1.48.1",
-    "@tanstack/router-plugin": "^1.47.0",
+    "@tanstack/router-devtools": "^1.121.16",
+    "@tanstack/router-plugin": "^1.121.16",
     "@types/luxon": "^3",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
