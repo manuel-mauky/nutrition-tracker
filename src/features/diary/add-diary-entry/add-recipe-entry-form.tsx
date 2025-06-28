@@ -6,8 +6,9 @@ import { Form } from "rsuite"
 import { InputPickerField, NumberField } from "../../../components/form-fields.tsx"
 import { FormRef } from "./types.ts"
 import { sortByName } from "../../../utils/sort-utils.ts"
+import { SelectedRecipeFoodsTable } from "./selected-recipe-foods-table.tsx"
 
-export type AddRecipeFormData = Omit<RecipeDiaryEntry, "id" | "date" | "mealType">
+export type AddRecipeFormData = Omit<RecipeDiaryEntry, "id" | "date" | "mealType" | "foods">
 
 export const AddRecipeEntryForm = forwardRef<
   FormRef,
@@ -23,6 +24,7 @@ export const AddRecipeEntryForm = forwardRef<
     control,
     reset,
     formState: { errors },
+    watch,
   } = useForm<AddRecipeFormData>({
     defaultValues: {
       portions: 1,
@@ -47,41 +49,55 @@ export const AddRecipeEntryForm = forwardRef<
     reset()
   })
 
+  const selectedRecipeId = watch("recipeId")
+
   return (
     <Form id={formId} onSubmit={(_, event) => onSubmitHandler(event)}>
-      <Controller
-        name="portions"
-        control={control}
-        rules={{
-          validate: (value) => (value <= 0 ? "Anzahl Portionen muss größer als 0 sein" : undefined),
-        }}
-        render={({ field }) => (
-          <NumberField
-            className="first-column"
-            step={0.1}
-            label="Anzahl Portionen"
-            field={field}
-            error={errors[field.name]?.message}
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ display: "flex" }}>
+          <Controller
+            name="portions"
+            control={control}
+            rules={{
+              validate: (value) => (value <= 0 ? "Anzahl Portionen muss größer als 0 sein" : undefined),
+            }}
+            render={({ field }) => (
+              <NumberField
+                className="first-column"
+                step={0.1}
+                label="Anzahl Portionen"
+                field={field}
+                error={errors[field.name]?.message}
+              />
+            )}
           />
-        )}
-      />
 
-      <Controller
-        name="recipeId"
-        control={control}
-        rules={{
-          required: "Rezept ist erforderlich",
-        }}
-        render={({ field }) => (
-          <InputPickerField
-            style={{ flexGrow: 1 }}
-            label="Rezept"
-            field={field}
-            data={recipeItems}
-            error={errors[field.name]?.message}
+          <Controller
+            name="recipeId"
+            control={control}
+            rules={{
+              required: "Rezept ist erforderlich",
+            }}
+            render={({ field }) => (
+              <InputPickerField
+                style={{ flexGrow: 1 }}
+                label="Rezept"
+                field={field}
+                data={recipeItems}
+                error={errors[field.name]?.message}
+              />
+            )}
           />
+        </div>
+
+        {selectedRecipeId && (
+          <div>
+            <p>Zutaten anpassen:</p>
+
+            <SelectedRecipeFoodsTable recipeId={selectedRecipeId} />
+          </div>
         )}
-      />
+      </div>
     </Form>
   )
 })

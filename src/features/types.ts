@@ -59,6 +59,8 @@ export type RecipeDiaryEntry = {
   date: IsoDateTimeString
   mealType: "recipe"
   recipeId: Id
+  foods: Array<FoodAmount>
+  // TODO: remove from state. Should only be used in the UI
   portions: number
 }
 
