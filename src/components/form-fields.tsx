@@ -5,7 +5,7 @@ import { PiCheck, PiX } from "react-icons/pi"
 import { DateTime } from "luxon"
 import { areDateTimesEqual } from "../utils/date-utils.ts"
 
-type FormData = Record<string, string | number | undefined | null>
+type FormData = Record<string, unknown>
 
 export const Textarea = React.forwardRef<HTMLTextAreaElement>((props, ref) => (
   <Input {...props} as="textarea" ref={ref} />

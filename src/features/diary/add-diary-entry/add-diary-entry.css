@@ -8,10 +8,6 @@
     width: 10em;
   }
 
-  .rs-form-group:not(.first-column) {
-    flex-grow: 1;
-  }
-
   form {
     width: 100%;
 
