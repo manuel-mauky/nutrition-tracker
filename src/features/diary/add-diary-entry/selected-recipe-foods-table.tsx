@@ -1,6 +1,6 @@
 import { FoodAmount, Id } from "../../types.ts"
 import { useStore } from "../../store.ts"
-import { CellProps, Container, IconButton, Table } from "rsuite"
+import { CellProps, IconButton, Table } from "rsuite"
 import { ColumnType } from "../../../utils/sort-utils.ts"
 import { InlineNumberField } from "../../../components/form-fields.tsx"
 
@@ -8,6 +8,7 @@ import { AddRecipeFormData } from "./add-recipe-entry-form.tsx"
 import { Control, useFieldArray } from "react-hook-form"
 import { Icon } from "@rsuite/icons"
 import { PiTrash } from "react-icons/pi"
+import { AddIngredientButton, AddIngredientFormValue } from "../../recipes/add-ingredient-button.tsx"
 
 type FoodAmountTableData = FoodAmount & { foodName: string; fieldId: string }
 
@@ -34,7 +35,6 @@ function AmountCell({
 }: CellProps<FoodAmountTableData> & {
   onAmountChanged: (index: number, foodId: Id, newValue: number) => void
 }) {
-  console.log("amount-cell", { rowData, rowIndex })
   return (
     <Table.Cell {...rest}>
       {rowData && (
@@ -89,12 +89,20 @@ export function SelectedRecipeFoodsTable({ control }: { control: Control<AddReci
       amountInGram: newValue,
     })
   }
+
+  function onAddIngredient(ingredient: AddIngredientFormValue) {
+    prepend({
+      foodId: ingredient.foodId,
+      amountInGram: ingredient.amount,
+    })
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "start", gap: ".5em" }}>
       <p>Zutaten anpassen?</p>
       <p>Änderungen wirken sich nur auf diesen Tagebucheintrag aus. Das Rezept selbst bleibt unverändert.</p>
 
-      <IconButton>Zutat hinzufügen</IconButton>
+      <AddIngredientButton onAddIngredient={onAddIngredient} existingFoods={data.map((d) => d.foodId)} />
 
       <div style={{ flexGrow: 1, width: "100%" }}>
         <Table fillHeight data={data}>

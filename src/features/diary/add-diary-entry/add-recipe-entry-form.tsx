@@ -1,7 +1,7 @@
-import { FoodAmount, RecipeDiaryEntry } from "../../types.ts"
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react"
+import { RecipeDiaryEntry } from "../../types.ts"
+import { forwardRef, useEffect, useImperativeHandle, useMemo } from "react"
 import { useStore } from "../../store.ts"
-import { Controller, useFieldArray, useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { Form } from "rsuite"
 import { InputPickerField, NumberField } from "../../../components/form-fields.tsx"
 import { FormRef } from "./types.ts"
@@ -47,9 +47,8 @@ export const AddRecipeEntryForm = forwardRef<
   )
 
   const onSubmitHandler = handleSubmit((data) => {
-    console.log("onSubmit", data)
-    // onSubmit(data)
-    // reset()
+    onSubmit(data)
+    reset()
   })
 
   const selectedRecipeId = watch("recipeId")
