@@ -12,7 +12,9 @@ import { DeleteRecipeButton } from "./delete-recipe-button.tsx"
 import { IngredientTable } from "./ingredient-table.tsx"
 
 import "./recipes.css"
-import { AddIngredientButton } from "./add-ingredient-button.tsx"
+import { AddIngredientButton, AddIngredientFormValue } from "./add-ingredient-button.tsx"
+import { Recipe } from "../types.ts"
+import { nanoid } from "nanoid"
 
 export function RecipeDetailsRoute() {
   const { recipeId } = useParams({ strict: false })
@@ -21,7 +23,7 @@ export function RecipeDetailsRoute() {
 
   const [editMode, setEditMode] = useState(false)
 
-  const { recipes } = useStore()
+  const { recipes, editRecipe } = useStore()
   const recipe = recipes.find((recipe) => recipe.id === recipeId)
 
   function handleEditCancel() {
@@ -34,6 +36,24 @@ export function RecipeDetailsRoute() {
     // a) users directly navigated to details page with wrong link/id
     // b) after the recipe was deleted
     return <Navigate to="/recipes" />
+  }
+
+  function onAddIngredient(ingredient: AddIngredientFormValue) {
+    if (recipe) {
+      const updatedRecipe: Recipe = {
+        ...recipe,
+        ingredients: [
+          ...recipe.ingredients,
+          {
+            ingredientId: nanoid(),
+            amountInGram: ingredient.amount,
+            foodId: ingredient.foodId,
+          },
+        ],
+      }
+
+      editRecipe(updatedRecipe)
+    }
   }
 
   return (
@@ -66,7 +86,10 @@ export function RecipeDetailsRoute() {
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <Text size="xl">Zutaten</Text>
           <ButtonToolbar style={{ marginTop: "10px", marginBottom: "10px" }}>
-            <AddIngredientButton recipe={recipe} />
+            <AddIngredientButton
+              onAddIngredient={onAddIngredient}
+              existingFoods={recipe.ingredients.map((ingredient) => ingredient.foodId)}
+            />
           </ButtonToolbar>
         </div>
 
