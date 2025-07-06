@@ -1,5 +1,13 @@
 import { seed, randUuid, randBoolean, randNumber } from "@ngneat/falso"
-import { DiaryEntry, Food, FoodDiaryEntry, IsoDateString, Recipe, RecipeDiaryEntry } from "./features/types.ts"
+import {
+  DiaryEntry,
+  Food,
+  FoodAmount,
+  FoodDiaryEntry,
+  IsoDateString,
+  Recipe,
+  RecipeDiaryEntry,
+} from "./features/types.ts"
 import { DateTime } from "luxon"
 
 seed("1")
@@ -140,11 +148,17 @@ function generateDiaryEntries(): Record<IsoDateString, Array<DiaryEntry>> {
         const i = randNumber({ min: 0, max: recipes.length - 1 })
         const recipe = recipes[i]
 
+        const foods: Array<FoodAmount> = recipe.ingredients.map((ingredient) => ({
+          foodId: ingredient.foodId,
+          amountInGram: ingredient.amountInGram,
+        }))
+
         const recipeEntry: RecipeDiaryEntry = {
           id: randUuid(),
           mealType: "recipe",
           date,
           recipeId: recipe.id,
+          foods,
           portions: randNumber({ min: 0.5, max: 1.5, precision: 0.5 }),
         }
 
