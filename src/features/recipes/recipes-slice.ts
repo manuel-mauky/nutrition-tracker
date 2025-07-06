@@ -38,8 +38,22 @@ export const createRecipesSlice: StateCreator<RootStore, RootStoreMutators, [], 
     set((state) => {
       const id = typeof recipeOrId === "string" ? recipeOrId : recipeOrId.id
 
-      return {
-        recipes: state.recipes.filter((recipe) => recipe.id !== id),
+      const recipe = state.recipes.find((recipe) => recipe.id === id)
+
+      if (recipe) {
+        // edit all diaryEntries referencing this recipe.
+        // remove reference and instead copy recipe name
+        Object.values(state.diaryEntries)
+          .flat()
+          .forEach((entry) => {
+            if (entry.mealType === "recipe" && entry.recipeId === id) {
+              entry.recipeId = undefined
+              entry.recipeName = recipe.name
+            }
+          })
+
+        const index = state.recipes.findIndex((recipe) => recipe.id === id)
+        state.recipes.splice(index, 1)
       }
     }),
 })

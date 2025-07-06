@@ -70,7 +70,7 @@ export const createDiarySlice: StateCreator<RootStore, RootStoreMutators, [], Di
         if (entry) {
           const i = entries.indexOf(entry)
 
-          delete entries[i]
+          entries.splice(i, 1)
 
           if (entries.length === 0) {
             deleteDay = day

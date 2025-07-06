@@ -116,13 +116,11 @@ export const selectRecipesWithNutrients = createSelector(
  * Calculate the sum of all nutritions of one specific day.
  *
  * @param foodsMap
- * @param recipesMap
  * @param diaryEntries
  * @param day
  */
 export function calcNutrientsOfDay(
   foodsMap: Record<Id, Food>,
-  recipesMap: Record<Id, Recipe>,
   diaryEntries: Record<IsoDateString, Array<DiaryEntry>>,
   day: DateTime,
 ): Nutrients {
@@ -139,16 +137,9 @@ export function calcNutrientsOfDay(
     if (entry.mealType === "food") {
       newNutrients = calcNutrientsForIngredient(foodsMap, entry)
     } else if (entry.mealType === "recipe") {
-      const recipeWithNutrients = calcNutrients(foodsMap, recipesMap[entry.recipeId])
+      const nutrientsList = entry.foods.map((food) => calcNutrientsForIngredient(foodsMap, food))
 
-      newNutrients = {
-        kcal: recipeWithNutrients.kcal,
-        protein: recipeWithNutrients.protein,
-        fat: recipeWithNutrients.fat,
-        carbs: recipeWithNutrients.carbs,
-        sugar: recipeWithNutrients.sugar,
-        fiber: recipeWithNutrients.fiber,
-      }
+      newNutrients = sumNutrients(nutrientsList)
     }
 
     return {

@@ -1,17 +1,34 @@
 import { DateTime } from "luxon"
 import { Fragment, useMemo } from "react"
-import { Heading } from "rsuite"
+import { Heading, IconButton } from "rsuite"
 import { useStore } from "../store.ts"
 import { sortDateTime } from "../../utils/sort-utils.ts"
-import { FoodDiaryEntry, RecipeDiaryEntry } from "../types.ts"
+import { DiaryEntry, FoodDiaryEntry, RecipeDiaryEntry } from "../types.ts"
 import { FormatTime } from "../../components/format-time.tsx"
 import { AddDiaryEntryDialog } from "./add-diary-entry/add-diary-entry-dialog.tsx"
 import { DiaryNutritionOverview } from "./diary-nutrition-overview.tsx"
+import { PiX } from "react-icons/pi"
 
 function RecipeEntryRow({ entry }: { entry: RecipeDiaryEntry }) {
-  const { recipes } = useStore()
+  const { recipes, removeDiaryEntry } = useStore()
 
-  const recipe = recipes.find((recipe) => recipe.id === entry.recipeId)!
+  let name = undefined
+
+  if (entry.recipeId) {
+    const recipe = recipes.find((recipe) => recipe.id === entry.recipeId)
+
+    if (recipe) {
+      name = recipe.name
+    }
+  }
+
+  if (!name) {
+    name = entry.recipeName ?? ""
+  }
+
+  function handleDelete() {
+    removeDiaryEntry(entry.id)
+  }
 
   return (
     <tr>
@@ -19,15 +36,22 @@ function RecipeEntryRow({ entry }: { entry: RecipeDiaryEntry }) {
         <FormatTime date={entry.date} />
       </td>
       <td>{entry.portions} x</td>
-      <td>{recipe.name}</td>
+      <td>{name}</td>
+      <td>
+        <IconButton appearance="subtle" size="xs" icon={<PiX />} onClick={handleDelete} />
+      </td>
     </tr>
   )
 }
 
 function FoodEntryRow({ entry }: { entry: FoodDiaryEntry }) {
-  const { foods } = useStore()
+  const { foods, removeDiaryEntry } = useStore()
 
   const food = foods.find((food) => food.id === entry.foodId)!
+
+  function handleDelete() {
+    removeDiaryEntry(entry.id)
+  }
 
   return (
     <tr>
@@ -36,6 +60,9 @@ function FoodEntryRow({ entry }: { entry: FoodDiaryEntry }) {
       </td>
       <td>{entry.amountInGram}g</td>
       <td>{food.name}</td>
+      <td>
+        <IconButton appearance="subtle" size="xs" icon={<PiX />} onClick={handleDelete} />
+      </td>
     </tr>
   )
 }
@@ -44,7 +71,7 @@ export function DiaryDayView({ day }: { day: DateTime }) {
   const { diaryEntries } = useStore()
   const asIsoDate = day.toISODate()
 
-  const entries = useMemo(() => {
+  const entries: DiaryEntry[] = useMemo(() => {
     if (asIsoDate) {
       return diaryEntries[asIsoDate]?.toSorted((a, b) => sortDateTime(a.date, b.date)) ?? []
     } else {
@@ -72,6 +99,7 @@ export function DiaryDayView({ day }: { day: DateTime }) {
               <col className="time-col" />
               <col className="amount-col" />
               <col className="name-col" />
+              <col className="delete-col" />
             </colgroup>
             <tbody>
               {entries.map((entry) => (

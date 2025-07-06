@@ -62,7 +62,7 @@ export function AddDiaryEntryDialog({ date }: { date: DateTime }) {
       date: time.toISO() ?? DateTime.now().toISO(),
       recipeId: data.recipeId,
       portions: data.portions,
-      foods: []
+      foods: data.foods,
     })
 
     setOpenDialog(false)

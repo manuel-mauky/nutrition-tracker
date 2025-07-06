@@ -58,7 +58,15 @@ export type RecipeDiaryEntry = {
   id: Id
   date: IsoDateTimeString
   mealType: "recipe"
-  recipeId: Id
+  // Can be undefined when the referenced recipe was deleted
+  recipeId?: Id
+  /**
+   * name of the recipe is empty by default and taken from the referenced recipe instead.
+   * There are two cases, were this is defined:
+   * 1. when the referenced recipe is deleted, the name will be copied from the recipe
+   * 2. when entering the diary entry, user can change/adjust the name
+   */
+  recipeName?: string
   foods: Array<FoodAmount>
   // TODO: remove from state. Should only be used in the UI
   portions: number

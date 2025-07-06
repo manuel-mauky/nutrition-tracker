@@ -3,7 +3,7 @@ import { Text } from "rsuite"
 import { PropsWithChildren, useMemo } from "react"
 import { useStore } from "../store.ts"
 import { Nutrients } from "../types.ts"
-import { calcNutrientsOfDay, createFoodsMap, createRecipesMap } from "../recipes/recipe-utils.ts"
+import { calcNutrientsOfDay, createFoodsMap } from "../recipes/recipe-utils.ts"
 
 type Variant = "main" | "side"
 
@@ -20,14 +20,13 @@ function Label({ children, variant = "side" }: PropsWithChildren<{ variant?: Var
 }
 
 export function DiaryNutritionOverview({ day }: { day: DateTime }) {
-  const { foods, recipes, diaryEntries } = useStore()
+  const { foods, diaryEntries } = useStore()
 
   const nutrients: Nutrients = useMemo(() => {
-    const recipesMap = createRecipesMap(recipes)
     const foodsMap = createFoodsMap(foods)
 
-    return calcNutrientsOfDay(foodsMap, recipesMap, diaryEntries, day)
-  }, [recipes, foods, diaryEntries, day])
+    return calcNutrientsOfDay(foodsMap, diaryEntries, day)
+  }, [foods, diaryEntries, day])
 
   return (
     <div className="diary-view-nutrition-overview">
