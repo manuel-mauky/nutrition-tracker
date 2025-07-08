@@ -68,7 +68,6 @@ export type RecipeDiaryEntry = {
    */
   recipeName?: string
   foods: Array<FoodAmount>
-  // TODO: remove from state. Should only be used in the UI
   portions: number
 }
 

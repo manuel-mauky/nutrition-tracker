@@ -53,19 +53,24 @@ export const AddRecipeEntryForm = forwardRef<
 
   const selectedRecipeId = watch("recipeId")
 
+  const portions = watch("portions")
+
   // keep form value for foods in sync with the selected recipe
   useEffect(() => {
     const recipe = recipes.find((recipe) => recipe.id === selectedRecipeId)
+
     if (recipe) {
+      const portionFactor = portions / recipe?.portions
+
       const foods = recipe.ingredients.map((i) => ({
         foodId: i.foodId,
-        amountInGram: i.amountInGram,
+        amountInGram: Math.round(i.amountInGram * portionFactor),
       }))
       setValue("foods", foods)
     } else {
       setValue("foods", [])
     }
-  }, [selectedRecipeId, recipes, setValue])
+  }, [selectedRecipeId, recipes, setValue, portions])
 
   return (
     <Form id={formId} onSubmit={(_, event) => onSubmitHandler(event)}>
