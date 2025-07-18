@@ -7,8 +7,10 @@ import { PiPlusBold } from "react-icons/pi"
 import { TextAreaField, TextField } from "../../components/form-fields.tsx"
 import { FoodNutritionForm } from "./food-nutrition-form.tsx"
 import { validateName } from "../utils.ts"
+import { useTranslation } from "react-i18next"
 
 export function AddFoodDialog() {
+  const { t } = useTranslation()
   const [openAddDialog, setOpenAddDialog] = useState(false)
   const { addFood, foods } = useStore()
 
@@ -48,11 +50,11 @@ export function AddFoodDialog() {
   return (
     <>
       <Button startIcon={<PiPlusBold />} onClick={handleOpen}>
-        Hinzufügen
+        {t("common.add")}
       </Button>
       <Modal open={openAddDialog} onClose={handleClose} backdrop="static">
         <Modal.Header>
-          <Modal.Title>Lebensmittel hinzufügen</Modal.Title>
+          <Modal.Title>{t("foods.addDialogTitle")}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -61,18 +63,18 @@ export function AddFoodDialog() {
               name="name"
               control={control}
               rules={{
-                required: "Name ist erforderlich",
+                required: t("common.validation.requiredName"),
                 validate: (value) => validateName(value, foods),
               }}
               render={({ field }) => (
-                <TextField autoFocus field={field} error={errors[field.name]?.message} label="Name" />
+                <TextField autoFocus field={field} error={errors[field.name]?.message} label={t("labels.name")} />
               )}
             />
             <Controller
               name="description"
               control={control}
               render={({ field }) => (
-                <TextAreaField label="Beschreibung" field={field} error={errors[field.name]?.message} />
+                <TextAreaField label={t("common.description")} field={field} error={errors[field.name]?.message} />
               )}
             />
 
@@ -82,9 +84,9 @@ export function AddFoodDialog() {
 
         <Modal.Footer>
           <Button form="add-food-form" type="submit">
-            Ok
+            {t("common.ok")}
           </Button>
-          <Button onClick={handleClose}>Abbrechen</Button>
+          <Button onClick={handleClose}>{t("common.cancel")}</Button>
         </Modal.Footer>
       </Modal>
     </>

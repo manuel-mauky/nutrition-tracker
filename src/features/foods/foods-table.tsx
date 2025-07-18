@@ -6,49 +6,50 @@ import { Link } from "@tanstack/react-router"
 import { DeleteFoodButton } from "./delete-food-button.tsx"
 import { selectSortSettings } from "../settings/settings-slice.ts"
 import { ColumnType, sort } from "../../utils/sort-utils.ts"
+import { useTranslation } from "react-i18next"
 
 export type FoodColumn = ColumnType<Food>
 
 const columns: Array<FoodColumn> = [
   {
     key: "name",
-    label: "Name",
+    label: "labels.name",
     width: 150,
     sortable: true,
   },
   {
     key: "kcal",
-    label: "KCal",
+    label: "domain.kcal",
     width: 80,
     sortable: true,
   },
   {
     key: "carbs",
-    label: "Kohlenhydrate",
+    label: "domain.carbs",
     width: 130,
     sortable: true,
   },
   {
     key: "sugar",
-    label: "Zucker",
+    label: "domain.sugar",
     width: 80,
     sortable: true,
   },
   {
     key: "fiber",
-    label: "Balaststoffe",
+    label: "domain.fiber",
     width: 120,
     sortable: true,
   },
   {
     key: "fat",
-    label: "Fett",
+    label: "domain.fat",
     width: 80,
     sortable: true,
   },
   {
     key: "protein",
-    label: "Eiweiß",
+    label: "domain.protein",
     width: 80,
     sortable: true,
   },
@@ -85,6 +86,7 @@ function ActionsTableCell({ rowData, ...rest }: CellProps<Food>) {
 }
 
 export function FoodsTable() {
+  const { t } = useTranslation()
   const { foods } = useStore()
 
   const { changeSortSettings, sortColumn, sortType } = useStore(selectSortSettings("foods"))
@@ -104,7 +106,7 @@ export function FoodsTable() {
           const { key, label, ...rest } = column
           return (
             <Table.Column {...rest} key={key}>
-              <Table.HeaderCell>{label}</Table.HeaderCell>
+              <Table.HeaderCell>{t(label)}</Table.HeaderCell>
 
               {key === "name" ? <FoodLinkCell dataKey={key} /> : <Table.Cell dataKey={key} />}
             </Table.Column>
@@ -112,7 +114,7 @@ export function FoodsTable() {
         })}
 
         <Table.Column key="actions">
-          <Table.HeaderCell>Aktionen</Table.HeaderCell>
+          <Table.HeaderCell>{t("labels.actions")}</Table.HeaderCell>
 
           <ActionsTableCell />
         </Table.Column>

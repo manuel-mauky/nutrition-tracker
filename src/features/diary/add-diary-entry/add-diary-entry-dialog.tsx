@@ -9,19 +9,22 @@ import { AddFoodEntryForm, AddFoodFormData } from "./add-food-entry-form.tsx"
 import FormGroup from "rsuite/FormGroup"
 import "./add-diary-entry.css"
 import { useStore } from "../../store.ts"
+import { TranslationKey } from "../../../i18n.ts"
+import { useTranslation } from "react-i18next"
 
-const mealTypes: Array<{ label: string; value: MealType }> = [
+const mealTypes: Array<{ label: TranslationKey; value: MealType }> = [
   {
-    label: "Lebensmittel",
+    label: "domain.food",
     value: "food",
   },
   {
-    label: "Rezept",
+    label: "domain.recipe",
     value: "recipe",
   },
 ]
 
 export function AddDiaryEntryDialog({ date }: { date: DateTime }) {
+  const { t } = useTranslation()
   const formRef = useRef<FormRef>(null)
 
   const { addDiaryEntry } = useStore()
@@ -84,12 +87,12 @@ export function AddDiaryEntryDialog({ date }: { date: DateTime }) {
   return (
     <>
       <Button startIcon={<PiPlusBold />} onClick={handleOpen} size="sm">
-        Hinzufügen
+        {t("common.add")}
       </Button>
 
       <Modal open={openDialog} onClose={handleClose} backdrop="static">
         <Modal.Header>
-          <Modal.Title>Tagebucheintrag hinzufügen</Modal.Title>
+          <Modal.Title>{t("diary.addDialogTitle")}</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -97,13 +100,13 @@ export function AddDiaryEntryDialog({ date }: { date: DateTime }) {
             <RadioGroup inline value={mealType} onChange={(value) => setMealType(value as MealType)}>
               {mealTypes.map((mealType) => (
                 <Radio key={mealType.value} value={mealType.value}>
-                  {mealType.label}
+                  {t(mealType.label)}
                 </Radio>
               ))}
             </RadioGroup>
 
             <FormGroup className="first-column">
-              <Form.ControlLabel>Wann?</Form.ControlLabel>
+              <Form.ControlLabel>{t("diary.whenLabel")}</Form.ControlLabel>
 
               <TimePicker
                 cleanable={false}
@@ -123,9 +126,9 @@ export function AddDiaryEntryDialog({ date }: { date: DateTime }) {
 
         <Modal.Footer>
           <Button form="add-diary-entry-form" type="submit">
-            Ok
+            {t("common.ok")}
           </Button>
-          <Button onClick={handleClose}>Abbrechen</Button>
+          <Button onClick={handleClose}>{t("common.cancel")}</Button>
         </Modal.Footer>
       </Modal>
     </>

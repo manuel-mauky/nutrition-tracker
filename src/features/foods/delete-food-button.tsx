@@ -4,6 +4,7 @@ import { useStore } from "../store.ts"
 import { DeleteEntityButton } from "../../components/delete-entity-button.tsx"
 import { selectRecipesWithFood } from "./foods-slice.ts"
 import { Link } from "@tanstack/react-router"
+import { useTranslation } from "react-i18next"
 
 export function DeleteFoodButton({
   foodId,
@@ -14,6 +15,7 @@ export function DeleteFoodButton({
   disabled?: boolean
   hideLabel?: boolean
 }) {
+  const { t } = useTranslation()
   const { foods, removeFood } = useStore()
 
   const recipesWithFood = useStore(selectRecipesWithFood(foodId ?? ""))
@@ -34,16 +36,14 @@ export function DeleteFoodButton({
       hideLabel={hideLabel}
       entity={food}
       removeEntity={removeFood}
-      title="Lebensmittel löschen?"
+      title={t("foods.deleteDialogTitle")}
       children={
         recipesWithFood.length > 0 ? (
           <>
             <Text>
-              "{food.name}" wird noch {recipesWithFood.length === 1 ? "einem Rezept" : "einigen Rezepten"} verwendet.
-              Wenn du das Lebensmittel löschst, wird es aus{" "}
-              {recipesWithFood.length === 1 ? "diesem Rezept" : "diesen Rezepten"} entfernt.
+              {t("foods.deleteDialogReferencedRecipesHint", { foodName: food.name, count: recipesWithFood.length })}
             </Text>
-            <Text>Rezepte:</Text>
+            <Text>{t("foods.deleteDialogReferencedRecipesHeadline")}</Text>
             <ul>
               {recipesWithFood.map((recipe) => (
                 <li key={recipe.id}>

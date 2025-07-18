@@ -15,8 +15,10 @@ import "./recipes.css"
 import { AddIngredientButton, AddIngredientFormValue } from "./add-ingredient-button.tsx"
 import { Recipe } from "../types.ts"
 import { nanoid } from "nanoid"
+import { useTranslation } from "react-i18next"
 
 export function RecipeDetailsRoute() {
+  const { t } = useTranslation()
   const { recipeId } = useParams({ strict: false })
 
   const formRef = useRef<RecipeDetailsFormRef>(null)
@@ -63,15 +65,15 @@ export function RecipeDetailsRoute() {
           {editMode ? (
             <ButtonGroup>
               <Button appearance="primary" type="submit" form="edit-recipe-form">
-                Speichern
+                {t("common.save")}
               </Button>
               <Button onClick={handleEditCancel} appearance="subtle">
-                Abbrechen
+                {t("common.cancel")}
               </Button>
             </ButtonGroup>
           ) : (
             <IconButton icon={<Icon as={PiPencilLine} />} onClick={() => setEditMode(!editMode)}>
-              Editieren
+              {t("common.edit")}
             </IconButton>
           )}
 
@@ -84,7 +86,7 @@ export function RecipeDetailsRoute() {
         <Divider />
 
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <Text size="xl">Zutaten</Text>
+          <Text size="xl">{t("domain.foods")}</Text>
           <ButtonToolbar style={{ marginTop: "10px", marginBottom: "10px" }}>
             <AddIngredientButton
               onAddIngredient={onAddIngredient}

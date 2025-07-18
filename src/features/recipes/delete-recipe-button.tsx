@@ -1,6 +1,7 @@
 import { Id } from "../types.ts"
 import { useStore } from "../store.ts"
 import { DeleteEntityButton } from "../../components/delete-entity-button.tsx"
+import { useTranslation } from "react-i18next"
 
 export function DeleteRecipeButton({
   recipeId,
@@ -11,6 +12,7 @@ export function DeleteRecipeButton({
   disabled?: boolean
   hideLabel?: boolean
 }) {
+  const { t } = useTranslation()
   const { recipes, removeRecipe } = useStore()
 
   if (!recipeId) {
@@ -29,7 +31,7 @@ export function DeleteRecipeButton({
       disabled={disabled}
       entity={recipe}
       removeEntity={removeRecipe}
-      title="Rezept Löschen?"
+      title={t("recipes.deleteDialogTitle")}
     />
   )
 }

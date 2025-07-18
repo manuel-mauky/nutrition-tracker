@@ -1,8 +1,10 @@
 import { Control, Controller, FieldErrors } from "react-hook-form"
 import { NumberField } from "../../components/form-fields.tsx"
 import { Food } from "../types.ts"
+import { useTranslation } from "react-i18next"
 
 export function FoodNutritionForm({ control, errors }: { control: Control<Food>; errors: FieldErrors<Food> }) {
+  const { t } = useTranslation()
   return (
     <>
       <Controller
@@ -14,33 +16,35 @@ export function FoodNutritionForm({ control, errors }: { control: Control<Food>;
         name="carbs"
         control={control}
         render={({ field }) => (
-          <NumberField label="Kohlenhydrate" unit="g" field={field} error={errors[field.name]?.message} />
+          <NumberField label={t("domain.carbs")} unit="g" field={field} error={errors[field.name]?.message} />
         )}
       />
       <Controller
         name="fat"
         control={control}
-        render={({ field }) => <NumberField label="Fett" unit="g" field={field} error={errors[field.name]?.message} />}
+        render={({ field }) => (
+          <NumberField label={t("domain.fat")} unit="g" field={field} error={errors[field.name]?.message} />
+        )}
       />
       <Controller
         name="protein"
         control={control}
         render={({ field }) => (
-          <NumberField label="Protein" unit="g" field={field} error={errors[field.name]?.message} />
+          <NumberField label={t("domain.protein")} unit="g" field={field} error={errors[field.name]?.message} />
         )}
       />
       <Controller
         name="fiber"
         control={control}
         render={({ field }) => (
-          <NumberField label="Ballaststoffe" unit="g" field={field} error={errors[field.name]?.message} />
+          <NumberField label={t("domain.fiber")} unit="g" field={field} error={errors[field.name]?.message} />
         )}
       />
       <Controller
         name="sugar"
         control={control}
         render={({ field }) => (
-          <NumberField label="Zucker" unit="g" field={field} error={errors[field.name]?.message} />
+          <NumberField label={t("domain.sugar")} unit="g" field={field} error={errors[field.name]?.message} />
         )}
       />
     </>

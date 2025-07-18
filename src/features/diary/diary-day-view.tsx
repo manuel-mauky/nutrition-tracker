@@ -8,6 +8,7 @@ import { FormatTime } from "../../components/format-time.tsx"
 import { AddDiaryEntryDialog } from "./add-diary-entry/add-diary-entry-dialog.tsx"
 import { DiaryNutritionOverview } from "./diary-nutrition-overview.tsx"
 import { PiX } from "react-icons/pi"
+import { useTranslation } from "react-i18next"
 
 function RecipeEntryRow({ entry }: { entry: RecipeDiaryEntry }) {
   const { recipes, removeDiaryEntry } = useStore()
@@ -68,6 +69,7 @@ function FoodEntryRow({ entry }: { entry: FoodDiaryEntry }) {
 }
 
 export function DiaryDayView({ day }: { day: DateTime }) {
+  const { t } = useTranslation()
   const { diaryEntries } = useStore()
   const asIsoDate = day.toISODate()
 
@@ -90,7 +92,7 @@ export function DiaryDayView({ day }: { day: DateTime }) {
         <AddDiaryEntryDialog date={day} />
       </header>
       <div className="diary-view-nutrition-header">
-        <Heading level={5}>Nährwerte</Heading>
+        <Heading level={5}>{t("domain.nutritionalValues")}</Heading>
       </div>
       <div className="diary-view-entries-container">
         {entries.length > 0 ? (
@@ -111,7 +113,7 @@ export function DiaryDayView({ day }: { day: DateTime }) {
             </tbody>
           </table>
         ) : (
-          <p>Keine Einträge</p>
+          <p>{t("common.noEntries")}</p>
         )}
       </div>
       <div className="diary-view-nutrition-container">

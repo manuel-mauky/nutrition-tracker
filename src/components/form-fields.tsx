@@ -4,6 +4,7 @@ import { DatePicker, Form, IconButton, Input, InputNumber, InputPicker, TimePick
 import { PiCheck, PiX } from "react-icons/pi"
 import { DateTime } from "luxon"
 import { areDateTimesEqual } from "../utils/date-utils.ts"
+import { useTranslation } from "react-i18next"
 
 type FormData = Record<string, unknown>
 
@@ -180,6 +181,7 @@ export function NumberField<T extends FormData>({
 }
 
 export function InlineNumberField({ value, onSave }: { value: number; onSave: (newValue: number) => void }) {
+  const { t } = useTranslation()
   const ref = useRef<HTMLInputElement>(null)
   const [editMode, setEditMode] = useState(false)
 
@@ -229,8 +231,8 @@ export function InlineNumberField({ value, onSave }: { value: number; onSave: (n
       {editMode ? (
         <div style={{ display: "flex", gap: "2px", alignItems: "center" }}>
           <InputNumber ref={ref} value={internalValue} onChange={onChange} size="xs" />
-          <IconButton icon={<PiCheck />} aria-label="Ok" onClick={onOk} size="xs" />
-          <IconButton icon={<PiX />} aria-label="Abbrechen" onClick={onCancel} size="xs" />
+          <IconButton icon={<PiCheck />} aria-label={t("common.ok")} onClick={onOk} size="xs" />
+          <IconButton icon={<PiX />} aria-label={t("common.cancel")} onClick={onCancel} size="xs" />
         </div>
       ) : (
         <span>{value}</span>

@@ -3,8 +3,10 @@ import { useStore } from "../store.ts"
 import { validateName } from "../utils.ts"
 import { useNavigate } from "@tanstack/react-router"
 import { CloneEntityButton } from "../../components/clone-entity-button.tsx"
+import { useTranslation } from "react-i18next"
 
 export function CloneFoodButton({ foodId, disabled = false }: { foodId: Id; disabled?: boolean }) {
+  const { t } = useTranslation()
   const { foods, addFood } = useStore()
   const food = foods.find((food) => food.id === foodId)
 
@@ -30,7 +32,7 @@ export function CloneFoodButton({ foodId, disabled = false }: { foodId: Id; disa
       addEntity={addFood}
       onCloneSuccess={onCloneSuccess}
       validateNewName={(newName) => validateName(newName, foods)}
-      title="Lebensmittel klonen?"
+      title={t("foods.cloneDialogTitle")}
     />
   )
 }

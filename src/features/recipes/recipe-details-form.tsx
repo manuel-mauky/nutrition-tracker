@@ -5,6 +5,7 @@ import { Controller, useForm } from "react-hook-form"
 import { Form } from "rsuite"
 import { validateName } from "../utils.ts"
 import { NumberField, TextAreaField, TextField } from "../../components/form-fields.tsx"
+import { useTranslation } from "react-i18next"
 
 export type RecipeForm = Omit<Recipe, "ingredients">
 
@@ -19,6 +20,7 @@ export type Props = {
 }
 
 export const RecipeDetailsForm = forwardRef<RecipeDetailsFormRef, Props>(({ recipe, editMode, setEditMode }, ref) => {
+  const { t } = useTranslation()
   const { recipes, editRecipe } = useStore()
 
   const {
@@ -53,31 +55,33 @@ export const RecipeDetailsForm = forwardRef<RecipeDetailsFormRef, Props>(({ reci
             name="name"
             control={control}
             rules={{
-              required: "Name ist erforderlich",
+              required: t("common.validation.requiredName"),
               validate: (value, formRecipe) =>
                 validateName(
                   value,
                   recipes.filter((recipe) => recipe.id !== formRecipe.id),
                 ),
             }}
-            render={({ field }) => <TextField label="Name" field={field} error={errors[field.name]?.message} />}
+            render={({ field }) => (
+              <TextField label={t("labels.name")} field={field} error={errors[field.name]?.message} />
+            )}
           />
 
           <Controller
             name="portions"
             control={control}
             rules={{
-              required: "Anzahl an Portionen ist erforderlich",
+              required: t("common.validation.requiredPortions"),
               validate: (value) => {
                 if (value <= 0) {
-                  return "Anzahl muss größer als 0 sein"
+                  return t("common.validation.moreThenZeroNumber")
                 }
               },
             }}
             render={({ field }) => (
               <NumberField
                 step={0.5}
-                label="Wieviele Portionen ergibt das Rezept?"
+                label={t("recipes.howManyPortionsPerRecipe")}
                 field={field}
                 error={errors[field.name]?.message}
               />
@@ -93,7 +97,7 @@ export const RecipeDetailsForm = forwardRef<RecipeDetailsFormRef, Props>(({ reci
               readOnly={!editMode}
               plaintext={false}
               style={{ height: "150px" }}
-              label="Beschreibung"
+              label={t("common.description")}
               field={field}
               error={errors[field.name]?.message}
             />

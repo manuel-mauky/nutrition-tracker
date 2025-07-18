@@ -5,6 +5,7 @@ import { Icon } from "@rsuite/icons"
 import { PiCopySimple } from "react-icons/pi"
 import { Button, Form, IconButton, Modal } from "rsuite"
 import { TextField } from "./form-fields.tsx"
+import { useTranslation } from "react-i18next"
 
 type CloneFormValue = {
   newName: string
@@ -27,6 +28,7 @@ export function CloneEntityButton<T extends Entity>({
   title,
   validateNewName,
 }: Props<T>) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
   const defaultValues: Partial<CloneFormValue> = {
@@ -77,7 +79,7 @@ export function CloneEntityButton<T extends Entity>({
   return (
     <>
       <IconButton icon={<Icon as={PiCopySimple} />} disabled={disabled} onClick={handleCloneButtonClicked}>
-        Klonen
+        {t("common.clone")}
       </IconButton>
       <Modal open={open} role="dialog" backdrop="static" autoFocus>
         <Modal.Header>
@@ -96,21 +98,21 @@ export function CloneEntityButton<T extends Entity>({
               name="newName"
               control={control}
               rules={{
-                required: "Name ist erforderlich",
+                required: t("common.validation.requiredName"),
                 validate: validateNewName,
               }}
               render={({ field }) => (
-                <TextField autoFocus label="Name" field={field} error={errors[field.name]?.message} />
+                <TextField autoFocus label={t("labels.name")} field={field} error={errors[field.name]?.message} />
               )}
             />
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button appearance="primary" type="submit" form="clone-form">
-            Ok
+            {t("common.ok")}
           </Button>
           <Button appearance="subtle" onClick={handleCloneCancel}>
-            Abbrechen
+            {t("common.cancel")}
           </Button>
         </Modal.Footer>
       </Modal>

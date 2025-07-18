@@ -7,10 +7,12 @@ import { PiPlusBold } from "react-icons/pi"
 import { TextField } from "../../components/form-fields.tsx"
 import { validateName } from "../utils.ts"
 import { useNavigate } from "@tanstack/react-router"
+import { useTranslation } from "react-i18next"
 
 type RecipeForm = Omit<Recipe, "ingredients">
 
 export function AddRecipeDialog() {
+  const { t } = useTranslation()
   const [openAddDialog, setOpenAddDialog] = useState(false)
 
   const navigate = useNavigate({ from: "/recipes" })
@@ -54,11 +56,11 @@ export function AddRecipeDialog() {
   return (
     <>
       <Button startIcon={<PiPlusBold />} onClick={handleOpen}>
-        Hinzufügen
+        {t("common.add")}
       </Button>
       <Modal open={openAddDialog} onClose={handleClose} backdrop="static">
         <Modal.Header>
-          <Modal.Title>Rezept hinzufügen</Modal.Title>
+          <Modal.Title>{t("recipes.addDialogTitle")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form id="add-recipe-form" fluid onSubmit={(_, event) => onSubmit(event)}>
@@ -66,27 +68,27 @@ export function AddRecipeDialog() {
               name="name"
               control={control}
               rules={{
-                required: "Name ist erforderlich",
+                required: t("common.validation.requiredName"),
                 validate: (value) => validateName(value, recipes),
               }}
               render={({ field }) => (
-                <TextField label="Name" autoFocus field={field} error={errors[field.name]?.message} />
+                <TextField label={t("labels.name")} autoFocus field={field} error={errors[field.name]?.message} />
               )}
             />
             <Controller
               name="description"
               control={control}
               render={({ field }) => (
-                <TextField label="Beschreibung" field={field} error={errors[field.name]?.message} />
+                <TextField label={t("common.description")} field={field} error={errors[field.name]?.message} />
               )}
             />
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button form="add-recipe-form" type="submit">
-            Ok
+            {t("common.ok")}
           </Button>
-          <Button onClick={handleClose}>Abbrechen</Button>
+          <Button onClick={handleClose}>{t("common.cancel")}</Button>
         </Modal.Footer>
       </Modal>
     </>

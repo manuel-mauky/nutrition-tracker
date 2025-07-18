@@ -6,48 +6,49 @@ import { Link } from "@tanstack/react-router"
 import { selectRecipesWithNutrients } from "./recipe-utils.ts"
 import { selectSortSettings } from "../settings/settings-slice.ts"
 import { ColumnType, sort } from "../../utils/sort-utils.ts"
+import { useTranslation } from "react-i18next"
 
 export type RecipeColumn = ColumnType<RecipeWithNutrients>
 
 const columns: Array<RecipeColumn> = [
   {
     key: "name",
-    label: "Name",
+    label: "labels.name",
     width: 150,
     sortable: true,
   },
   {
     key: "kcal",
-    label: "KCal",
+    label: "domain.kcal",
     sortable: true,
   },
   {
     key: "carbs",
-    label: "Kohlenhydrate",
+    label: "domain.carbs",
     width: 130,
     sortable: true,
   },
   {
     key: "sugar",
-    label: "Zucker",
+    label: "domain.sugar",
     width: 80,
     sortable: true,
   },
   {
     key: "fiber",
-    label: "Balaststoffe",
+    label: "domain.fiber",
     width: 120,
     sortable: true,
   },
   {
     key: "fat",
-    label: "Fett",
+    label: "domain.fat",
     width: 80,
     sortable: true,
   },
   {
     key: "protein",
-    label: "Eiweiß",
+    label: "domain.protein",
     width: 80,
     sortable: true,
   },
@@ -66,6 +67,7 @@ function LinkCell({ rowData, ...rest }: CellProps<Recipe>) {
 }
 
 export function RecipesTable() {
+  const { t } = useTranslation()
   const { changeSortSettings, sortColumn, sortType } = useStore(selectSortSettings("recipes"))
   const recipesWithNutrients: Array<RecipeWithNutrients> = useStore(selectRecipesWithNutrients)
 
@@ -85,7 +87,7 @@ export function RecipesTable() {
 
           return (
             <Table.Column {...rest} key={key}>
-              <Table.HeaderCell>{label}</Table.HeaderCell>
+              <Table.HeaderCell>{t(label)}</Table.HeaderCell>
 
               {key === "name" ? <LinkCell dataKey={key} /> : <Table.Cell dataKey={key} />}
             </Table.Column>

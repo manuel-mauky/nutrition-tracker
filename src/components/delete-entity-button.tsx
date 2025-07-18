@@ -3,6 +3,7 @@ import { PropsWithChildren, useState } from "react"
 import { Button, IconButton, Modal, Text } from "rsuite"
 import { Icon } from "@rsuite/icons"
 import { PiTrash } from "react-icons/pi"
+import { useTranslation } from "react-i18next"
 
 export function DeleteEntityButton({
   entity,
@@ -18,6 +19,7 @@ export function DeleteEntityButton({
   title: string
   hideLabel?: boolean
 }>) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
   function handleDeleteButtonClicked() {
@@ -38,23 +40,25 @@ export function DeleteEntityButton({
   return (
     <>
       <IconButton
-        aria-label="Löschen"
+        aria-label={t("common.delete")}
         icon={<Icon as={PiTrash} />}
         disabled={disabled}
         onClick={handleDeleteButtonClicked}
-        children={hideLabel ? undefined : "Löschen"}
+        children={hideLabel ? undefined : t("common.delete")}
       />
       <Modal open={open} role="alertdialog" backdrop="static" autoFocus>
         <Modal.Header>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{children ?? <Text>Möchtest du "{entity.name}" wirklich löschen?</Text>}</Modal.Body>
+        <Modal.Body>
+          {children ?? <Text>{t("labels.entityDeleteSecurityQuestion", { entityName: entity.name })}</Text>}
+        </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleDeleteOk} appearance="primary">
-            Ok
+            {t("common.ok")}
           </Button>
           <Button onClick={handleDeleteCancel} appearance="subtle">
-            Abbrechen
+            {t("common.cancel")}
           </Button>
         </Modal.Footer>
       </Modal>

@@ -15,8 +15,10 @@ import { PiPencilLine } from "react-icons/pi"
 import { Icon } from "@rsuite/icons"
 import { CloneFoodButton } from "./clone-food-button.tsx"
 import { validateName } from "../utils.ts"
+import { useTranslation } from "react-i18next"
 
 export function FoodDetailsRoute() {
+  const { t } = useTranslation()
   const { foodId } = useParams({ strict: false })
 
   const [editMode, setEditMode] = useState(false)
@@ -58,15 +60,15 @@ export function FoodDetailsRoute() {
         {editMode ? (
           <ButtonGroup>
             <Button appearance="primary" type="submit" form="edit-food-form">
-              Speichern
+              {t("common.save")}
             </Button>
             <Button onClick={handleEditCancel} appearance="subtle">
-              Abbrechen
+              {t("common.cancel")}
             </Button>
           </ButtonGroup>
         ) : (
           <IconButton icon={<Icon as={PiPencilLine} />} onClick={() => setEditMode(!editMode)}>
-            Editieren
+            {t("common.edit")}
           </IconButton>
         )}
 
@@ -81,7 +83,7 @@ export function FoodDetailsRoute() {
               name="name"
               control={control}
               rules={{
-                required: "Name ist erforderlich",
+                required: t("common.validation.requiredName"),
                 validate: (value, formFood) =>
                   validateName(
                     value,
@@ -103,7 +105,7 @@ export function FoodDetailsRoute() {
                 readOnly={!editMode}
                 plaintext={false}
                 style={{ height: "200px" }}
-                label="Beschreibung"
+                label={t("common.description")}
                 field={field}
                 error={errors[field.name]?.message}
               />

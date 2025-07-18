@@ -4,8 +4,10 @@ import { validateName } from "../utils.ts"
 import { useNavigate } from "@tanstack/react-router"
 import { CloneEntityButton } from "../../components/clone-entity-button.tsx"
 import { nanoid } from "nanoid"
+import { useTranslation } from "react-i18next"
 
 export function CloneRecipeButton({ recipeId, disabled = false }: { recipeId: Id; disabled?: boolean }) {
+  const { t } = useTranslation()
   const navigate = useNavigate({ from: "/recipes/$recipeId" })
 
   const { recipes, addRecipe } = useStore()
@@ -47,7 +49,7 @@ export function CloneRecipeButton({ recipeId, disabled = false }: { recipeId: Id
       addEntity={cloneRecipe}
       onCloneSuccess={onCloneSuccess}
       validateNewName={(newName) => validateName(newName, recipes)}
-      title="Rezepte klonen?"
+      title={t("recipes.cloneDialogTitle")}
     />
   )
 }

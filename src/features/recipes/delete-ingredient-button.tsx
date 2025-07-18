@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Button, IconButton, Modal, Text } from "rsuite"
 import { Icon } from "@rsuite/icons"
 import { PiTrash } from "react-icons/pi"
+import { useTranslation } from "react-i18next"
 
 export function DeleteIngredientButton({
   recipe,
@@ -16,6 +17,7 @@ export function DeleteIngredientButton({
   disabled?: boolean
   hideLabel?: boolean
 }) {
+  const { t } = useTranslation()
   const { foods, editRecipe } = useStore()
   const [open, setOpen] = useState(false)
 
@@ -57,27 +59,25 @@ export function DeleteIngredientButton({
   return (
     <>
       <IconButton
-        aria-label="Löschen"
+        aria-label={t("common.delete")}
         icon={<Icon as={PiTrash} />}
         disabled={disabled}
         onClick={handleDeleteButtonClicked}
-        children={hideLabel ? undefined : "Löschen"}
+        children={hideLabel ? undefined : t("common.delete")}
       />
       <Modal open={open} role="alertdialog" backdrop="static" autoFocus>
         <Modal.Header>
-          <Modal.Title>Zutat löschen</Modal.Title>
+          <Modal.Title>{t("recipes.deleteFoodFromRecipeDialogTitle")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Text>
-            Möchtest du die Zutat "{food.name}" wirklich aus dem Rezept "{recipe.name}" löschen?
-          </Text>
+          <Text>{t("recipes.deleteFoodFromRecipeDialogHint")}</Text>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={handleDeleteOk} appearance="primary">
-            Ok
+            {t("common.ok")}
           </Button>
           <Button onClick={handleDeleteCancel} appearance="subtle">
-            Abbrechen
+            {t("common.cancel")}
           </Button>
         </Modal.Footer>
       </Modal>

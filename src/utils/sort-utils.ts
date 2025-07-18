@@ -1,6 +1,7 @@
 import { SortType } from "rsuite-table"
 import { ColumnProps } from "rsuite"
 import { DateTime } from "luxon"
+import { TranslationKey } from "../i18n.ts"
 
 type Row = {
   [key: string]: string | number
@@ -8,7 +9,7 @@ type Row = {
 
 export type ColumnType<T extends Row> = ColumnProps<T> & {
   key: keyof T
-  label: string
+  label: TranslationKey
 }
 
 export function sort<T extends Row, C extends ColumnType<T>>(

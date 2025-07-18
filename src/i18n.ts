@@ -1,4 +1,4 @@
-import i18n from "i18next"
+import i18n, { CustomTypeOptions } from "i18next"
 import { initReactI18next } from "react-i18next"
 
 import deApp from "./locales/de/app.json"
@@ -34,3 +34,13 @@ i18n.use(initReactI18next).init({
     escapeValue: false,
   },
 })
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RecursiveKeyOf<TObj extends Record<string, any>> = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [TKey in keyof TObj & (string | number)]: TObj[TKey] extends Record<string, any>
+    ? `${TKey}.${RecursiveKeyOf<TObj[TKey]>}`
+    : `${TKey}`
+}[keyof TObj & (string | number)]
+
+export type TranslationKey = RecursiveKeyOf<CustomTypeOptions["resources"]["app"]>

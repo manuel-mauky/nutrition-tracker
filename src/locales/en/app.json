@@ -1,21 +1,92 @@
 {
   "common": {
-    "appTitle": "Nutrition Tracker"
+    "appTitle": "Nutrition Tracker",
+    "add": "Add",
+    "ok": "Ok",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "save": "Save",
+    "edit": "Edit",
+    "description": "Description",
+    "clone": "Clone",
+    "noEntries": "No Entries",
+    "validation": {
+      "requiredName": "Name is required",
+      "moreThenZeroGram": "Has to be more than 0 g",
+      "requiredFood": "Food is required",
+      "moreThenZeroNumber": "Number has to be bigger then 0",
+      "requiredRecipe": "Recipe is required",
+      "requiredPortions": "Number of portions is required"
+    }
+  },
+  "labels": {
+    "name": "Name",
+    "amountInGram": "Amount (in g)",
+    "actions": "Actions",
+    "entityDeleteSecurityQuestion": "Do you want to delete \"{{entityName}}\"?",
+    "time": "{{timeString}} o'clock",
+    "numberOfPortions": "Number of portions"
+  },
+  "domain": {
+    "kcal": "KCal",
+    "protein": "Protein",
+    "fiber": "Fiber",
+    "fat": "Fat",
+    "sugar": "Sugar",
+    "carbs": "Carbs",
+    "foods": "Foods",
+    "food": "Food",
+    "recipe": "Recipe",
+    "recipes": "Recipes",
+    "nutritionalValues": "Nutritional Values"
   },
   "diary": {
     "navLink": "Diary",
-    "title": "Diary"
+    "title": "Diary",
+    "addDialogTitle": "Add Diary entry",
+    "whenLabel": "When?",
+    "adjustIngredients": "Adjust ingredients?",
+    "adjustIngredientsHint1": "Adjustments will affect this diary entry. The recipe itself will not be changed."
   },
   "foods": {
     "navLink": "Foods",
-    "title": "Foods"
+    "title": "Foods",
+    "addDialogTitle": "Add Food",
+    "cloneDialogTitle": "Clone Food?",
+    "deleteDialogTitle": "Delete Food?",
+    "deleteDialogReferencedRecipesHint_one": "{{foodName}} is still used in a recipe. If you delete the food, it will be removed from that recipe.",
+    "deleteDialogReferencedRecipesHint_other": "{{foodName}} is still used in some recipes. If you delete the food, it will be removed from those recipes.",
+    "deleteDialogReferencedRecipesHeadline": "Recipes:"
   },
   "recipes": {
     "navLink": "Recipes",
-    "title": "Recipes"
+    "title": "Recipes",
+    "addDialogTitle": "Add Recipe",
+    "cloneDialogTitle": "Clone Recipe?",
+    "deleteDialogTitle": "Delete Recipe?",
+    "addFoodToRecipeDialogTitle": "Add Food to Recipe",
+    "addIngredientFoodAlreadyAddedHint": "The food {{foodName}} is already part of the recipe. Do you want to add it again?",
+    "deleteFoodFromRecipeDialogTitle": "Delete food?",
+    "deleteFoodFromRecipeDialogHint": "Do you want to delete {{foodName}} from the recipe {{recipeName}}?",
+    "howManyPortionsPerRecipe": "How many portions does this recipe make?",
+    "recipeDoesntContainFoods": "Recipe doesn't contain any foods"
   },
   "settings": {
     "navLink": "Settings",
-    "title": "Settings"
+    "title": "Settings",
+    "dataPersistenceSubTitle": "Data persistence",
+    "exportButton": "Export",
+    "importButton": "Import",
+    "chooseFileButton": "Choose",
+    "importDataDialogTitle": "Import data?",
+    "importDataDialogHint": "Do you want to import data? This will overwrite the current data and cannot be undone.",
+    "persistenceHint1": "Nutrition-Tracker intentionally doesn't persist any data on any server. Everything is only persisted locally in your browser. However, this comes with the risk of loosing data, for example when the webapp wasn't used for a longer period of time or you're deleting your browser history or cookies.",
+    "persistenceHint2": "You can allow Nutrition-Tracker to store data locally in your browser for a long term.",
+    "persistenceHint3": "However, this also is not a guarantee. It's strongly encouraged to regularly backup your data. To create a backup you can download your data and import it later if needed. This way, you can also take your data to another browser or computer.",
+    "persistencePermissionGranted": "Permission already granted",
+    "persistencePermissionHint1": "When you click this button, your browser might ask you for permission.",
+    "persistencePermissionButton": "Allow long term persistence?",
+    "persistenceExportHint1": "Persists your current data in a file for download.",
+    "persistenceImportHint1": "Choose an exported file and import your data. Caution: Your current data will be overwritten!"
   }
 }

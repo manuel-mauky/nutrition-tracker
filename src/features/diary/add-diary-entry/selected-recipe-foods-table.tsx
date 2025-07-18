@@ -9,6 +9,7 @@ import { Control, useFieldArray } from "react-hook-form"
 import { Icon } from "@rsuite/icons"
 import { PiTrash } from "react-icons/pi"
 import { AddIngredientButton, AddIngredientFormValue } from "../../recipes/add-ingredient-button.tsx"
+import { useTranslation } from "react-i18next"
 
 type FoodAmountTableData = FoodAmount & { foodName: string; fieldId: string }
 
@@ -17,12 +18,12 @@ type FoodsTableColumn = ColumnType<FoodAmountTableData>
 const columns: Array<FoodsTableColumn> = [
   {
     key: "amountInGram",
-    label: "Menge (g)",
+    label: "labels.amountInGram",
     width: 150,
   },
   {
     key: "foodName",
-    label: "Name",
+    label: "labels.name",
     flexGrow: 1,
   },
 ]
@@ -65,6 +66,7 @@ function DeleteFoodTableCell({
 }
 
 export function SelectedRecipeFoodsTable({ control }: { control: Control<AddRecipeFormData> }) {
+  const { t } = useTranslation()
   const { foods: allFoods } = useStore()
 
   const { fields, update, remove, prepend } = useFieldArray({
@@ -80,7 +82,7 @@ export function SelectedRecipeFoodsTable({ control }: { control: Control<AddReci
   }))
 
   if (data.length === 0) {
-    return <p>Rezept enthält keine Lebensmittel</p>
+    return <p>{t("recipes.recipeDoesntContainFoods")}</p>
   }
 
   function onAmountChanged(index: number, foodId: Id, newValue: number) {
@@ -99,8 +101,8 @@ export function SelectedRecipeFoodsTable({ control }: { control: Control<AddReci
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "start", gap: ".5em" }}>
-      <p>Zutaten anpassen?</p>
-      <p>Änderungen wirken sich nur auf diesen Tagebucheintrag aus. Das Rezept selbst bleibt unverändert.</p>
+      <p>{t("diary.adjustIngredients")}</p>
+      <p>{t("diary.adjustIngredientsHint1")}</p>
 
       <AddIngredientButton onAddIngredient={onAddIngredient} existingFoods={data.map((d) => d.foodId)} />
 
@@ -124,13 +126,13 @@ export function SelectedRecipeFoodsTable({ control }: { control: Control<AddReci
 
             return (
               <Table.Column {...rest} key={key}>
-                <Table.HeaderCell>{label}</Table.HeaderCell>
+                <Table.HeaderCell>{t(label)}</Table.HeaderCell>
                 {cell}
               </Table.Column>
             )
           })}
           <Table.Column key="delete">
-            <Table.HeaderCell>Löschen</Table.HeaderCell>
+            <Table.HeaderCell>{t("common.delete")}</Table.HeaderCell>
 
             <DeleteFoodTableCell onRemove={remove} />
           </Table.Column>

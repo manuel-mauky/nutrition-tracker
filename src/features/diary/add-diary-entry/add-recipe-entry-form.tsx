@@ -7,6 +7,7 @@ import { InputPickerField, NumberField } from "../../../components/form-fields.t
 import { FormRef } from "./types.ts"
 import { sortByName } from "../../../utils/sort-utils.ts"
 import { SelectedRecipeFoodsTable } from "./selected-recipe-foods-table.tsx"
+import { useTranslation } from "react-i18next"
 
 export type AddRecipeFormData = Omit<RecipeDiaryEntry, "id" | "date" | "mealType">
 
@@ -17,6 +18,8 @@ export const AddRecipeEntryForm = forwardRef<
     onSubmit: (data: AddRecipeFormData) => void
   }
 >(function AddRecipeEntryForm({ formId, onSubmit }, ref) {
+  const { t } = useTranslation()
+
   const { recipes } = useStore()
 
   const {
@@ -80,13 +83,13 @@ export const AddRecipeEntryForm = forwardRef<
             name="portions"
             control={control}
             rules={{
-              validate: (value) => (value <= 0 ? "Anzahl Portionen muss größer als 0 sein" : undefined),
+              validate: (value) => (value <= 0 ? t("common.validation.moreThenZeroPortions") : undefined),
             }}
             render={({ field }) => (
               <NumberField
                 className="first-column"
                 step={0.1}
-                label="Anzahl Portionen"
+                label={t("labels.numberOfPortions")}
                 field={field}
                 error={errors[field.name]?.message}
               />
@@ -97,10 +100,15 @@ export const AddRecipeEntryForm = forwardRef<
             name="recipeId"
             control={control}
             rules={{
-              required: "Rezept ist erforderlich",
+              required: t("common.validation.requiredRecipe"),
             }}
             render={({ field }) => (
-              <InputPickerField label="Rezept" field={field} data={recipeItems} error={errors[field.name]?.message} />
+              <InputPickerField
+                label={t("domain.recipe")}
+                field={field}
+                data={recipeItems}
+                error={errors[field.name]?.message}
+              />
             )}
           />
         </div>

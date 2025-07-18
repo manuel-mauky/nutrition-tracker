@@ -6,6 +6,7 @@ import { Controller, useForm } from "react-hook-form"
 import { Form } from "rsuite"
 import { InputPickerField, NumberField } from "../../../components/form-fields.tsx"
 import { sortByName } from "../../../utils/sort-utils.ts"
+import { useTranslation } from "react-i18next"
 
 export type AddFoodFormData = Omit<FoodDiaryEntry, "id" | "date" | "mealType">
 
@@ -16,6 +17,7 @@ export const AddFoodEntryForm = forwardRef<
     onSubmit: (data: AddFoodFormData) => void
   }
 >(function AddFoodEntryForm({ formId, onSubmit }, ref) {
+  const { t } = useTranslation()
   const { foods } = useStore()
 
   const {
@@ -53,13 +55,13 @@ export const AddFoodEntryForm = forwardRef<
         name="amountInGram"
         control={control}
         rules={{
-          validate: (value) => (value <= 0 ? "Muss größer als 0g sein" : undefined),
+          validate: (value) => (value <= 0 ? t("common.validation.moreThenZeroGram") : undefined),
         }}
         render={({ field }) => (
           <NumberField
             className="first-column"
             step={0.1}
-            label="Menge in Gram"
+            label={t("labels.amountInGram")}
             field={field}
             error={errors[field.name]?.message}
           />
@@ -69,12 +71,12 @@ export const AddFoodEntryForm = forwardRef<
         name="foodId"
         control={control}
         rules={{
-          required: "Lebensmittel ist erforderlich",
+          required: t("common.validation.requiredFood"),
         }}
         render={({ field }) => (
           <InputPickerField
             style={{ flexGrow: 1 }}
-            label="Lebensmittel"
+            label={t("domain.food")}
             field={field}
             data={foodItems}
             error={errors[field.name]?.message}

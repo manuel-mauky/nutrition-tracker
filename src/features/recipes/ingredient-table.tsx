@@ -10,6 +10,8 @@ import { DeleteIngredientButton } from "./delete-ingredient-button.tsx"
 import { selectSortSettings } from "../settings/settings-slice.ts"
 import { ColumnType, sort } from "../../utils/sort-utils.ts"
 
+import { useTranslation } from "react-i18next"
+
 type IngredientData = Ingredient &
   Nutrients & {
     name: string
@@ -20,49 +22,49 @@ export type IngredientColumn = ColumnType<IngredientData>
 const columns: Array<IngredientColumn> = [
   {
     key: "amountInGram",
-    label: "Menge (in g)",
+    label: "labels.amountInGram",
     width: 150,
     sortable: true,
   },
   {
     key: "name",
-    label: "Name",
+    label: "labels.name",
     width: 150,
     sortable: true,
   },
   {
     key: "kcal",
-    label: "KCal",
+    label: "domain.kcal",
     width: 80,
     sortable: true,
   },
   {
     key: "carbs",
-    label: "Kohlenhydrate",
+    label: "domain.carbs",
     width: 130,
     sortable: true,
   },
   {
     key: "sugar",
-    label: "Zucker",
+    label: "domain.sugar",
     width: 80,
     sortable: true,
   },
   {
     key: "fiber",
-    label: "Balaststoffe",
+    label: "domain.fiber",
     width: 120,
     sortable: true,
   },
   {
     key: "fat",
-    label: "Fett",
+    label: "domain.fat",
     width: 80,
     sortable: true,
   },
   {
     key: "protein",
-    label: "Eiweiß",
+    label: "domain.protein",
     width: 80,
     sortable: true,
   },
@@ -112,6 +114,8 @@ function ActionsTableCell({ rowData, recipe, ...rest }: CellProps<IngredientData
 
 export function IngredientTable({ recipe }: { recipe: Recipe }) {
   const { changeSortSettings, sortType, sortColumn } = useStore(selectSortSettings("recipeIngredients"))
+
+  const { t } = useTranslation()
 
   const { foods, editRecipe } = useStore()
 
@@ -195,9 +199,9 @@ export function IngredientTable({ recipe }: { recipe: Recipe }) {
             <Table.Column {...rest} key={key}>
               <Table.HeaderCell>
                 {isNutrientName(key) ? (
-                  <HeaderSummary title={label} sum={`${recipeWithNutrients[key]} ${nutrientUnit[key]}`} />
+                  <HeaderSummary title={t(label)} sum={`${recipeWithNutrients[key]} ${nutrientUnit[key]}`} />
                 ) : (
-                  label
+                  t(label)
                 )}
               </Table.HeaderCell>
               {cell}
@@ -206,7 +210,7 @@ export function IngredientTable({ recipe }: { recipe: Recipe }) {
         })}
 
         <Table.Column key="actions">
-          <Table.HeaderCell>Aktionen</Table.HeaderCell>
+          <Table.HeaderCell>{t("labels.actions")}</Table.HeaderCell>
           <ActionsTableCell recipe={recipe} />
         </Table.Column>
       </Table>

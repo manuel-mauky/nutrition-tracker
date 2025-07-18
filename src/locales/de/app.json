@@ -1,21 +1,92 @@
 {
   "common": {
-    "appTitle": "Nutrition Tracker"
+    "appTitle": "Nutrition Tracker",
+    "add": "Hinzufügen",
+    "ok": "Ok",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "save": "Speichern",
+    "edit": "Editieren",
+    "description": "Beschreibung",
+    "clone": "Klonen",
+    "noEntries": "Keine Einträge",
+    "validation": {
+      "requiredName": "Name ist erforderlich",
+      "moreThenZeroGram": "Muss größer als 0 g sein",
+      "requiredFood": "Lebensmittel ist erforderlich",
+      "moreThenZeroNumber": "Anzahl muss größer als 0 sein",
+      "requiredRecipe": "Rezept ist erforderlich",
+      "requiredPortions": "Anzahl an Portionen ist erforderlich"
+    }
+  },
+  "labels": {
+    "name": "Name",
+    "amountInGram": "Menge (in g)",
+    "actions": "Aktionen",
+    "entityDeleteSecurityQuestion": "Möchtest du \"{{entityName}}\" wirklich löschen?",
+    "time": "{{timeString}} Uhr",
+    "numberOfPortions": "Anzahl Portionen"
+  },
+  "domain": {
+    "kcal": "KCal",
+    "protein": "Eiweiß",
+    "fiber": "Balaststoffe",
+    "fat": "Fett",
+    "sugar": "Zucker",
+    "carbs": "Kohlenhydrate",
+    "foods": "Lebensmittel",
+    "food": "Lebensmittel",
+    "recipe": "Rezept",
+    "recipes": "Rezepte",
+    "nutritionalValues": "Nährwerte"
   },
   "diary": {
     "navLink": "Tagebuch",
-    "title": "Tagebuch"
+    "title": "Tagebuch",
+    "addDialogTitle": "Tagebucheintrag hinzufügen",
+    "whenLabel": "Wann?",
+    "adjustIngredients": "Zutaten anpassen?",
+    "adjustIngredientsHint1": "Änderungen wirken sich nur auf diesen Tagebucheintrag aus. Das Rezept selbst bleibt unverändert."
   },
   "foods": {
     "navLink": "Lebensmittel",
-    "title": "Lebensmittel"
+    "title": "Lebensmittel",
+    "addDialogTitle": "Lebensmittel hinzufügen",
+    "cloneDialogTitle": "Lebensmittel klonen?",
+    "deleteDialogTitle": "Lebensmittel löschen?",
+    "deleteDialogReferencedRecipesHint_one": "{{foodName}} wird noch in einem Rezept verwendet. Wenn du das Lebensmittel löschst, wird es aus diesem Rezept entfernt.",
+    "deleteDialogReferencedRecipesHint_other": "{{foodName}} wird noch in einigen Rezepten verwendet. Wenn du das Lebensmittel löschst, wird es aus diesen Rezepten entfernt.",
+    "deleteDialogReferencedRecipesHeadline": "Rezepte:"
   },
   "recipes": {
     "navLink": "Rezepte",
-    "title": "Rezepte"
+    "title": "Rezepte",
+    "addDialogTitle": "Rezept hinzufügen",
+    "cloneDialogTitle": "Rezept klonen?",
+    "deleteDialogTitle": "Rezept löschen?",
+    "addFoodToRecipeDialogTitle": "Zutaten zu Rezept hinzufügen",
+    "addIngredientFoodAlreadyAddedHint": "Die Zutat {{foodName}} ist bereits im Rezept enthalten. Möchtest du es nochmal hinzufügen?",
+    "deleteFoodFromRecipeDialogTitle": "Zutat löschen?",
+    "deleteFoodFromRecipeDialogHint": "Möchtest du die Zutat {{foodName}} aus dem Rezept {{recipeName}} löschen?",
+    "howManyPortionsPerRecipe": "Wieviele Portionen ergibt das Rezept?",
+    "recipeDoesntContainFoods": "Rezept enthält keine Lebensmittel"
   },
   "settings": {
     "navLink": "Einstellungen",
-    "title": "Einstellungen"
+    "title": "Einstellungen",
+    "dataPersistenceSubTitle": "Datenspeicherung",
+    "exportButton": "Export",
+    "importButton": "Import",
+    "chooseFileButton": "Auswählen",
+    "importDataDialogTitle": "Wirklich importieren?",
+    "importDataDialogHint": "Möchten Sie die Daten wirklich importieren? Damit werden alle aktuelle Daten überschrieben und lassen sich nicht wieder herstellen.",
+    "persistenceHint1": "Nutrition-Tracker speichert bewusst keine deiner Daten auf irgendeinem Server. Alle Daten werden ausschließlich lokal in deinem Browser gespeichert. Damit ist allerdings ein gewisses Risiko verbunden, dass Daten verloren gehen könnten, beispielsweise wenn du die Seite lange nicht mehr besucht hast oder du die Browser-History oder Cookies löschst.",
+    "persistenceHint2": "Du kannst Nutrition-Tracker erlauben, Daten langfristig lokal im Browser zu speichern.",
+    "persistenceHint3": "Allerdings ist auch das keine absolute Garantie. Es wird daher dringend empfohlen, die Daten regelmäßig zu sichern. Um eine Sicherheitskopie deiner Daten zu erstellen, kannst du hier deine Daten als Datei exportieren und bei Bedarf wieder importieren. Damit kannst du deine Daten auch zu einem anderen Browser oder Computer mitnehmen.",
+    "persistencePermissionGranted": "Erlaubnis bereits erteilt",
+    "persistencePermissionHint1": "Wenn du diesen Button klickst, fragt dich dein Browser eventuell nach, ob du dies gestatten möchtest.",
+    "persistencePermissionButton": "Dauerhafte Speicherung erlauben?",
+    "persistenceExportHint1": "Speichert deine aktuellen Daten in eine Datei zum Download.",
+    "persistenceImportHint1": "Wähle eine exportierte Datei aus und importiere die Daten. Vorsicht: Dabei werden deine aktuellen Daten überschrieben!"
   }
 }

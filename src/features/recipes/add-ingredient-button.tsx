@@ -6,6 +6,7 @@ import { Id } from "../types.ts"
 import { Controller, useForm } from "react-hook-form"
 import { InputPickerField, NumberField } from "../../components/form-fields.tsx"
 import { sortByName } from "../../utils/sort-utils.ts"
+import { useTranslation } from "react-i18next"
 
 export type AddIngredientFormValue = {
   amount: number
@@ -18,6 +19,7 @@ type Props = {
 }
 
 export function AddIngredientButton({ onAddIngredient, existingFoods }: Props) {
+  const { t } = useTranslation()
   const [openAddDialog, setOpenAddDialog] = useState(false)
 
   const { foods } = useStore()
@@ -59,30 +61,35 @@ export function AddIngredientButton({ onAddIngredient, existingFoods }: Props) {
   return (
     <>
       <Button startIcon={<PiPlusBold />} onClick={handleOpen}>
-        Hinzufügen
+        {t("common.add")}
       </Button>
 
       <Modal open={openAddDialog} onClose={handleClose} backdrop="static">
         <Modal.Header>
-          <Modal.Title>Zutaten zu Rezept hinzufügen</Modal.Title>
+          <Modal.Title>{t("recipes.addFoodToRecipeDialogTitle")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form id="add-ingredient-form" fluid onSubmit={(_, event) => onSubmit(event)}>
             <Controller
               name="amount"
               rules={{
-                validate: (value) => (value <= 0 ? "Menge muss größer als 1 gram sein" : undefined),
+                validate: (value) => (value <= 0 ? t("common.validation.moreThenZeroGram") : undefined),
               }}
               control={control}
               render={({ field }) => (
-                <NumberField label="Menge (in g)" autoFocus field={field} error={errors[field.name]?.message} />
+                <NumberField
+                  label={t("labels.amountInGram")}
+                  autoFocus
+                  field={field}
+                  error={errors[field.name]?.message}
+                />
               )}
             />
             <Controller
               name="foodId"
               control={control}
               rules={{
-                required: "Lebensmittel ist erforderlich",
+                required: t("common.validation.moreThenZeroNumber"),
               }}
               render={({ field }) => {
                 const alreadyIncludedIngredient = [...(existingFoods ?? [])].find((foodId) => foodId === field.value)
@@ -93,7 +100,7 @@ export function AddIngredientButton({ onAddIngredient, existingFoods }: Props) {
                   <>
                     <InputPickerField
                       data={foodItems}
-                      label="Lebensmittel"
+                      label={t("domain.food")}
                       field={field}
                       error={errors[field.name]?.message}
                     />
@@ -101,10 +108,7 @@ export function AddIngredientButton({ onAddIngredient, existingFoods }: Props) {
                     {alreadyIncludedIngredient && food && (
                       <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
                         <PiWarningCircle size="30px" color="var(--rs-state-warning)" />
-                        <Text>
-                          {" "}
-                          Die Zutat "{food.name}" ist bereits im Rezept enthalten. Möchtest du es nochmal hinzufügen?
-                        </Text>
+                        <Text>{t("recipes.addIngredientFoodAlreadyAddedHint", { foodName: food.name })}</Text>
                       </div>
                     )}
                   </>
@@ -116,9 +120,9 @@ export function AddIngredientButton({ onAddIngredient, existingFoods }: Props) {
 
         <Modal.Footer>
           <Button form="add-ingredient-form" type="submit">
-            Ok
+            {t("common.ok")}
           </Button>
-          <Button onClick={handleClose}>Abbrechen</Button>
+          <Button onClick={handleClose}>{t("common.cancel")}</Button>
         </Modal.Footer>
       </Modal>
     </>

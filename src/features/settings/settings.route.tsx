@@ -94,72 +94,55 @@ export function SettingsRoute() {
     <>
       <Modal open={showImportWarning} role="alertdialog" backdrop="static" autoFocus>
         <Modal.Header>
-          <Modal.Title>Wirklich importieren?</Modal.Title>
+          <Modal.Title>{t("settings.importDataDialogTitle")}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          Möchten Sie die Daten wirklich importieren? Damit werden alle aktuelle Daten überschrieben und lassen sich
-          nicht wieder herstellen.
-        </Modal.Body>
+        <Modal.Body>{t("settings.importDataDialogHint")}</Modal.Body>
         <Modal.Footer>
           <Button onClick={onImport} appearance="primary">
-            Ok
+            {t("common.ok")}
           </Button>
           <Button onClick={() => setShowImportWarning(false)} appearance="subtle">
-            Abbrechen
+            {t("common.cancel")}
           </Button>
         </Modal.Footer>
       </Modal>
       <ContentLayout header={<Text>{t("settings.title")}</Text>}>
         <div id="settings-root">
-          <Panel header="Datenspeicher">
+          <Panel header={t("settings.dataPersistenceSubTitle")}>
             <div style={panelContainerStyle}>
-              <Text>
-                Nutrition-Tracker speichert bewusst keine deiner Daten auf irgendeinem Server. Alle Daten werden
-                ausschließlich lokal in deinem Browser gespeichert. Damit ist allerdings ein gewisses Risiko verbunden,
-                dass Daten verloren gehen könnten, beispielsweise wenn du die Seite lange nicht mehr besucht hast oder
-                du die Browser-History oder Cookies löschst.
-              </Text>
-              <Text>Du kannst Nutrition-Tracker erlauben, Daten langfristig lokal im Browser zu speichern.</Text>
+              <Text>{t("settings.persistenceHint1")}</Text>
+
+              <Text>{t("settings.persistenceHint2")}</Text>
               {isPersistedEnabled ? (
                 <div style={{ display: "flex", flexDirection: "row", gap: "5px" }}>
-                  <PiCheckCircle size="20" style={{ color: "var(--rs-state-success)" }} /> Erlaubnis bereits erteilt
+                  <PiCheckCircle size="20" style={{ color: "var(--rs-state-success)" }} />{" "}
+                  {t("settings.persistencePermissionGranted")}
                 </div>
               ) : (
                 <div>
-                  <Text>
-                    Wenn du diesen Button klickst, fragt dich dein Browser eventuell nach, ob du dies gestatten
-                    möchtest.
-                  </Text>
-                  <Button onClick={onRequestPersisted}>Dauerhafte Speicherung erlauben?</Button>
+                  <Text>{t("settings.persistencePermissionHint1")}</Text>
+                  <Button onClick={onRequestPersisted}>{t("settings.persistencePermissionButton")}</Button>
                 </div>
               )}
-              <Text>
-                Allerdings ist auch das keine absolute Garantie. Es wird daher dringend empfohlen, die Daten regelmäßig
-                zu sichern. Um eine Sicherheitskopie deiner Daten zu erstellen, kannst du hier deine Daten als Datei
-                exportieren und bei Bedarf wieder importieren. <br />
-                Damit kannst du deine Daten auch zu einem anderen Browser oder Computer mitnehmen.
-              </Text>
+              <Text>{t("settings.persistenceHint3")}</Text>
 
               <div className="two-column-form-grid">
                 <Panel header="Export" shaded>
                   <div style={panelContainerStyle}>
-                    <Text>Speichert deine aktuellen Daten in eine Datei zum Download.</Text>
+                    <Text>{t("settings.persistenceExportHint1")}</Text>
                     <Button startIcon={<PiDownloadSimple />} onClick={onExport}>
-                      Export
+                      {t("settings.exportButton")}
                     </Button>
                   </div>
                 </Panel>
 
                 <Panel header="Import" shaded>
                   <div style={panelContainerStyle}>
-                    <Text>
-                      Wähle eine exportierte Datei aus und importiere die Daten. Vorsicht: Dabei werden deine aktuellen
-                      Daten überschrieben!
-                    </Text>
+                    <Text>{t("settings.persistenceImportHint1")}</Text>
 
                     <div>
                       <Uploader
-                        locale={{ ...deDE.Uploader, ...deDE.common, upload: "Auswählen" }}
+                        locale={{ ...deDE.Uploader, ...deDE.common, upload: t("settings.chooseFileButton") }}
                         startIcon={<PiUploadSimple />}
                         accept="application/json"
                         autoUpload={false}
@@ -169,7 +152,7 @@ export function SettingsRoute() {
                       />
 
                       <Button startIcon={<PiArrowSquareIn />} disabled={!uploadedState} onClick={onImportClicked}>
-                        Import
+                        {t("settings.importButton")}
                       </Button>
                     </div>
                   </div>

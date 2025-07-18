@@ -4,6 +4,7 @@ import { PropsWithChildren, useMemo } from "react"
 import { useStore } from "../store.ts"
 import { Nutrients } from "../types.ts"
 import { calcNutrientsOfDay, createFoodsMap } from "../recipes/recipe-utils.ts"
+import { useTranslation } from "react-i18next"
 
 type Variant = "main" | "side"
 
@@ -22,6 +23,8 @@ function Label({ children, variant = "side" }: PropsWithChildren<{ variant?: Var
 export function DiaryNutritionOverview({ day }: { day: DateTime }) {
   const { foods, diaryEntries } = useStore()
 
+  const { t } = useTranslation()
+
   const nutrients: Nutrients = useMemo(() => {
     const foodsMap = createFoodsMap(foods)
 
@@ -30,22 +33,22 @@ export function DiaryNutritionOverview({ day }: { day: DateTime }) {
 
   return (
     <div className="diary-view-nutrition-overview">
-      <Label variant="main">KCal</Label>
+      <Label variant="main">{t("domain.kcal")}</Label>
       <Value variant="main" value={nutrients.kcal} />
 
-      <Label variant="main">Eiweiß</Label>
+      <Label variant="main">{t("domain.protein")}</Label>
       <Value variant="main" value={nutrients.protein} />
 
-      <Label>Balaststoffe</Label>
+      <Label>{t("domain.fiber")}</Label>
       <Value value={nutrients.fiber} />
 
-      <Label>Fett</Label>
+      <Label>{t("domain.fat")}</Label>
       <Value value={nutrients.fat} />
 
-      <Label>Zucker</Label>
+      <Label>{t("domain.sugar")}</Label>
       <Value value={nutrients.sugar} />
 
-      <Label>Kohlenhydrate</Label>
+      <Label>{t("domain.carbs")}</Label>
       <Value value={nutrients.carbs} />
     </div>
   )
