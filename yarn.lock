@@ -3308,6 +3308,7 @@ __metadata:
     react-icons: "npm:^5.2.1"
     reselect: "npm:^5.1.1"
     rsuite: "npm:^5.73.0"
+    tsx: "npm:^4.20.3"
     typescript: "npm:^5.5.4"
     vite: "npm:^5.4.1"
     zustand: "npm:^4.5.5"
@@ -4160,7 +4161,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsx@npm:^4.19.2":
+"tsx@npm:^4.19.2, tsx@npm:^4.20.3":
   version: 4.20.3
   resolution: "tsx@npm:4.20.3"
   dependencies:

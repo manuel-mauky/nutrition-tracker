@@ -46,6 +46,7 @@
     "keys-diff": "^1.0.8",
     "lint-staged": ">=10",
     "prettier": "^3.3.3",
+    "tsx": "^4.20.3",
     "typescript": "^5.5.4",
     "vite": "^5.4.1"
   },
