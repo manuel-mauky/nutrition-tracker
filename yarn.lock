@@ -1306,6 +1306,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^24.2.1":
+  version: 24.2.1
+  resolution: "@types/node@npm:24.2.1"
+  dependencies:
+    undici-types: "npm:~7.10.0"
+  checksum: 10c0/439a3c7edf88a298e0c92e46f670234070b892589c3b06e82cc86c47a7e1cf220f4a4b4736ec6ac7e4b9e1c40d7b6d443a1e22f99dd17f13f9dd15de3b32011b
+  languageName: node
+  linkType: hard
+
 "@types/prop-types@npm:*, @types/prop-types@npm:^15.7.5":
   version: 15.7.15
   resolution: "@types/prop-types@npm:15.7.15"
@@ -1990,6 +1999,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"es-toolkit@npm:^1.39.8":
+  version: 1.39.8
+  resolution: "es-toolkit@npm:1.39.8"
+  dependenciesMeta:
+    "@trivago/prettier-plugin-sort-imports@4.3.0":
+      unplugged: true
+    prettier-plugin-sort-re-exports@0.0.1:
+      unplugged: true
+  checksum: 10c0/a13f50433959ae784d9eef467c7a3883f28bd40c651d6f62a11c93a0b7460b070a72a8c9c8d4423039d5d441a777cf2b9850113d9b3d04d1f65a79dccec04f31
+  languageName: node
+  linkType: hard
+
 "esbuild@npm:^0.21.3":
   version: 0.21.5
   resolution: "esbuild@npm:0.21.5"
@@ -2334,7 +2355,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.3.2":
+"fast-glob@npm:^3.3.2, fast-glob@npm:^3.3.3":
   version: 3.3.3
   resolution: "fast-glob@npm:3.3.3"
   dependencies:
@@ -2871,6 +2892,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"keys-diff@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "keys-diff@npm:1.0.8"
+  checksum: 10c0/7bd58fb2f5356bbb5c0cfa39f818402e260ccef2747ec97cf22a7891ed4a62f1a7fb3a0610c34ad677e2c3d2f3d9b5a16f4f5186844acf902023a88fb02bb9fb
+  languageName: node
+  linkType: hard
+
 "keyv@npm:^4.5.3":
   version: 4.5.4
   resolution: "keyv@npm:4.5.4"
@@ -3254,17 +3282,21 @@ __metadata:
     "@tanstack/router-devtools": "npm:1.125.3"
     "@tanstack/router-plugin": "npm:1.125.3"
     "@types/luxon": "npm:^3"
+    "@types/node": "npm:^24.2.1"
     "@types/react": "npm:^18.3.3"
     "@types/react-dom": "npm:^18.3.0"
     "@typescript-eslint/eslint-plugin": "npm:^8.1.0"
     "@typescript-eslint/parser": "npm:^8.1.0"
     "@vitejs/plugin-react": "npm:^4.3.1"
+    es-toolkit: "npm:^1.39.8"
     eslint: "npm:^8.57.0"
     eslint-plugin-react-hooks: "npm:^4.6.2"
     eslint-plugin-react-refresh: "npm:^0.4.9"
+    fast-glob: "npm:^3.3.3"
     husky: "npm:>=6"
     i18next: "npm:^23.16.5"
     immer: "npm:^10.1.1"
+    keys-diff: "npm:^1.0.8"
     lint-staged: "npm:>=10"
     luxon: "npm:^3.5.0"
     nanoid: "npm:^5.1.5"
@@ -4177,6 +4209,13 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10c0/92ea03509e06598948559ddcdd8a4ae5a7ab475766d5589f1b796f5731b3d631a4c7ddfb86a3bd44d58d10102b132cd4b4994dda9b63e6273c66d77d6a271dbd
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~7.10.0":
+  version: 7.10.0
+  resolution: "undici-types@npm:7.10.0"
+  checksum: 10c0/8b00ce50e235fe3cc601307f148b5e8fb427092ee3b23e8118ec0a5d7f68eca8cee468c8fc9f15cbb2cf2a3797945ebceb1cbd9732306a1d00e0a9b6afa0f635
   languageName: node
   linkType: hard
 

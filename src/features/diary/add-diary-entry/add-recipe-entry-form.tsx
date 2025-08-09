@@ -83,7 +83,7 @@ export const AddRecipeEntryForm = forwardRef<
             name="portions"
             control={control}
             rules={{
-              validate: (value) => (value <= 0 ? t("common.validation.moreThenZeroPortions") : undefined),
+              validate: (value) => (value <= 0 ? t("common.validation.requiredPortions") : undefined),
             }}
             render={({ field }) => (
               <NumberField
